@@ -1,0 +1,923 @@
+/* ============================================================
+   Vix.cpp Docs — custom.css
+   Modern edition — refined light & dark, polished code blocks
+   ============================================================ */
+
+/* ── Tokens ── */
+:root {
+  --vix-accent:   #22c55e;
+  --vix-accent-d: #16a34a;
+  --vix-accent-s: rgba(34, 197, 94, .08);
+  --vix-accent-b: rgba(34, 197, 94, .22);
+  --vix-radius:   14px;
+  --vix-radius-s: 10px;
+  --vix-shadow-s: 0 1px 3px rgba(0,0,0,.04), 0 1px 2px rgba(0,0,0,.06);
+  --vix-shadow-m: 0 4px 16px rgba(0,0,0,.06), 0 1px 3px rgba(0,0,0,.08);
+  --vix-transition: .16s cubic-bezier(.4,0,.2,1);
+}
+
+/* ── Light ── */
+html:not(.dark) {
+  --vp-c-bg:      #fafbfc;
+  --vp-c-bg-soft: #f0f2f5;
+  --vp-c-bg-alt:  #e8ebef;
+  --vp-c-divider: rgba(0, 0, 0, .07);
+  --vp-c-text-1:  #1a1d23;
+  --vp-c-text-2:  #5c6370;
+  --vp-c-brand-1: #16a34a;
+  --vp-c-brand-2: #22c55e;
+  --vp-c-brand-3: #4ade80;
+
+  /* Code block surfaces — light */
+  --cb-bg:        #1e2028;
+  --cb-bg-head:   #262830;
+  --cb-border:    rgba(0, 0, 0, .06);
+  --cb-shadow:    0 2px 12px rgba(0,0,0,.10), 0 1px 3px rgba(0,0,0,.06);
+}
+
+/* ── Dark ── */
+html.dark {
+  --vp-c-bg:      #0c0f14;
+  --vp-c-bg-soft: #13161d;
+  --vp-c-bg-alt:  #1a1d25;
+  --vp-c-divider: rgba(255, 255, 255, .07);
+  --vp-c-text-1:  rgba(255, 255, 255, .93);
+  --vp-c-text-2:  rgba(255, 255, 255, .55);
+  --vp-c-brand-1: #22c55e;
+  --vp-c-brand-2: #4ade80;
+  --vp-c-brand-3: #86efac;
+
+  /* Code block surfaces — dark */
+  --cb-bg:        #0d1117;
+  --cb-bg-head:   #161b22;
+  --cb-border:    rgba(255, 255, 255, .06);
+  --cb-shadow:    0 4px 24px rgba(0,0,0,.35), 0 1px 4px rgba(0,0,0,.2);
+}
+
+/* ── App / Layout ── */
+html, body, #app, .VPApp { min-height: 100vh; }
+.VPApp { display: flex; flex-direction: column; }
+.VPContent { flex: 1 0 auto; }
+html, body { overflow-x: hidden; }
+
+/* Smooth theme transition */
+html.dark,
+html:not(.dark) {
+  transition: background-color .3s ease, color .3s ease;
+}
+
+/* ── Navbar ── */
+.VPNavBar {
+  background: color-mix(in srgb, var(--vp-c-bg) 85%, transparent) !important;
+  border-bottom: 1px solid var(--vp-c-divider) !important;
+  backdrop-filter: blur(16px) saturate(1.6);
+  -webkit-backdrop-filter: blur(16px) saturate(1.6);
+}
+
+.VPNavBarTitle .title {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--vp-c-text-1);
+}
+
+.VPNavBarMenuLink,
+.VPNavBarMenuLink > a {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  transition: color var(--vix-transition);
+}
+
+.VPNavBarTitle .VPImage { border-radius: 8px; }
+
+/* ── Sidebar ── */
+.VPSidebar {
+  background: var(--vp-c-bg) !important;
+}
+
+.VPSidebar .curtain,
+.VPSidebar .content,
+.VPSidebar .nav {
+  background: var(--vp-c-bg) !important;
+}
+
+/* Sidebar text */
+.VPSidebarGroup .title {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--vp-c-text-2);
+  opacity: .8;
+}
+
+.VPSidebarItem .link {
+  font-size: 13px;
+  font-weight: 550;
+  line-height: 1.45;
+  border-radius: 8px;
+  transition: all var(--vix-transition);
+}
+
+.VPSidebarItem .link:hover {
+  background: var(--vix-accent-s);
+  color: var(--vix-accent);
+}
+
+.VPSidebarItem.is-active > .item > .link,
+.VPSidebarItem.is-active > .item .link {
+  color: var(--vix-accent) !important;
+  font-weight: 700 !important;
+  background: var(--vix-accent-s);
+  padding-left: 18px !important;
+}
+
+/* Active sidebar indicator */
+.VPSidebarItem.is-active > .item {
+  position: relative;
+}
+
+/* Sidebar scrollbar */
+.VPSidebar .nav {
+  scrollbar-width: thin;
+  scrollbar-color: var(--vp-c-divider) transparent;
+}
+.VPSidebar .nav::-webkit-scrollbar { width: 6px; }
+.VPSidebar .nav::-webkit-scrollbar-track { background: transparent; }
+.VPSidebar .nav::-webkit-scrollbar-thumb {
+  background: var(--vp-c-divider); border-radius: 999px;
+}
+
+/* Desktop sidebar scrollbar */
+@media (min-width: 961px) {
+  .VPSidebar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(34, 197, 94, .35) transparent;
+  }
+  .VPSidebar::-webkit-scrollbar,
+  .VPSidebar .content::-webkit-scrollbar,
+  .VPSidebar .nav::-webkit-scrollbar { width: 7px; }
+  .VPSidebar::-webkit-scrollbar-track,
+  .VPSidebar .content::-webkit-scrollbar-track,
+  .VPSidebar .nav::-webkit-scrollbar-track { background: transparent; }
+  .VPSidebar::-webkit-scrollbar-thumb,
+  .VPSidebar .content::-webkit-scrollbar-thumb,
+  .VPSidebar .nav::-webkit-scrollbar-thumb {
+    background: rgba(34, 197, 94, .28);
+    border-radius: 999px;
+    border: 2px solid var(--vp-c-bg);
+  }
+  .VPSidebar::-webkit-scrollbar-thumb:hover,
+  .VPSidebar .content::-webkit-scrollbar-thumb:hover,
+  .VPSidebar .nav::-webkit-scrollbar-thumb:hover {
+    background: rgba(34, 197, 94, .55);
+  }
+}
+
+
+/* ══════════════════════════════════════════════
+   DOC CONTENT
+   ══════════════════════════════════════════════ */
+
+.VPDoc .vp-doc {
+  max-width: 740px;
+}
+
+/* ── Headings ── */
+.vp-doc h1 {
+  font-size: clamp(1.7rem, 3vw, 2.2rem);
+  letter-spacing: -0.035em;
+  font-weight: 900;
+  line-height: 1.08;
+  color: var(--vp-c-text-1);
+}
+
+.vp-doc h2 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  border-top: 1px solid var(--vp-c-divider);
+  margin-top: 2.2rem;
+  padding-top: 1.6rem;
+}
+
+.vp-doc h3 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+/* ── Paragraphs ── */
+.vp-doc p {
+  line-height: 1.78;
+  font-size: 15px;
+  color: var(--vp-c-text-1);
+}
+
+/* ── Inline code ── */
+.vp-doc :not(pre) > code {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: .8em;
+  padding: 2.5px 7px;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: background var(--vix-transition), border-color var(--vix-transition);
+}
+
+html:not(.dark) .vp-doc :not(pre) > code {
+  background: rgba(34, 197, 94, .07);
+  border: 1px solid rgba(34, 197, 94, .15);
+  color: #15803d;
+}
+
+html.dark .vp-doc :not(pre) > code {
+  background: rgba(34, 197, 94, .08);
+  border: 1px solid rgba(34, 197, 94, .18);
+  color: #4ade80;
+}
+
+
+/* ══════════════════════════════════════════════
+   CODE BLOCKS — VitePress native (Shiki)
+   Both themes use a dark code surface for consistency
+   ══════════════════════════════════════════════ */
+
+.vp-doc div[class*="language-"],
+.vp-doc [class*="language-"] {
+  border-radius: var(--vix-radius) !important;
+  border: 1px solid var(--cb-border) !important;
+  overflow: hidden;
+  margin: 20px 0 !important;
+  box-shadow: var(--cb-shadow);
+  transition: box-shadow var(--vix-transition), border-color var(--vix-transition);
+}
+
+/* Subtle lift on hover */
+.vp-doc div[class*="language-"]:hover,
+.vp-doc [class*="language-"]:hover {
+  box-shadow: var(--cb-shadow), 0 0 0 1px var(--vix-accent-b);
+}
+
+/* Language label */
+.vp-doc div[class*="language-"] .lang {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.28);
+  top: 12px;
+  right: 14px;
+}
+
+/* Copy button */
+.vp-doc [class*='language-'] > button.copy {
+  top: 8px !important;
+  right: 8px !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(255, 255, 255, .12) !important;
+  background-color: rgba(255, 255, 255, .06) !important;
+  background-image: none !important;
+  opacity: 0;
+  transition: all var(--vix-transition) !important;
+}
+
+.vp-doc [class*='language-']:hover > button.copy {
+  opacity: 1 !important;
+}
+
+.vp-doc [class*='language-'] > button.copy::before {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 16px;
+  margin: auto;
+  background-color: rgba(255, 255, 255, .72);
+  mask-image: var(--vp-icon-copy);
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: 16px 16px;
+  -webkit-mask-image: var(--vp-icon-copy);
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: 16px 16px;
+}
+
+.vp-doc [class*='language-'] > button.copy:hover {
+  background-color: rgba(34, 197, 94, .14) !important;
+  border-color: rgba(34, 197, 94, .30) !important;
+  transform: translateY(-1px);
+}
+
+.vp-doc [class*='language-'] > button.copy:hover::before {
+  background-color: #86efac;
+}
+
+.vp-doc [class*='language-'] > button.copy.copied::before {
+  background-color: #22c55e;
+}
+
+/* Code scrollbars */
+.vp-doc pre::-webkit-scrollbar { height: 6px; }
+.vp-doc pre::-webkit-scrollbar-thumb {
+  background: rgba(34,197,94,.25);
+  border-radius: 999px;
+}
+.vp-doc pre::-webkit-scrollbar-thumb:hover {
+  background: rgba(34,197,94,.45);
+}
+.vp-doc pre::-webkit-scrollbar-track { background: transparent; }
+
+/* Line numbers */
+.vp-doc div[class*="language-"].line-numbers-mode .line-numbers-wrapper,
+.vp-doc [class*="language-"].line-numbers-mode .line-numbers-wrapper {
+  padding-top: 16px !important;
+  padding-bottom: 16px !important;
+  line-height: 1.72 !important;
+  font-size: .875rem !important;
+  font-family: "JetBrains Mono", ui-monospace, monospace !important;
+  border-right: 1px solid rgba(255,255,255,.06);
+}
+
+.vp-doc div[class*="language-"].line-numbers-mode pre,
+.vp-doc [class*="language-"].line-numbers-mode pre {
+  padding-top: 16px !important;
+  padding-bottom: 16px !important;
+}
+
+
+/* ══════════════════════════════════════════════
+   CUSTOM CodeBlock COMPONENT — Light mode overrides
+   The component always renders dark internally,
+   but we refine borders/shadows for light context
+   ══════════════════════════════════════════════ */
+
+html:not(.dark) .cb {
+  border-color: rgba(0,0,0,.08);
+  background: var(--cb-bg);
+  box-shadow: none;
+}
+
+html:not(.dark) .cb-head {
+  background: var(--cb-bg-head);
+  border-color: rgba(255,255,255,.06);
+}
+
+html:not(.dark) .cb-body {
+  background: var(--cb-bg);
+}
+
+
+/* ══════════════════════════════════════════════
+   TABLES
+   ══════════════════════════════════════════════ */
+
+.vp-doc table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  margin: 20px 0;
+  display: block;
+  overflow-x: auto;
+  border-radius: var(--vix-radius-s);
+}
+
+.vp-doc th {
+  padding: 10px 14px;
+  border-bottom: 2px solid var(--vp-c-divider);
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--vp-c-text-2);
+  text-align: left;
+}
+
+.vp-doc td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--vp-c-divider);
+  vertical-align: top;
+  line-height: 1.65;
+}
+
+.vp-doc tr:last-child td { border-bottom: 0; }
+
+/* Subtle row hover */
+.vp-doc tr:hover td {
+  background: var(--vix-accent-s);
+  transition: background var(--vix-transition);
+}
+
+
+/* ══════════════════════════════════════════════
+   BLOCKQUOTES
+   ══════════════════════════════════════════════ */
+
+.vp-doc blockquote {
+  border-left: 3px solid var(--vix-accent);
+  padding: 14px 18px;
+  border-radius: 0 var(--vix-radius-s) var(--vix-radius-s) 0;
+  background: var(--vix-accent-s);
+  margin: 20px 0;
+  font-size: 14.5px;
+  line-height: 1.72;
+}
+
+
+/* ══════════════════════════════════════════════
+   BADGES / CUSTOM CONTAINERS
+   ══════════════════════════════════════════════ */
+
+.vp-doc .tip,
+.vp-doc .warning,
+.vp-doc .danger,
+.vp-doc .info {
+  border-radius: var(--vix-radius-s);
+  border: 1px solid;
+  padding: 14px 18px;
+  margin: 20px 0;
+}
+
+
+/* ══════════════════════════════════════════════
+   OUTLINE (TOC)
+   ══════════════════════════════════════════════ */
+
+.VPDocAside .outline-link {
+  font-size: 12.5px;
+  font-weight: 600;
+  transition: color var(--vix-transition);
+}
+
+.VPDocAside .outline-link.active {
+  color: var(--vix-accent) !important;
+  font-weight: 700;
+}
+
+
+/* ══════════════════════════════════════════════
+   PREV / NEXT NAVIGATION
+   ══════════════════════════════════════════════ */
+
+.VPDocFooter .pager-link {
+  border-radius: var(--vix-radius);
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-soft);
+  transition: all var(--vix-transition);
+}
+
+.VPDocFooter .pager-link:hover {
+  border-color: var(--vix-accent-b);
+  background: var(--vix-accent-s);
+  transform: translateY(-1px);
+  box-shadow: var(--vix-shadow-s);
+}
+
+
+/* ══════════════════════════════════════════════
+   SEARCH
+   ══════════════════════════════════════════════ */
+
+.VPNavBarSearch .VPNavBarSearchButton,
+.VPNavBarSearch .DocSearch-Button {
+  border-radius: var(--vix-radius-s);
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-soft);
+  font-size: 13px;
+  font-weight: 600;
+  height: 34px;
+  padding: 0 12px;
+  transition: all var(--vix-transition);
+}
+
+.VPLocalSearchBox { background: transparent !important; border: none !important; }
+.VPBackdrop,
+.VPNavBarSearch .DocSearch-Overlay,
+.VPLocalSearchBox .backdrop { background: transparent !important; backdrop-filter: none !important; }
+
+
+/* ══════════════════════════════════════════════
+   MOBILE — Sidebar & Layout
+   ══════════════════════════════════════════════ */
+
+@media (max-width: 960px) {
+  .VPNavBar {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+  }
+
+  .VPContent {
+    padding-top: 0 !important;
+  }
+
+  .VPLocalNav {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    z-index: 99 !important;
+    background: var(--vp-c-bg) !important;
+    border-top: 1px solid var(--vp-c-divider) !important;
+    border-bottom: 1px solid var(--vp-c-divider) !important;
+  }
+
+  .VPLocalNav .container,
+  .VPLocalNav .items {
+    background: var(--vp-c-bg) !important;
+  }
+
+  body.vix-local-nav-fixed .VPLocalNav {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 999 !important;
+  }
+
+  body.vix-local-nav-fixed .VPContent {
+    padding-top: var(--vp-local-nav-height, 48px) !important;
+  }
+
+  body.vix-local-nav-fixed .VPSidebar {
+    top: var(--vp-local-nav-height, 20px) !important;
+    height: calc(100vh - var(--vp-local-nav-height, 20px)) !important;
+  }
+
+  body.vix-local-nav-fixed .VPSidebar .curtain,
+  body.vix-local-nav-fixed .VPSidebar .content,
+  body.vix-local-nav-fixed .VPSidebar .nav {
+    padding-top: 8px !important;
+  }
+
+  .VPSidebar {
+    z-index: 100 !important;
+    background: var(--vp-c-bg) !important;
+  }
+
+  .VPDoc,
+  .VPDoc .container,
+  .VPDoc .content,
+  .VPDoc .content-container {
+    overflow: visible !important;
+  }
+}
+
+
+/* ══════════════════════════════════════════════
+   RESPONSIVE TYPOGRAPHY & SPACING
+   ══════════════════════════════════════════════ */
+
+@media (max-width: 960px) {
+  .VPNavBarTitle .title { font-size: 14px; }
+  .vp-doc h1 { font-size: 1.7rem; }
+  .vp-doc h2 { font-size: 1.15rem; }
+}
+
+@media (max-width: 640px) {
+  .VPDoc {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .VPDoc .container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .vp-doc h1 { font-size: 1.5rem; }
+  .vp-doc p  { font-size: 14.5px; }
+
+  .vp-doc div[class*="language-"] pre,
+  .vp-doc [class*="language-"] pre {
+    font-size: .82rem !important;
+    padding: 12px 14px !important;
+  }
+
+  .vp-doc div[class*="language-"].line-numbers-mode .line-numbers-wrapper,
+  .vp-doc [class*="language-"].line-numbers-mode .line-numbers-wrapper {
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+  }
+
+  .vp-doc div[class*="language-"].line-numbers-mode pre,
+  .vp-doc [class*="language-"].line-numbers-mode pre {
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .VPDoc .container { padding: 0 12px !important; }
+  .vp-doc h1 { font-size: 1.3rem; }
+}
+
+
+/* ══════════════════════════════════════════════
+   UTILITIES
+   ══════════════════════════════════════════════ */
+
+.VPFooter { display: none !important; }
+.VPLocalNav { background: var(--vp-c-bg) !important; }
+
+
+/* ══════════════════════════════════════════════
+   LINKS — Accent-colored with subtle underline
+   ══════════════════════════════════════════════ */
+
+.vp-doc a {
+  color: var(--vix-accent);
+  text-decoration: none;
+  text-underline-offset: 3px;
+  transition: color var(--vix-transition), text-decoration var(--vix-transition);
+}
+
+.vp-doc a:hover {
+  color: var(--vix-accent-d);
+  text-decoration: underline;
+}
+
+html.dark .vp-doc a {
+  color: #4ade80;
+}
+
+html.dark .vp-doc a:hover {
+  color: #86efac;
+}
+
+
+/* ══════════════════════════════════════════════
+   SELECTION COLOR
+   ══════════════════════════════════════════════ */
+
+::selection {
+  background: rgba(34, 197, 94, .20);
+  color: inherit;
+}
+
+html.dark ::selection {
+  background: rgba(34, 197, 94, .25);
+}
+
+/* ============================================================
+   Plain text code blocks
+   Keep txt/text/plain/no-lang blocks readable on dark code surfaces
+   ============================================================ */
+
+/* Native VitePress code blocks: ```txt, ```text, ```plain, and ``` */
+.vp-doc div.language- code,
+.vp-doc div.language- pre,
+.vp-doc div[class*="language-txt"] code,
+.vp-doc div[class*="language-text"] code,
+.vp-doc div[class*="language-plain"] code,
+.vp-doc div[class*="language-plaintext"] code,
+.vp-doc [class*="language-txt"] code,
+.vp-doc [class*="language-text"] code,
+.vp-doc [class*="language-plain"] code,
+.vp-doc [class*="language-plaintext"] code,
+.vp-doc div[class*="language-txt"] pre,
+.vp-doc div[class*="language-text"] pre,
+.vp-doc div[class*="language-plain"] pre,
+.vp-doc div[class*="language-plaintext"] pre,
+.vp-doc [class*="language-txt"] pre,
+.vp-doc [class*="language-text"] pre,
+.vp-doc [class*="language-plain"] pre,
+.vp-doc [class*="language-plaintext"] pre {
+  color: #f8fafc !important;
+}
+
+/* Custom CodeBlock plain text */
+.vp-doc .cb .cb-code--plain {
+  color: #f8fafc !important;
+}
+
+.vp-doc .cb .cb-code--plain span {
+  color: inherit !important;
+}
+.vp-doc div[class*="language-"],
+.vp-doc [class*="language-"] {
+  background: var(--cb-bg) !important;
+  border-radius: var(--vix-radius) !important;
+  border: 1px solid var(--cb-border) !important;
+  overflow: hidden;
+  margin: 20px 0 !important;
+  box-shadow: none;
+  transition: border-color var(--vix-transition);
+}
+
+.vp-doc div[class*="language-"] pre,
+.vp-doc [class*="language-"] pre {
+  padding: 16px 18px !important;
+  font-size: .875rem !important;
+  line-height: 1.72 !important;
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace !important;
+  background: transparent !important;
+  margin: 0 !important;
+  overflow-x: auto;
+}
+
+.vp-doc div[class*="language-"] code,
+.vp-doc [class*="language-"] code {
+  background: transparent !important;
+}
+
+.vp-doc div[class*="language-"].line-numbers-mode .line-numbers-wrapper,
+.vp-doc [class*="language-"].line-numbers-mode .line-numbers-wrapper {
+  background: transparent !important;
+}
+
+.vp-doc div[class*="language-"].line-numbers-mode pre,
+.vp-doc [class*="language-"].line-numbers-mode pre {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-top: 16px !important;
+  padding-bottom: 16px !important;
+}
+.vp-doc [class*='language-'] code,
+.vp-doc div[class*='language-'] code {
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+:root {
+  --cb-bg: #101820;
+  --cb-bg-head: #151f2a;
+}
+
+html.dark {
+  --cb-bg: #101820;
+  --cb-bg-head: #151f2a;
+}
+
+html:not(.dark) {
+  --cb-bg: #101820;
+  --cb-bg-head: #151f2a;
+}
+.vp-doc div[class*="language-"],
+.vp-doc [class*="language-"] {
+  background: var(--cb-bg) !important;
+}
+
+.vp-doc div[class*="language-"] pre,
+.vp-doc [class*="language-"] pre {
+  background: transparent !important;
+}
+
+.vp-doc div[class*="language-"] code,
+.vp-doc [class*="language-"] code {
+  background: transparent !important;
+}
+
+
+/* ============================================================
+   Sidebar tree hierarchy
+   DOM-based tree without duplicated rules
+   ============================================================ */
+
+/* Every nested items container becomes a tree branch */
+.VPSidebarItem .items {
+  margin-left: 14px !important;
+  padding-left: 12px !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+html:not(.dark) .VPSidebarItem .items {
+  border-left-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* First visible child level:
+   Overview, Core, Runtime, Data, System, Log */
+.VPSidebarItem .items > .VPSidebarItem > .item > .link {
+  padding-left: 16px !important;
+  font-size: 13px !important;
+  opacity: 0.9;
+}
+
+/* Deeper tree containers:
+   children inside Core, Log, Runtime, etc. */
+.VPSidebarItem .items .VPSidebarItem .items {
+  margin-left: 11px !important;
+  padding-left: 5px !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+html:not(.dark) .VPSidebarItem .items .VPSidebarItem .items {
+  border-left-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Real children:
+   Print, Console, Inspect, Input, etc. */
+.VPSidebarItem .items .VPSidebarItem .items > .VPSidebarItem > .item > .link {
+  padding-left: 0 !important;
+  font-size: 12.8px !important;
+  opacity: 0.88;
+}
+
+/* Deeper children if needed later */
+.VPSidebarItem .items .VPSidebarItem .items .VPSidebarItem .items > .VPSidebarItem > .item > .link {
+  padding-left: 0 !important;
+  font-size: 12.5px !important;
+  opacity: 0.82;
+}
+
+/* Bullet marker for nested links */
+.VPSidebarItem .items .VPSidebarItem .link::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-right: 8px;
+  border-radius: 999px;
+  background: var(--vp-c-divider);
+  vertical-align: middle;
+}
+
+/* Do not show bullet on collapsible section parents if VitePress renders them as folders */
+.VPSidebarItem .items > .VPSidebarItem > .item > .link.has-active::before {
+  display: none;
+}
+
+/* Active item */
+.VPSidebarItem .items .VPSidebarItem.is-active > .item > .link {
+  opacity: 1;
+  font-weight: 700 !important;
+  color: var(--vix-accent) !important;
+}
+
+.VPSidebarItem .items .VPSidebarItem.is-active > .item > .link::before {
+  background: var(--vix-accent);
+}
+/* Remove all custom sidebar dot markers */
+.VPSidebarItem .link::before,
+.VPSidebarItem .items .VPSidebarItem .link::before,
+.VPSidebarItem .items .VPSidebarItem.is-active > .item > .link::before {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin-right: 0 !important;
+  background: transparent !important;
+}
+/* Remove sidebar tree vertical lines */
+.VPSidebarItem .items,
+.VPSidebarItem .items .VPSidebarItem .items,
+.VPSidebarGroup > .items,
+.VPSidebarGroup > .items > .VPSidebarItem > .items {
+  border-left: 0 !important;
+}
+.VPSidebarItem .items {
+    margin-left: 14px !important;
+    padding-left: 0px !important;
+}
+.VPSidebarItem .items .VPSidebarItem .items {
+    margin-left: 11px !important;
+    padding-left: 0px !important;
+}
+/* Keep first-level sidebar items aligned */
+.VPSidebarItem .items > .VPSidebarItem > .item > .link {
+  padding-left: 0 !important;
+  font-size: 13px !important;
+}
+
+/* Keep deeper children indented only inside folders like Core */
+.VPSidebarItem .items .VPSidebarItem .items > .VPSidebarItem > .item > .link {
+  padding-left: 0 !important;
+  font-size: 12.8px !important;
+  opacity: 0.88;
+}
+/* Remove active sidebar cursor indicator */
+.VPSidebarItem.is-active > .item::before,
+.VPSidebarItem.has-active > .item::before {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+/* Keep active sidebar link aligned */
+.VPSidebarItem.is-active > .item > .link,
+.VPSidebarItem.is-active > .item .link {
+  padding-left: 0 !important;
+}
+/* Remove active sidebar left cursor everywhere */
+.VPSidebarItem .indicator,
+.VPSidebarItem .item::before,
+.VPSidebarItem .item::after,
+.VPSidebarItem.is-active > .item::before,
+.VPSidebarItem.is-active > .item::after,
+.VPSidebarItem.has-active > .item::before,
+.VPSidebarItem.has-active > .item::after {
+  content: none !important;
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+}
