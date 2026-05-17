@@ -83,9 +83,7 @@ It should avoid unnecessary work while staying correct.
 ## Project resolution
 
 The first step is project resolution.
-
 Vix needs to find the project root.
-
 A project root is usually a directory containing one of these files:
 
 ```txt
@@ -183,9 +181,7 @@ myapp/.vix/generated/app/
 ## Why userProjectDir and cmakeSourceDir are separate
 
 For normal CMake projects, the two paths are the same.
-
 For `vix.app`, they are different.
-
 That means the build plan must not treat one path as everything.
 
 Use:
@@ -225,9 +221,7 @@ If those two paths are confused, Vix can build the wrong target, export to the w
 ## Build planning
 
 After project resolution, Vix creates a build plan.
-
 The build plan contains derived paths and decisions.
-
 A good plan contains values like:
 
 ```txt
@@ -248,7 +242,6 @@ projectFingerprint
 ```
 
 The plan is the central object used by the build pipeline.
-
 It tells the rest of the command what to configure, where to build, and what target to build.
 
 ## Presets
@@ -418,7 +411,6 @@ manifest.name
 ## Configure signature
 
 Vix can avoid unnecessary configure work by computing a signature.
-
 A configure signature represents the inputs that affect CMake configuration.
 
 Examples:
@@ -435,13 +427,11 @@ vix.app-generated CMake content
 ```
 
 If the signature is unchanged, Vix can skip reconfigure.
-
 If it changes, Vix should run configure again.
 
 ## Project fingerprint
 
 The project fingerprint helps detect meaningful build configuration changes.
-
 For CMake projects, important files may include:
 
 ```txt
@@ -458,7 +448,6 @@ vix.app
 ```
 
 But the build system must still remember that the user project directory is the real project root.
-
 The generated CMake file is derived from `vix.app`.
 
 ## CMake arguments
@@ -494,9 +483,7 @@ sccache
 ```
 
 A launcher helps speed up repeated compilation by caching compiler outputs.
-
 The build plan can store the resolved launcher.
-
 Then CMake can receive something like:
 
 ```txt
@@ -517,15 +504,12 @@ lld
 ```
 
 Linking can become a bottleneck in C++ builds.
-
 Using a faster linker reduces the cost of incremental builds where only the final link step is needed.
-
 This does not remove compilation cost, but it improves the hot path.
 
 ## CMake compatibility path
 
 The current build pipeline still uses CMake/Ninja as the execution layer.
-
 This gives Vix compatibility with:
 
 ```txt
@@ -539,13 +523,11 @@ fast linkers
 ```
 
 The compatibility path is important because C++ projects can be very different.
-
 Vix should not break existing workflows.
 
 ## Build graph layer
 
 Beyond running CMake, Vix can build a deeper model of the build.
-
 The build graph layer can import:
 
 ```txt
@@ -582,9 +564,7 @@ object output
 ```
 
 This is useful because Vix should not guess compile flags.
-
 It can import the real command emitted by CMake/Ninja.
-
 That makes cache decisions more accurate.
 
 ## build.ninja
@@ -592,7 +572,6 @@ That makes cache decisions more accurate.
 `build.ninja` contains the generated build rules.
 
 Vix can parse it to understand build edges.
-
 Edges can be classified as:
 
 ```txt
@@ -624,13 +603,11 @@ main.o: src/main.cpp include/app.hpp include/config.hpp
 ```
 
 Dependency files are essential for correct incremental builds.
-
 If a header changes, the object files that depend on it must become dirty.
 
 ## Build nodes
 
 A build graph contains nodes.
-
 Nodes can represent:
 
 ```txt
@@ -668,17 +645,13 @@ generate
 ```
 
 A compile task turns a source file into an object file.
-
 A link task turns object files and libraries into an executable.
-
 An archive task creates a static library.
-
 A copy task copies resources or outputs.
 
 ## Dirty checking
 
 A build system should know whether a task needs to run.
-
 Inputs to dirty checking can include:
 
 ```txt
@@ -692,15 +665,12 @@ build fingerprint
 ```
 
 If nothing relevant changed, the task can be skipped.
-
 If anything relevant changed, the task should run.
 
 ## Object cache
 
 The object cache stores reusable compiled object files.
-
 A cached object is valid only if the compile inputs match.
-
 Important cache inputs include:
 
 ```txt
@@ -716,13 +686,11 @@ build type
 ```
 
 If those match, Vix can restore the object instead of recompiling.
-
 This can make repeated builds much faster.
 
 ## Artifact cache
 
 The artifact cache works at a larger level.
-
 It can cache build outputs such as:
 
 ```txt
@@ -735,7 +703,6 @@ compiled dependencies
 The artifact cache is useful when a whole target or dependency was already built with the same relevant inputs.
 
 Object cache helps with translation units.
-
 Artifact cache helps with larger build products.
 
 ## No-op builds
@@ -753,15 +720,12 @@ finish quickly
 ```
 
 This is where a build tool can feel extremely fast.
-
 The goal is not to make the compiler magically faster.
-
 The goal is to avoid invoking it when there is no work.
 
 ## Target-aware builds
 
 A target-aware build should only build what is needed for the requested target.
-
 If the user runs:
 
 ```bash
@@ -769,17 +733,13 @@ vix build --build-target server
 ```
 
 Vix should not do unnecessary work for unrelated targets.
-
 This is especially important for larger projects.
-
 For `vix.app`, this is simpler because one manifest usually describes one target.
-
 For CMake projects, Vix can rely on CMake/Ninja target information.
 
 ## Scheduler
 
 A scheduler executes build tasks in dependency order.
-
 It can run independent tasks in parallel.
 
 A simple model is:
@@ -793,9 +753,7 @@ repeat
 ```
 
 This is the core of parallel builds.
-
 Ninja already does this well.
-
 Vix’s own scheduler becomes important for a future native build path.
 
 ## Jobs
@@ -809,15 +767,12 @@ vix build -j 8
 ```
 
 If no job count is provided, Vix can choose a default based on available CPU cores.
-
 Parallelism speeds up compilation when multiple source files can be built independently.
 
 ## Diagnostics
 
 `vix build` should not only run commands.
-
 It should make failures readable.
-
 A good diagnostic includes:
 
 ```txt
@@ -830,7 +785,6 @@ raw compiler output when needed
 ```
 
 C++ build errors are often noisy.
-
 Vix can improve the developer experience by extracting the useful part.
 
 ## Configure errors
@@ -874,7 +828,6 @@ undefined macro
 ```
 
 Vix can parse compiler output and show a cleaner message.
-
 The build system should preserve the raw log when needed.
 
 ## Link errors
@@ -913,11 +866,8 @@ links = [
 ## Build logs
 
 Vix can write configure and build logs.
-
 Logs are important because the terminal output may be filtered or styled.
-
 A full log helps debug hard build failures.
-
 Common logs include:
 
 ```txt
@@ -931,7 +881,6 @@ The UI can stay clean while logs preserve details.
 ## Output style
 
 `vix build` can present progress in a more readable way than raw build output.
-
 A build header may include:
 
 ```txt
@@ -962,9 +911,7 @@ vix build --clean
 ```
 
 This is useful when cache or generated files are stale.
-
 For `vix.app`, cleaning should affect build outputs under the user project directory.
-
 It should not confuse the generated CMake directory with the project root.
 
 ## vix.app and build
@@ -1007,7 +954,6 @@ cmake --build build-ninja --target hello
 ## Native vix.app build path
 
 The future native path can avoid CMake for simple `vix.app` projects.
-
 The architecture can become:
 
 ```txt
@@ -1019,7 +965,6 @@ vix.app
 ```
 
 This means Vix would create compile and link tasks directly from the manifest.
-
 CMake would remain available as a fallback and compatibility path.
 
 ## Why native build can be faster
@@ -1034,9 +979,7 @@ extra indirection
 ```
 
 It can also use Vix-specific caches more directly.
-
 But this does not mean C++ compilation becomes free.
-
 It means Vix can avoid work more aggressively when it understands the project directly.
 
 ## Compatibility vs speed
@@ -1051,7 +994,6 @@ vix.app        -> fast path
 CMake projects continue to work.
 
 `vix.app` projects become the place where Vix can innovate faster.
-
 This is a better strategy than trying to replace CMake for every C++ project.
 
 ## Common build flow
@@ -1073,7 +1015,6 @@ A typical `vix build` flow looks like this:
 ```
 
 Not every step runs every time.
-
 A no-op build should skip as much as possible.
 
 ## Common failure points
@@ -1098,9 +1039,7 @@ A good build command should make each failure point clear.
 ## Good engineering boundary
 
 `vix build` should not be only a wrapper around CMake.
-
 It should be a build orchestrator.
-
 Today, it can orchestrate:
 
 ```txt
@@ -1135,13 +1074,9 @@ Only the execution strategy changes.
 ## Conclusion
 
 `vix build` is the center of the Vix.cpp build experience.
-
 It resolves the project, creates a build plan, configures the build system, builds the target, and prepares for caching and graph-aware execution.
-
 For CMake projects, it keeps compatibility.
-
 For `vix.app` projects, it starts with generated CMake and can later become a native fast path.
-
 The important architectural lesson is:
 
 ```txt
@@ -1158,7 +1093,6 @@ generatedFromVixApp
 ```
 
 That separation makes the current build correct.
-
 It also prepares Vix for the next step:
 
 ```txt

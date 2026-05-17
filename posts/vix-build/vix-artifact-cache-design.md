@@ -7,9 +7,7 @@ date: 2026-05-17
 # vix Artifact Cache Design
 
 An object cache speeds up compilation at the source-file level.
-
 An artifact cache works at a larger level.
-
 It answers a different question:
 
 ```txt
@@ -17,7 +15,6 @@ Have we already built this target, package, or binary with the same relevant inp
 ```
 
 If the answer is yes, Vix can reuse the result instead of rebuilding it.
-
 This is especially important for C++ because repeated builds often spend time not only compiling source files, but also rebuilding libraries, relinking executables, and rebuilding dependencies that did not really change.
 
 ## Object cache vs artifact cache
@@ -87,11 +84,8 @@ A compiled dependency can also be an artifact.
 ## Why artifact caching matters
 
 Imagine a dependency that rarely changes.
-
 Without an artifact cache, each project may rebuild it again.
-
 With an artifact cache, Vix can build it once, store the result, and reuse it when the same inputs appear again.
-
 This matters for:
 
 ```txt
@@ -105,7 +99,6 @@ cross-project reuse
 ```
 
 The goal is not to hide compilation.
-
 The goal is to avoid rebuilding known outputs.
 
 ## The basic idea
@@ -126,7 +119,6 @@ A cache hit is only safe if the fingerprint is correct.
 ## Artifact identity
 
 An artifact needs a stable identity.
-
 For example:
 
 ```txt
@@ -142,13 +134,11 @@ dependency fingerprint
 ```
 
 A compiled library built with GCC Debug is not the same as the same library built with Clang Release.
-
 The artifact identity must include enough information to avoid invalid reuse.
 
 ## Fingerprint
 
 A fingerprint is a compact representation of build-relevant inputs.
-
 For an artifact, the fingerprint can include:
 
 ```txt
@@ -177,17 +167,13 @@ reuse only when the artifact identity matches
 ```
 
 If Vix is not sure, it should rebuild.
-
 A false cache miss is acceptable.
-
 A false cache hit is dangerous.
-
 A build cache must be conservative.
 
 ## Local build state
 
 Artifact caching can also use local build state.
-
 A local state file can record:
 
 ```txt
@@ -238,15 +224,12 @@ A possible structure:
 ```
 
 The exact layout can evolve.
-
 The important idea is that reusable artifacts are stored by identity.
 
 ## Package artifacts
 
 Package artifacts are especially useful.
-
 Suppose a package is installed globally.
-
 The source may live under:
 
 ```txt
@@ -275,7 +258,6 @@ This reduces repeated dependency builds.
 ## Header-only packages
 
 Header-only packages do not need compiled artifacts.
-
 For them, artifact cache may only record include paths and metadata.
 
 Example:
@@ -286,7 +268,6 @@ manifest.json
 ```
 
 No library output is needed.
-
 This distinction matters because header-only packages should not be treated like compiled packages.
 
 ## Compiled packages
@@ -302,7 +283,6 @@ generated metadata
 ```
 
 These are good artifact cache candidates.
-
 The cache can store a reusable prefix:
 
 ```txt
@@ -316,7 +296,6 @@ Then Vix can add that prefix to the build system.
 ## CMAKE_PREFIX_PATH integration
 
 For compiled packages, Vix can expose cached artifacts through CMake.
-
 For example, if a package artifact contains:
 
 ```txt
@@ -330,13 +309,11 @@ CMAKE_PREFIX_PATH
 ```
 
 Then normal CMake package discovery can find it.
-
 This keeps artifact reuse compatible with CMake.
 
 ## Source fallback
 
 If a compiled artifact is not available, Vix can fall back to source-based integration.
-
 The fallback might be:
 
 ```txt
@@ -376,15 +353,12 @@ Example:
 ```
 
 The exact format can change.
-
 The important part is explainability.
-
 Vix should know what an artifact is and why it is valid.
 
 ## Artifact cache hit
 
 An artifact cache hit means Vix found a complete reusable output.
-
 Example:
 
 ```txt
@@ -392,15 +366,12 @@ artifact cache hit: mathlib
 ```
 
 Then Vix can reuse the cached artifact instead of rebuilding it.
-
 For a package, that may mean adding a cached prefix to the build.
-
 For a final target, that may mean restoring the binary or skipping the build.
 
 ## Artifact cache miss
 
 An artifact cache miss means no valid artifact was found.
-
 Reasons can include:
 
 ```txt
@@ -417,13 +388,11 @@ cache entry invalid
 ```
 
 A miss should not be treated as an error.
-
 It simply means Vix must build normally.
 
 ## Storing after build
 
 After a successful build, Vix can store the artifact.
-
 For a library, store:
 
 ```txt
@@ -455,7 +424,6 @@ Storing should happen only after the build succeeds.
 ## No-op build acceleration
 
 A local artifact state can make no-op builds very fast.
-
 If the current project inputs match the previous successful build state, Vix may avoid:
 
 ```txt
@@ -466,7 +434,6 @@ copy
 ```
 
 or at least avoid most of them.
-
 The ideal no-op build is:
 
 ```txt
@@ -486,7 +453,6 @@ rm -rf build-ninja
 ```
 
 Without a cache, everything must rebuild.
-
 With a warm artifact cache, Vix may restore or reuse:
 
 ```txt
@@ -496,7 +462,6 @@ final binaries
 ```
 
 The build directory is clean, but the global cache is not.
-
 That can turn a clean build into a mostly restore operation.
 
 ## Artifact cache and object cache together
@@ -515,7 +480,6 @@ Object cache miss:
 ```
 
 This gives several layers of acceleration.
-
 Vix should always try the largest safe reuse first.
 
 ## Layered cache strategy
@@ -536,11 +500,8 @@ This is how Vix can avoid repeated work at multiple levels.
 ## Relationship with BuildGraph
 
 The BuildGraph tells Vix what the target depends on.
-
 The artifact cache tells Vix whether a larger output can be reused.
-
 The graph helps compute the artifact fingerprint.
-
 For example, a target artifact depends on:
 
 ```txt
@@ -556,7 +517,6 @@ If those inputs are unchanged, the final artifact may be valid.
 ## Relationship with Scheduler
 
 The scheduler executes tasks.
-
 If artifact cache hits, the scheduler may not need to execute lower-level tasks.
 
 Example:
@@ -573,11 +533,8 @@ If the artifact cache misses, the scheduler can still use object cache during co
 ## Relationship with Link
 
 Linking can be expensive.
-
 Even if object files are cached, the final link can still take time.
-
 Artifact caching can help avoid relinking when the linked output is already known to be valid.
-
 A future link cache could store:
 
 ```txt
@@ -600,7 +557,6 @@ resources = [
 ```
 
 If resources are part of the final artifact, their content should be included in the artifact identity.
-
 If a resource changes, the artifact should not be reused without updating the resource output.
 
 ## Artifact cache and vix.app
@@ -624,17 +580,13 @@ output_dir
 ```
 
 That makes it easier to compute a stable artifact fingerprint.
-
 For arbitrary CMake projects, Vix may need to rely on generated build files and CMake state.
-
 For `vix.app`, Vix can eventually compute more directly.
 
 ## Artifact cache and CMake projects
 
 For CMake projects, artifact caching should be conservative.
-
 CMake can contain arbitrary logic.
-
 So Vix should base artifact decisions on generated outputs such as:
 
 ```txt
@@ -651,11 +603,10 @@ It should not try to guess what arbitrary CMake logic means.
 
 Package artifacts are one of the best initial use cases.
 
-Why?
-
+Why ?
 Because packages often change less frequently than application source code.
-
 If Vix can reuse compiled packages across projects, it can reduce a lot of repeated work.
+
 
 Example:
 
@@ -670,7 +621,6 @@ This is especially useful for local development and CI.
 ## Artifact cache and CI
 
 CI often starts from a clean workspace.
-
 That makes artifact cache valuable.
 
 A CI system can restore:
@@ -682,7 +632,6 @@ A CI system can restore:
 before building.
 
 Then Vix can reuse compiled dependencies or target artifacts when identities match.
-
 But the cache key must account for:
 
 ```txt
@@ -713,13 +662,11 @@ aarch64-linux-gnu
 ```
 
 Target triple must be part of the artifact key.
-
 Sysroot and toolchain metadata may also be needed.
 
 ## Artifact cache and build type
 
 Debug and Release artifacts are different.
-
 Debug may include:
 
 ```txt
@@ -741,9 +688,7 @@ So build type must be part of the artifact identity.
 ## Artifact cache and compiler
 
 Artifacts depend on the compiler.
-
 A static library built with one compiler may not be safe to reuse with another compiler.
-
 Important compiler identity fields include:
 
 ```txt
@@ -760,7 +705,6 @@ For safety, Vix should separate artifacts by compiler identity.
 ## Artifact cache and ABI
 
 ABI compatibility matters for C++.
-
 Even if source code is unchanged, ABI can change with:
 
 ```txt
@@ -773,7 +717,6 @@ build type
 ```
 
 Artifact caching must respect ABI boundaries.
-
 This is another reason artifact reuse must be conservative.
 
 ## Cache invalidation
@@ -793,13 +736,11 @@ target triple changed
 ```
 
 When the fingerprint changes, Vix looks under a different cache key.
-
 The old artifact may remain in the cache, but it is not used for the new build.
 
 ## Cache eviction
 
 Artifact caches can become large.
-
 Vix will eventually need eviction policies.
 
 Possible policies:
@@ -814,13 +755,11 @@ per-target cleanup
 ```
 
 Eviction should never affect correctness.
-
 It only affects whether future builds are cache hits or misses.
 
 ## Explainable cache behavior
 
 Engineers need to trust the cache.
-
 Vix should eventually explain:
 
 ```txt
@@ -878,7 +817,6 @@ timestamp
 ```
 
 On the next run, Vix can compare current state with previous state.
-
 If nothing changed, it can skip work.
 
 ## Local state vs global cache
@@ -898,13 +836,11 @@ Do we have this artifact anywhere in the cache?
 Both are useful.
 
 Local state is very fast for no-op builds.
-
 Global cache is useful after clean builds, across projects, and in CI.
 
 ## Artifact restoration
 
 Restoring an artifact can mean different things.
-
 For a final binary:
 
 ```txt
@@ -928,9 +864,7 @@ The restoration strategy depends on artifact type.
 ## Avoiding stale restores
 
 Restoring must be atomic when possible.
-
 A partial restore can leave a broken build directory.
-
 A safe process can be:
 
 ```txt
@@ -962,11 +896,8 @@ Do not use broken cache entries.
 ## Security considerations
 
 A build cache stores executable code.
-
 If artifacts come only from the local machine, the risk is lower.
-
 If artifacts are shared remotely, Vix must treat them carefully.
-
 Remote artifacts need stronger integrity checks.
 
 Possible mechanisms:
@@ -984,9 +915,7 @@ For a local-first build cache, start simple and safe.
 ## Remote artifact cache
 
 A future remote cache could let teams share compiled outputs.
-
 That requires strict identity and trust rules.
-
 A remote artifact cache must know:
 
 ```txt
@@ -1011,7 +940,6 @@ vix.app
 ```
 
 artifact cache can sit above the graph.
-
 Before scheduling tasks, Vix can ask:
 
 ```txt
@@ -1019,9 +947,7 @@ Do I already have the final target artifact?
 ```
 
 If yes, restore it.
-
 If no, execute the graph.
-
 This is the fastest path when safe.
 
 ## Artifact cache and generated CMake
@@ -1033,23 +959,16 @@ vix.app -> generated CMake -> CMake/Ninja
 ```
 
 Vix can still use artifact cache.
-
 It can fingerprint the generated CMake, manifest, and build configuration.
-
 Then it can decide whether a previous artifact is still valid.
-
 This makes artifact caching useful before native builds are complete.
 
 ## What artifact cache cannot solve
 
 Artifact cache cannot make every first build instant.
-
 If Vix has never seen an artifact before, it must build it.
-
 If inputs changed, it must rebuild.
-
 If the compiler changed, old artifacts may be invalid.
-
 So the promise is not:
 
 ```txt
@@ -1078,7 +997,6 @@ cache hits are easy to explain
 ```
 
 Final executable caching can come later.
-
 Package artifacts provide immediate value.
 
 ## Practical first version
@@ -1131,17 +1049,11 @@ If identity is incomplete, the cache should miss.
 ## Conclusion
 
 The artifact cache is the coarse-grained cache layer in `vix build`.
-
 It complements the object cache.
-
 Object cache avoids recompiling individual source files.
-
 Artifact cache avoids rebuilding larger outputs such as libraries, executables, and compiled packages.
-
 Together with the BuildGraph, Scheduler, and future native `vix.app` path, artifact caching gives Vix a realistic path toward dramatically faster repeated C++ builds.
-
 The goal is not magic.
-
 The goal is disciplined reuse:
 
 ```txt

@@ -7,9 +7,7 @@ date: 2026-05-17
 # Toward Native vix.app Builds
 
 `vix.app` starts with generated CMake.
-
 That is the safe compatibility path.
-
 But the long-term direction is more important:
 
 ```txt
@@ -21,7 +19,6 @@ vix.app
 ```
 
 This is where `vix.app` becomes more than a simpler configuration file.
-
 It becomes structured build input that Vix can understand directly.
 
 ## The current path
@@ -38,9 +35,7 @@ vix.app
 ```
 
 This is practical.
-
 It gives users a simple manifest while keeping compatibility with the C++ build ecosystem.
-
 The generated CMake path means Vix can support `vix.app` without rewriting the entire build engine first.
 
 ## Why generated CMake is a good first step
@@ -66,7 +61,6 @@ platform differences
 ```
 
 So Vix can focus on the user-facing experience first.
-
 A user writes:
 
 ```ini
@@ -87,13 +81,11 @@ vix run
 ```
 
 Internally, Vix can still use CMake.
-
 That is the bridge.
 
 ## Why generated CMake is not the final path
 
 Generated CMake still has overhead.
-
 Even for a simple project, the pipeline can include:
 
 ```txt
@@ -107,9 +99,7 @@ Ninja execution
 ```
 
 For complex projects, this overhead is acceptable.
-
 For simple projects, Vix can eventually do better.
-
 A `vix.app` manifest already gives Vix the important build information directly:
 
 ```txt
@@ -142,7 +132,6 @@ vix.app
 ```
 
 In this model, Vix does not generate CMake as the primary execution path.
-
 Instead, it creates the build graph directly from the manifest.
 
 For a simple app:
@@ -191,17 +180,11 @@ toolchain logic
 ```
 
 Vix should not try to understand all arbitrary CMake logic.
-
 CMake should remain the compatibility path for that.
-
 But `vix.app` is different.
-
 It is narrow and declarative.
-
 It has no arbitrary control flow.
-
 It describes one target.
-
 That makes it possible for Vix to translate it directly into native build tasks.
 
 ## Compatibility path vs native path
@@ -214,9 +197,7 @@ vix.app        -> native fast path
 ```
 
 This does not mean removing CMake.
-
 It means Vix should use the best path for each project type.
-
 For complex projects:
 
 ```txt
@@ -234,7 +215,6 @@ This gives Vix a realistic path to faster builds without breaking existing C++ w
 ## The first native build target
 
 The first native `vix.app` build should support a small, clear subset.
-
 Minimum useful support:
 
 ```txt
@@ -252,7 +232,6 @@ output_dir
 ```
 
 That is enough to build many simple projects.
-
 The native path does not need to support every CMake feature on day one.
 
 ## What should remain CMake-only
@@ -276,13 +255,11 @@ package export generation
 ```
 
 Trying to support all of these immediately would turn the native builder into a second CMake.
-
 That would be the wrong direction.
 
 ## Native build should be explicit
 
 The native path should not rely on hidden magic.
-
 If the manifest says:
 
 ```ini
@@ -293,7 +270,6 @@ sources = [
 ```
 
 then Vix creates compile tasks for those files.
-
 If the manifest says:
 
 ```ini
@@ -303,7 +279,6 @@ include_dirs = [
 ```
 
 then those include directories are part of the compile command.
-
 If the manifest says:
 
 ```ini
@@ -313,7 +288,6 @@ links = [
 ```
 
 then those link inputs are part of the link task.
-
 The manifest should map clearly to build tasks.
 
 ## BuildGraph generation
@@ -348,7 +322,6 @@ The graph becomes the source of execution.
 ## Compile task generation
 
 For each source file, Vix creates a compile task.
-
 A compile task needs:
 
 ```txt
@@ -419,15 +392,12 @@ main.o: src/main.cpp include/app.hpp include/config.hpp
 ```
 
 These dependency files are required for correct incremental builds.
-
 Without them, Vix cannot know which headers affect which object files.
-
 The native path should treat dependency files as first-class build metadata.
 
 ## Dirty checking
 
 Before running a compile task, Vix should decide whether it is dirty.
-
 Inputs include:
 
 ```txt
@@ -441,15 +411,12 @@ build configuration
 ```
 
 If the task is clean, skip it.
-
 If the object cache has a valid entry, restore it.
-
 Otherwise, run the compiler.
 
 ## ObjectCache integration
 
 Native `vix.app` builds should use ObjectCache directly.
-
 For each compile task:
 
 ```txt
@@ -461,7 +428,6 @@ store object after successful compile
 ```
 
 This is one of the main reasons native builds can be faster.
-
 The object cache becomes part of the build execution path, not an external accident.
 
 ## Scheduler integration
@@ -478,9 +444,7 @@ link myapp
 ```
 
 The compile tasks can run in parallel.
-
 The link task waits for object files.
-
 This is the same basic model as Ninja, but controlled by Vix for the manifest subset it understands.
 
 ## Link task generation
@@ -503,7 +467,6 @@ executable
 ```
 
 For a static library target, Vix creates an archive task.
-
 For a shared library target, Vix creates a shared link task.
 
 ## Static library native build
@@ -595,9 +558,7 @@ copy data/config.json -> target_dir/config/config.json
 ```
 
 Resource changes should not trigger C++ recompilation.
-
 They should only trigger resource copy tasks.
-
 That separation is important.
 
 ## output_dir in native builds
@@ -643,7 +604,6 @@ find_package(fmt REQUIRED)
 ```
 
 In native mode, Vix needs a package resolution layer.
-
 That layer may initially be limited.
 
 Possible first approach:
@@ -699,9 +659,7 @@ packages = [
 ```
 
 If native package resolution is not ready, Vix should not fail unnecessarily.
-
 It can fall back to generated CMake.
-
 This preserves compatibility.
 
 ## Experimental flag
@@ -721,13 +679,11 @@ VIX_APP_NATIVE_BUILD=1 vix build
 ```
 
 This allows testing without breaking the stable build path.
-
 The default path can remain generated CMake until native builds are reliable.
 
 ## Making native mode default
 
 Native mode should become default only when it is reliable for common projects.
-
 A safe progression:
 
 ```txt
@@ -743,7 +699,6 @@ This avoids destabilizing `vix build`.
 ## Build correctness
 
 Native builds must be correct before they are fast.
-
 Important correctness requirements:
 
 ```txt
@@ -761,7 +716,6 @@ If any of these are wrong, the build system cannot be trusted.
 ## Compiler detection
 
 The native builder needs to know which compiler to use.
-
 Possible sources:
 
 ```txt
@@ -801,13 +755,11 @@ runtime library paths
 ```
 
 This cannot be hardcoded only for Linux if Vix wants to be portable.
-
 A first version can target Linux and expand later.
 
 ## Archive tool
 
 For static libraries, native mode needs an archiver.
-
 Common tool:
 
 ```txt
@@ -821,13 +773,11 @@ ar rcs libmathlib.a add.o mul.o
 ```
 
 On Windows, this may be different.
-
 So archive tasks should go through a toolchain abstraction.
 
 ## Linker selection
 
 Vix can prefer fast linkers when available.
-
 Examples:
 
 ```txt
@@ -836,7 +786,6 @@ lld
 ```
 
 In native mode, linker selection can be more direct.
-
 The build plan can decide:
 
 ```txt
@@ -851,7 +800,6 @@ But it still must respect platform and compiler differences.
 ## Relationship with CMake compatibility
 
 Native mode should not remove the CMake path.
-
 The relationship should be:
 
 ```txt
@@ -884,7 +832,6 @@ If native mode preserves the same output layout, `vix run` can work unchanged or
 ## Relationship with diagnostics
 
 Native mode gives Vix more control over diagnostics.
-
 Instead of receiving errors only through CMake/Ninja output, Vix can know:
 
 ```txt
@@ -919,7 +866,6 @@ This is a major advantage of owning the graph.
 ## No-op native builds
 
 A native no-op build can be extremely fast.
-
 If Vix knows:
 
 ```txt
@@ -933,7 +879,6 @@ resources copied
 ```
 
 then it can skip everything.
-
 The best output is:
 
 ```txt
@@ -945,7 +890,6 @@ or a very fast success message.
 ## Clean build with warm cache
 
 Native mode plus cache can make clean builds much faster.
-
 If the build directory is removed:
 
 ```bash
@@ -953,7 +897,6 @@ rm -rf build-ninja
 ```
 
 but the object cache is warm, Vix can restore objects.
-
 Flow:
 
 ```txt
@@ -968,7 +911,6 @@ If artifact cache also has the final target, Vix may restore the final binary to
 ## Artifact cache in native mode
 
 Before executing the graph, Vix can check artifact cache.
-
 If the final target artifact is valid:
 
 ```txt
@@ -979,7 +921,6 @@ skip link
 ```
 
 If not, continue to object cache and task execution.
-
 This creates a layered cache model:
 
 ```txt
@@ -992,7 +933,6 @@ linker
 ## Native mode and BuildGraph persistence
 
 The native BuildGraph can be saved between builds.
-
 Stored state can include:
 
 ```txt
@@ -1007,7 +947,6 @@ last successful target
 ```
 
 On the next build, Vix can reload this state and update only what changed.
-
 This makes repeated builds faster.
 
 ## Native mode and generated CMake side by side
@@ -1197,9 +1136,7 @@ fallback
 ```
 
 Trying to do everything at once is risky.
-
 The correct approach is layered.
-
 Each milestone should produce a working build.
 
 ## Engineering principle
@@ -1212,7 +1149,6 @@ fallback where CMake is safer
 ```
 
 This keeps the user experience stable.
-
 It also allows Vix to grow without breaking existing workflows.
 
 ## What success looks like
@@ -1286,15 +1222,10 @@ vix.app
 ## Conclusion
 
 Native `vix.app` builds are the natural next step for Vix.
-
 Generated CMake makes `vix.app` usable today.
-
 Native BuildGraph execution can make it faster tomorrow.
-
 The key is not to remove CMake.
-
 The key is to use CMake where it is strongest and use Vix’s own graph where the project is simple enough to understand directly.
-
 That gives Vix a realistic and powerful direction:
 
 ```txt

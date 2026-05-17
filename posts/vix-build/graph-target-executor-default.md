@@ -17,9 +17,7 @@ fallback to CMake and Ninja when they are the safer path
 ```
 
 Vix still keeps CMake and Ninja compatibility.
-
 But Vix now has a stronger build layer on top of them.
-
 The graph target executor is now the default path for real build targets.
 
 ## The previous path
@@ -35,15 +33,11 @@ vix build
 ```
 
 This path is reliable.
-
 It works for existing CMake projects.
-
 It works for complex targets.
-
 It works for `all`.
 
 But it also means that even when Vix knows more about the project, it still delegates almost everything to the CMake/Ninja path.
-
 That is safe, but not always ideal.
 
 ## The new target-aware path
@@ -72,15 +66,12 @@ vix build
 ```
 
 This gives Vix a build view that is more precise than a plain command wrapper.
-
 Vix can now reason about the requested target before deciding what to run.
 
 ## Why CMake and Ninja are still used
 
 This change does not remove CMake.
-
 It does not remove Ninja.
-
 The current model is:
 
 ```txt
@@ -90,19 +81,14 @@ Vix   -> target-aware graph analysis and fast paths
 ```
 
 That is important.
-
 CMake and Ninja are still excellent for compatibility.
-
 Vix uses them as a stable foundation while adding its own build intelligence on top.
 
 ## Why `all` stays on the CMake/Ninja path
 
 The `all` target is different.
-
 It is not a single executable.
-
 It is not a single library.
-
 It is a global target that can include many things:
 
 - executables
@@ -151,9 +137,7 @@ target: vix
 ```
 
 Then it checks which compile tasks are dirty.
-
 If no source, header, command, or output state requires recompilation, the target is clean.
-
 The output can look like:
 
 ```txt
@@ -165,7 +149,6 @@ The output can look like:
 ## Skipping Ninja when the target is already up to date
 
 One important improvement is that Vix can now skip the final Ninja call when the graph already proves the target is up to date.
-
 Before this improvement, even a clean graph could still end with:
 
 ```bash
@@ -179,7 +162,6 @@ ninja: no work to do.
 ```
 
 That is correct, but still extra work.
-
 Now the graph executor can detect:
 
 ```txt
@@ -188,7 +170,6 @@ target output exists
 ```
 
 Then it can skip Ninja entirely.
-
 The internal logic is:
 
 ```txt
@@ -202,7 +183,6 @@ This makes the no-op path cleaner.
 ## Dirty compile task detection
 
 A key fix was the dirty detection logic.
-
 For compile tasks, the output object file should not make the task dirty just because the output node changed.
 
 A compile task should be dirty when:
@@ -215,9 +195,7 @@ A compile task should be dirty when:
 - dependency file is missing
 
 The output object is the result of the task.
-
 It should not be treated the same way as an input.
-
 The corrected model is:
 
 ```txt
@@ -227,9 +205,7 @@ compile task dirty =
 ```
 
 This matters because large projects can have hundreds of compile tasks.
-
 On Vix.cpp itself, the `vix` target selected hundreds of compile tasks.
-
 After the dirty logic was corrected, a clean rebuild correctly reported:
 
 ```txt
@@ -241,17 +217,11 @@ That is the behavior needed for reliable target-aware builds.
 ## Large dirty target fallback
 
 The graph executor can handle target-aware builds.
-
 But for very large dirty closures, Ninja is still a better execution engine today.
-
 So Vix has a safety fallback.
-
 If too many compile tasks are dirty, Vix falls back to Ninja.
-
 The rule is not based on the number of selected tasks.
-
 A large target can select many tasks and still be clean.
-
 The rule is based on dirty tasks:
 
 ```txt
@@ -264,7 +234,6 @@ This avoids a bad path where Vix tries to directly execute a very large dirty bu
 ## Cleaner graph logs
 
 During development, graph logs were useful.
-
 They showed steps like:
 
 ```txt
@@ -276,11 +245,8 @@ graph: target outputs exist, skipping ninja
 ```
 
 That helped debug the executor.
-
 But this is too verbose for normal users.
-
 So graph logs are hidden by default.
-
 They should only appear with:
 
 ```bash
@@ -304,9 +270,7 @@ The normal output stays clean:
 ## The `--fast` build-state path
 
 The biggest no-op speedup came from the build-state fast path.
-
 The graph executor avoids unnecessary Ninja work.
-
 But before reaching the graph executor, Vix may still need to:
 
 - load global packages
@@ -318,9 +282,7 @@ But before reaching the graph executor, Vix may still need to:
 - propagate dirty state
 
 For a large repository, that can still cost time.
-
 So `--fast` adds a higher-level shortcut.
-
 If the project state matches the last successful build, Vix can return early:
 
 ```bash
@@ -339,9 +301,7 @@ This happens before loading global packages, before rebuilding the graph, and be
 ## What build-state checks
 
 The fast path depends on build-state validation.
-
 It compares the current state with the last successful build.
-
 The state includes information like:
 
 - build signature
@@ -357,7 +317,6 @@ nothing changed
 ```
 
 Then it skips the full build pipeline.
-
 This is the fastest no-op path.
 
 ## Benchmark result
@@ -377,25 +336,17 @@ That means the fast path was about:
 ```
 
 for this no-op target build.
-
 The important detail is that this benchmark is for a clean no-op state.
-
 It does not mean every build is 20x faster.
-
 It means Vix can now skip the full pipeline when the project state proves that nothing changed.
 
 ## Why the benchmark matters
 
 A no-op build is common during development.
-
 Developers often run a build to check whether the project is still valid.
-
 If nothing changed, the best build is the one that proves that quickly.
-
 The old no-op path still needed to walk through the normal build system.
-
 The fast path can now avoid that.
-
 This improves the feedback loop.
 
 ## The current model
@@ -427,7 +378,6 @@ Each layer has a purpose.
 ## Why this is not just a wrapper
 
 A wrapper simply forwards commands.
-
 Vix Build now does more than that.
 
 It can:
@@ -442,15 +392,12 @@ It can:
 - return early on no-op builds
 
 This is build-system behavior.
-
 CMake and Ninja are still part of the pipeline, but Vix now owns more of the decision-making.
 
 ## Compatibility stays intact
 
 Existing CMake projects continue to work.
-
 The CMake path remains the compatibility layer.
-
 The graph executor can be disabled:
 
 ```bash
@@ -468,7 +415,6 @@ This means the new executor improves the build path without removing the old one
 ## Why this matters for Vix
 
 Vix is not trying to replace the entire C++ ecosystem in one step.
-
 The better path is gradual:
 
 - keep compatibility
@@ -478,13 +424,11 @@ The better path is gradual:
 - make common workflows faster
 
 This change follows that path.
-
 It keeps the reliability of CMake/Ninja while allowing Vix to become more than a command wrapper.
 
 ## What this enables next
 
 Owning the graph opens the door to better build features.
-
 Future improvements can include:
 
 - explain why a file rebuilt
@@ -495,15 +439,12 @@ Future improvements can include:
 - make `vix.app` native builds faster
 
 The graph executor is a foundation.
-
 It gives Vix a place to build these features.
 
 ## Relationship with `vix.app`
 
 This also helps the long-term `vix.app` direction.
-
 Today, `vix.app` uses generated CMake for compatibility.
-
 But the long-term path is:
 
 ```txt
@@ -515,9 +456,7 @@ vix.app
 ```
 
 The graph target executor brings Vix closer to that model.
-
 It proves that Vix can reason about build targets directly.
-
 That is necessary before native `vix.app` builds can become the fast path.
 
 ## The principle
@@ -530,23 +469,16 @@ fallback to CMake/Ninja where they are safer
 ```
 
 That is the right balance.
-
 It gives users speed without losing compatibility.
-
 It gives Vix room to grow without breaking existing C++ projects.
 
 ## Conclusion
 
 `vix build` now has a stronger execution model.
-
 For real targets, Vix can use its graph executor by default.
-
 For clean targets, it can skip unnecessary Ninja work.
-
 For no-op builds with `--fast`, it can return through a build-state fast path.
-
 And for complex or global targets, it still falls back to CMake and Ninja.
-
 The result is a build system that stays compatible, but becomes more intelligent:
 
 ```txt
