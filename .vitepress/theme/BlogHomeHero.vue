@@ -45,13 +45,12 @@ const posts = [
       </div>
 
       <h1 class="bh-title">
-        Technical notes on<br />
-        building Vix.cpp.
+        Engineering notes from the Vix.cpp project.
       </h1>
 
       <p class="bh-lead">
-        Deep engineering posts about C++ tooling, build systems, runtime design,
-        diagnostics, developer experience, and the internal decisions behind Vix.cpp.
+        Technical articles about the build system, runtime design, CLI behavior,
+        diagnostics, and the decisions behind a modern C++ developer workflow.
       </p>
 
       <div class="bh-meta">
@@ -476,6 +475,36 @@ const posts = [
 
 .bh-topic:hover .bh-topic-count {
   color: rgba(255, 255, 255, .65);
+}
+
+.bh {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 48px 24px 72px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.bh-hero {
+  margin-bottom: 48px;
+}
+
+.bh-title {
+  max-width: 760px;
+  margin: 0 0 22px;
+  font-size: clamp(2.25rem, 4.4vw, 3.15rem);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  font-weight: 800;
+  color: #0a0a0a;
+}
+
+.bh-lead {
+  max-width: 720px;
+  margin: 0 0 28px;
+  font-size: clamp(1rem, 1.6vw, 1.18rem);
+  line-height: 1.75;
+  color: #4b5563;
+  letter-spacing: -0.01em;
 }
 
 @media (max-width: 768px) {
