@@ -2,6 +2,7 @@
    Vix.cpp Blog — custom.css
    Modern light theme · For C++ experts
    Code blocks: cppreference.com style (cream background)
+   Layout: Pure blog mode (NO docs sidebar/aside)
    ============================================================ */
 
 /* ── Design tokens ── */
@@ -17,7 +18,7 @@ html:not(.dark) {
   --vix-accent-s:      rgba(10, 10, 10, .04);
   --vix-accent-b:      rgba(10, 10, 10, .10);
 
-  /* Brand green (used sparingly) */
+  /* Brand green (sparingly) */
   --vix-brand:         #16a34a;
   --vix-brand-s:       rgba(22, 163, 74, .07);
   --vix-brand-b:       rgba(22, 163, 74, .18);
@@ -65,10 +66,7 @@ body,
 .VPApp,
 .VPContent,
 .VPHome,
-.VPDoc,
-.VPNav,
-.VPNavBar,
-.VPLocalNav {
+.VPDoc {
   background: var(--vp-c-bg) !important;
   color: var(--vp-c-text-1) !important;
   font-family: var(--vix-font-sans);
@@ -83,212 +81,179 @@ html, body, #app, .VPApp { min-height: 100vh; }
 html, body { overflow-x: hidden; }
 
 
-/* ══════════════════════════════════════════════
-   NAVBAR
-   ══════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════
+   BLOG MODE — Hide docs UI completely
+   We use our own header & footer in Layout.vue
+   ══════════════════════════════════════════════════════════════ */
 
-.VPNavBar {
-  background: rgba(255, 255, 255, .80) !important;
-  border-bottom: 1px solid var(--vp-c-divider-soft) !important;
-  backdrop-filter: blur(20px) saturate(1.4);
-  -webkit-backdrop-filter: blur(20px) saturate(1.4);
-}
-
-.VPNavBar.has-sidebar .content {
-  padding-right: 0 !important;
-}
-
-.VPNavBarTitle .title {
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--vp-c-text-1);
-}
-
-.VPNavBarMenuLink,
-.VPNavBarMenuLink > a {
-  font-size: 13.5px !important;
-  font-weight: 500 !important;
-  letter-spacing: -0.005em;
-  color: var(--vp-c-text-2) !important;
-  transition: color var(--vix-transition);
-}
-
-.VPNavBarMenuLink:hover,
-.VPNavBarMenuLink > a:hover {
-  color: var(--vp-c-text-1) !important;
-}
-
-
-/* ══════════════════════════════════════════════
-   SIDEBAR
-   ══════════════════════════════════════════════ */
-
-.VPSidebar {
-  background: var(--vp-c-bg) !important;
-  border-right: 1px solid var(--vp-c-divider-soft) !important;
-}
-
-.VPSidebar .curtain,
-.VPSidebar .content,
-.VPSidebar .nav {
-  background: var(--vp-c-bg) !important;
-}
-
-.VPSidebarGroup .title {
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: var(--vp-c-text-3);
-}
-
-.VPSidebarItem .link {
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 1.5;
-  border-radius: 6px;
-  color: var(--vp-c-text-2);
-  transition: all var(--vix-transition);
-}
-
-.VPSidebarItem .link:hover {
-  background: var(--vp-c-bg-alt);
-  color: var(--vp-c-text-1);
-}
-
-.VPSidebarItem.is-active > .item > .link {
-  color: var(--vp-c-text-1) !important;
-  font-weight: 600 !important;
-  background: var(--vp-c-bg-alt);
-}
-
-/* Remove all default indicators */
-.VPSidebarItem .indicator,
-.VPSidebarItem .item::before,
-.VPSidebarItem .item::after,
-.VPSidebarItem.is-active > .item::before,
-.VPSidebarItem.is-active > .item::after,
-.VPSidebarItem.has-active > .item::before,
-.VPSidebarItem.has-active > .item::after,
-.VPSidebarItem .link::before {
-  content: none !important;
+.VPNav,
+.VPNavBar,
+.VPLocalNav,
+.VPSidebar,
+.VPSidebarItem,
+.VPDocAside,
+.VPDocAsideOutline,
+.VPDocAsideCarbonAds,
+.VPFooter {
   display: none !important;
-  width: 0 !important;
-  height: 0 !important;
-  background: transparent !important;
 }
 
-/* Sidebar tree — no vertical lines */
-.VPSidebarItem .items {
-  margin-left: 12px !important;
+/* Reset content layout — no left padding for sidebar, no right padding for aside */
+.VPContent {
+  padding-top: 0 !important;
+}
+
+.VPContent.has-sidebar {
   padding-left: 0 !important;
-  border-left: 0 !important;
+  margin: 0 !important;
 }
 
-.VPSidebarItem .items .VPSidebarItem .items {
-  margin-left: 10px !important;
+.VPDoc {
+  padding: 0 !important;
+}
+
+.VPDoc.has-sidebar {
   padding-left: 0 !important;
-  border-left: 0 !important;
 }
 
-/* Sidebar scrollbar */
-@media (min-width: 961px) {
-  .VPSidebar {
-    scrollbar-width: thin;
-    scrollbar-color: var(--vp-c-divider) transparent;
-  }
-  .VPSidebar::-webkit-scrollbar,
-  .VPSidebar .content::-webkit-scrollbar,
-  .VPSidebar .nav::-webkit-scrollbar { width: 6px; }
-  .VPSidebar::-webkit-scrollbar-track,
-  .VPSidebar .content::-webkit-scrollbar-track,
-  .VPSidebar .nav::-webkit-scrollbar-track { background: transparent; }
-  .VPSidebar::-webkit-scrollbar-thumb,
-  .VPSidebar .content::-webkit-scrollbar-thumb,
-  .VPSidebar .nav::-webkit-scrollbar-thumb {
-    background: var(--vp-c-divider);
-    border-radius: 999px;
-  }
-  .VPSidebar::-webkit-scrollbar-thumb:hover,
-  .VPSidebar .content::-webkit-scrollbar-thumb:hover,
-  .VPSidebar .nav::-webkit-scrollbar-thumb:hover {
-    background: rgba(10, 10, 10, .25);
-  }
+.VPDoc.has-aside .content-container {
+  max-width: none !important;
+}
+
+.VPDoc .container {
+  display: block !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.VPDoc .content {
+  padding: 0 !important;
+  max-width: none !important;
+}
+
+.VPDoc .content-container {
+  max-width: none !important;
 }
 
 
-/* ══════════════════════════════════════════════
-   DOC CONTENT — Editorial typography
-   ══════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════
+   ARTICLE LAYOUT — Editorial blog post
+   Centered, ~720px max-width, generous spacing
+   ══════════════════════════════════════════════════════════════ */
 
-.VPDoc .vp-doc {
-  max-width: 740px;
+.vp-doc {
+  max-width: 720px !important;
+  margin: 0 auto !important;
+  padding: 56px 24px 80px !important;
 }
 
-/* Headings */
+/* Home page (BlogHomeHero) gets its own padding from the component */
+.VPHome .vp-doc {
+  padding: 0 !important;
+  max-width: none !important;
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   TYPOGRAPHY — Editorial scale
+   ══════════════════════════════════════════════════════════════ */
+
+/* H1 — Article title */
 .vp-doc h1 {
   font-family: var(--vix-font-sans);
-  font-size: clamp(2rem, 4vw, 2.75rem);
-  letter-spacing: -0.04em;
+  font-size: clamp(2.2rem, 4.5vw, 3rem);
+  letter-spacing: -0.045em;
   font-weight: 800;
   line-height: 1.05;
   color: var(--vp-c-text-1);
-  margin-bottom: 1.2rem;
+  margin: 0 0 1.4rem;
+}
+
+/* Subtitle (first p after h1) */
+.vp-doc h1 + p {
+  font-size: 19px;
+  line-height: 1.55;
+  color: var(--vp-c-text-2);
+  font-weight: 400;
+  margin-bottom: 2rem;
+  letter-spacing: -0.01em;
 }
 
 .vp-doc h2 {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 700;
   letter-spacing: -0.025em;
   line-height: 1.25;
-  margin-top: 3rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--vp-c-divider-soft);
+  margin-top: 3.5rem;
+  padding-top: 0;
+  border-top: none;
   color: var(--vp-c-text-1);
 }
 
 .vp-doc h3 {
-  font-size: 1.125rem;
+  font-size: 1.2rem;
   font-weight: 700;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.018em;
   line-height: 1.35;
-  margin-top: 2rem;
+  margin-top: 2.4rem;
   color: var(--vp-c-text-1);
 }
 
 .vp-doc h4 {
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 600;
-  letter-spacing: -0.01em;
-  margin-top: 1.5rem;
+  letter-spacing: -0.012em;
+  margin-top: 1.8rem;
   color: var(--vp-c-text-1);
+}
+
+/* Anchor links on headings — subtle, only visible on hover */
+.vp-doc .header-anchor {
+  color: var(--vp-c-text-3) !important;
+  font-weight: 400;
+  text-decoration: none !important;
+  opacity: 0;
+  transition: opacity .15s ease;
+  margin-left: 8px;
+}
+
+.vp-doc h2:hover .header-anchor,
+.vp-doc h3:hover .header-anchor,
+.vp-doc h4:hover .header-anchor {
+  opacity: 1;
 }
 
 /* Paragraphs */
 .vp-doc p {
-  line-height: 1.75;
-  font-size: 16px;
+  line-height: 1.78;
+  font-size: 17px;
   color: var(--vp-c-text-1);
   letter-spacing: -0.003em;
+  margin: 1.2rem 0;
 }
-
-.vp-doc p + p { margin-top: 1.2rem; }
 
 /* Lists */
 .vp-doc ul, .vp-doc ol {
-  font-size: 16px;
-  line-height: 1.75;
+  font-size: 17px;
+  line-height: 1.78;
   color: var(--vp-c-text-1);
+  margin: 1.2rem 0;
+  padding-left: 1.4rem;
 }
 
-.vp-doc li { margin: 0.4rem 0; }
+.vp-doc li { margin: 0.5rem 0; }
 .vp-doc li::marker { color: var(--vp-c-text-3); }
 
-/* Inline code — cppreference style on the small */
+.vp-doc li > ul,
+.vp-doc li > ol {
+  margin: 0.5rem 0;
+}
+
+/* Inline code */
 .vp-doc :not(pre) > code {
   font-family: var(--vix-font-mono);
-  font-size: .85em;
+  font-size: .88em;
   padding: 2px 6px;
   border-radius: 4px;
   font-weight: 500;
@@ -302,7 +267,7 @@ html, body { overflow-x: hidden; }
 .vp-doc a {
   color: var(--vp-c-text-1);
   text-decoration: underline;
-  text-decoration-color: var(--vp-c-divider);
+  text-decoration-color: rgba(10, 10, 10, 0.30);
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
   font-weight: 500;
@@ -311,6 +276,7 @@ html, body { overflow-x: hidden; }
 
 .vp-doc a:hover {
   text-decoration-color: var(--vp-c-text-1);
+  text-decoration-thickness: 1.5px;
 }
 
 .vp-doc strong { font-weight: 700; color: var(--vp-c-text-1); }
@@ -319,15 +285,32 @@ html, body { overflow-x: hidden; }
 .vp-doc hr {
   border: 0;
   border-top: 1px solid var(--vp-c-divider-soft);
-  margin: 3rem 0;
+  margin: 3rem auto;
+  width: 40%;
+}
+
+/* Images */
+.vp-doc img {
+  max-width: 100%;
+  border-radius: var(--vix-radius);
+  margin: 1.8rem auto;
+  display: block;
+  border: 1px solid var(--vp-c-divider-soft);
+}
+
+.vp-doc img + em {
+  display: block;
+  text-align: center;
+  font-size: 13.5px;
+  color: var(--vp-c-text-3);
+  margin: -0.6rem 0 1.8rem;
+  font-style: italic;
 }
 
 
-/* ══════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════
    CODE BLOCKS — cppreference.com style
-   Cream background, classic colors
-   Applies to VitePress native (Shiki) code blocks
-   ══════════════════════════════════════════════ */
+   ══════════════════════════════════════════════════════════════ */
 
 .vp-doc div[class*="language-"],
 .vp-doc [class*="language-"] {
@@ -335,7 +318,7 @@ html, body { overflow-x: hidden; }
   border-radius: var(--vix-radius-s) !important;
   border: 1px solid var(--cb-border) !important;
   overflow: hidden;
-  margin: 24px 0 !important;
+  margin: 28px 0 !important;
   box-shadow: none;
   transition: border-color var(--vix-transition);
 }
@@ -347,9 +330,9 @@ html, body { overflow-x: hidden; }
 
 .vp-doc div[class*="language-"] pre,
 .vp-doc [class*="language-"] pre {
-  padding: 18px 20px !important;
-  font-size: 15px !important;
-  line-height: 1.65 !important;
+  padding: 16px 18px !important;
+  font-size: 13.5px !important;
+  line-height: 1.6 !important;
   font-family: var(--vix-font-mono) !important;
   background: transparent !important;
   margin: 0 !important;
@@ -369,59 +352,6 @@ html, body { overflow-x: hidden; }
 
 .vp-doc div[class*="language-"] code span {
   font-weight: inherit;
-}
-
-/* ═══════════════════════════════════════════════
-   Override Shiki theme colors to match cppreference
-   Shiki uses inline styles; we force our palette
-   ═══════════════════════════════════════════════ */
-
-/* Keywords (covers Shiki classes & common keyword styles) */
-.vp-doc [class*="language-"] code .keyword,
-.vp-doc [class*="language-"] code .token.keyword,
-.vp-doc [class*="language-"] code span[style*="color:#C586C0"],
-.vp-doc [class*="language-"] code span[style*="color:#569CD6"],
-.vp-doc [class*="language-"] code span[style*="color:#FF7B72"],
-.vp-doc [class*="language-cpp"] code .storage,
-.vp-doc [class*="language-cpp"] code .storage.type {
-  color: #0000ff !important;
-  font-weight: 600 !important;
-}
-
-/* Strings */
-.vp-doc [class*="language-"] code .string,
-.vp-doc [class*="language-"] code .token.string,
-.vp-doc [class*="language-"] code span[style*="color:#CE9178"],
-.vp-doc [class*="language-"] code span[style*="color:#A31515"],
-.vp-doc [class*="language-"] code span[style*="color:#A5C261"] {
-  color: #a31515 !important;
-}
-
-/* Comments */
-.vp-doc [class*="language-"] code .comment,
-.vp-doc [class*="language-"] code .token.comment,
-.vp-doc [class*="language-"] code span[style*="color:#6A9955"],
-.vp-doc [class*="language-"] code span[style*="color:#8B949E"],
-.vp-doc [class*="language-"] code span[style*="color:#7C7C7C"] {
-  color: #338033 !important;
-  font-style: italic !important;
-}
-
-/* Numbers */
-.vp-doc [class*="language-"] code .number,
-.vp-doc [class*="language-"] code .token.number,
-.vp-doc [class*="language-"] code span[style*="color:#B5CEA8"],
-.vp-doc [class*="language-"] code span[style*="color:#79C0FF"] {
-  color: #098658 !important;
-}
-
-/* Preprocessor / meta */
-.vp-doc [class*="language-"] code .meta.preprocessor,
-.vp-doc [class*="language-"] code .token.macro,
-.vp-doc [class*="language-"] code .token.directive,
-.vp-doc [class*="language-"] code span[style*="color:#C586C0"][class*="meta"] {
-  color: #7f0055 !important;
-  font-weight: 600 !important;
 }
 
 /* Language label */
@@ -495,13 +425,13 @@ html, body { overflow-x: hidden; }
 }
 .vp-doc pre::-webkit-scrollbar-track { background: transparent; }
 
-/* Line numbers — cream background */
+/* Line numbers (opt-in per block via ```cpp:line-numbers) */
 .vp-doc div[class*="language-"].line-numbers-mode .line-numbers-wrapper,
 .vp-doc [class*="language-"].line-numbers-mode .line-numbers-wrapper {
-  padding-top: 18px !important;
-  padding-bottom: 18px !important;
-  line-height: 1.65 !important;
-  font-size: 15px !important;
+  padding-top: 16px !important;
+  padding-bottom: 16px !important;
+  line-height: 1.6 !important;
+  font-size: 13.5px !important;
   font-family: var(--vix-font-mono) !important;
   color: rgba(0, 0, 0, .35) !important;
   border-right: 1px solid var(--cb-border) !important;
@@ -510,8 +440,8 @@ html, body { overflow-x: hidden; }
 
 .vp-doc div[class*="language-"].line-numbers-mode pre,
 .vp-doc [class*="language-"].line-numbers-mode pre {
-  padding-top: 14px !important;
-  padding-bottom: 14px !important;
+  padding-top: 16px !important;
+  padding-bottom: 16px !important;
 }
 
 /* Plain text blocks */
@@ -524,15 +454,15 @@ html, body { overflow-x: hidden; }
 }
 
 
-/* ══════════════════════════════════════════════
-   TABLES
-   ══════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════
+   TABLES — Editorial
+   ══════════════════════════════════════════════════════════════ */
 
 .vp-doc table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px;
-  margin: 24px 0;
+  font-size: 14.5px;
+  margin: 28px 0;
   display: block;
   overflow-x: auto;
 }
@@ -565,21 +495,21 @@ html, body { overflow-x: hidden; }
 }
 
 
-/* ══════════════════════════════════════════════
-   BLOCKQUOTES
-   ══════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════
+   BLOCKQUOTES — Editorial pull-quote
+   ══════════════════════════════════════════════════════════════ */
 
 .vp-doc blockquote {
-  border-left: 2px solid var(--vp-c-text-1);
-  padding: 4px 0 4px 20px;
-  margin: 24px 0;
+  border-left: 3px solid var(--vp-c-text-1);
+  padding: 4px 0 4px 24px;
+  margin: 28px 0;
   background: transparent;
   font-family: var(--vix-font-serif);
-  font-size: 18px;
+  font-size: 20px;
   font-style: italic;
-  line-height: 1.6;
+  line-height: 1.55;
   color: var(--vp-c-text-1);
-  letter-spacing: -0.005em;
+  letter-spacing: -0.01em;
 }
 
 .vp-doc blockquote p {
@@ -591,9 +521,9 @@ html, body { overflow-x: hidden; }
 }
 
 
-/* ══════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════
    CUSTOM CONTAINERS (tip, warning, etc.)
-   ══════════════════════════════════════════════ */
+   ══════════════════════════════════════════════════════════════ */
 
 .vp-doc .tip,
 .vp-doc .warning,
@@ -603,7 +533,7 @@ html, body { overflow-x: hidden; }
   border: 1px solid var(--vp-c-divider);
   background: var(--vp-c-bg-soft);
   padding: 14px 18px;
-  margin: 20px 0;
+  margin: 24px 0;
   font-size: 14.5px;
   line-height: 1.7;
 }
@@ -625,56 +555,26 @@ html, body { overflow-x: hidden; }
 .vp-doc .info    { border-left: 3px solid #3b82f6; }
 
 
-/* ══════════════════════════════════════════════
-   OUTLINE (TOC)
-   ══════════════════════════════════════════════ */
-
-.VPDocAside { padding-left: 24px; }
-
-.VPDocAsideOutline .outline-title {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: var(--vp-c-text-3);
-}
-
-.VPDocAside .outline-link {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--vp-c-text-2);
-  line-height: 1.5;
-  padding: 4px 0;
-  transition: color var(--vix-transition);
-}
-
-.VPDocAside .outline-link:hover { color: var(--vp-c-text-1); }
-
-.VPDocAside .outline-link.active {
-  color: var(--vp-c-text-1) !important;
-  font-weight: 600;
-}
-
-.VPDocAsideOutline .outline-marker {
-  background-color: var(--vp-c-text-1) !important;
-}
-
-
-/* ══════════════════════════════════════════════
-   PREV / NEXT NAVIGATION
-   ══════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════
+   PREV / NEXT — Post navigation
+   ══════════════════════════════════════════════════════════════ */
 
 .VPDocFooter {
+  max-width: 720px !important;
+  margin: 4rem auto 0 !important;
+  padding: 2.5rem 24px 0 !important;
   border-top: 1px solid var(--vp-c-divider-soft);
-  margin-top: 4rem;
-  padding-top: 2rem;
+}
+
+.VPDocFooter .pager {
+  gap: 16px;
 }
 
 .VPDocFooter .pager-link {
   border-radius: var(--vix-radius);
   border: 1px solid var(--vp-c-divider);
   background: var(--vp-c-bg);
-  padding: 16px 20px;
+  padding: 18px 22px;
   transition: all var(--vix-transition);
 }
 
@@ -694,49 +594,44 @@ html, body { overflow-x: hidden; }
 }
 
 .VPDocFooter .pager-link .title {
-  font-size: 15px;
+  font-size: 15.5px;
   font-weight: 600;
   letter-spacing: -0.015em;
   color: var(--vp-c-text-1);
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
-
-/* ══════════════════════════════════════════════
-   SEARCH
-   ══════════════════════════════════════════════ */
-
-.VPNavBarSearch .VPNavBarSearchButton,
-.VPNavBarSearch .DocSearch-Button {
-  border-radius: var(--vix-radius-s);
-  border: 1px solid var(--vp-c-divider);
-  background: var(--vp-c-bg-soft);
-  font-size: 13px;
+/* Last updated info */
+.VPLastUpdated {
+  font-size: 12.5px;
+  color: var(--vp-c-text-3);
+  margin-top: 1.5rem;
   font-weight: 500;
-  height: 34px;
-  padding: 0 12px;
-  color: var(--vp-c-text-2);
-  transition: all var(--vix-transition);
 }
 
-.VPNavBarSearch .VPNavBarSearchButton:hover,
-.VPNavBarSearch .DocSearch-Button:hover {
-  border-color: var(--vp-c-text-3);
-  color: var(--vp-c-text-1);
-}
+
+/* ══════════════════════════════════════════════════════════════
+   SEARCH — Refined
+   ══════════════════════════════════════════════════════════════ */
 
 .VPLocalSearchBox { background: transparent !important; border: none !important; }
-.VPBackdrop,
-.VPNavBarSearch .DocSearch-Overlay,
-.VPLocalSearchBox .backdrop {
+
+.VPLocalSearchBox .backdrop,
+.VPBackdrop {
   background: rgba(10, 10, 10, .40) !important;
   backdrop-filter: blur(4px) !important;
 }
 
+.VPLocalSearchBox .shell {
+  border-radius: var(--vix-radius) !important;
+  border: 1px solid var(--vp-c-divider) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12) !important;
+}
 
-/* ══════════════════════════════════════════════
+
+/* ══════════════════════════════════════════════════════════════
    SELECTION
-   ══════════════════════════════════════════════ */
+   ══════════════════════════════════════════════════════════════ */
 
 ::selection {
   background: rgba(10, 10, 10, .15);
@@ -744,86 +639,54 @@ html, body { overflow-x: hidden; }
 }
 
 
-/* ══════════════════════════════════════════════
-   MOBILE
-   ══════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════════════ */
 
-@media (max-width: 960px) {
-  .VPNavBar {
-    position: relative !important;
-    top: auto !important;
-    left: auto !important;
-    right: auto !important;
+@media (max-width: 768px) {
+  .vp-doc {
+    padding: 32px 20px 56px !important;
   }
 
-  .VPContent { padding-top: 0 !important; }
-
-  .VPLocalNav {
-    position: relative !important;
-    top: auto !important;
-    left: auto !important;
-    right: auto !important;
-    z-index: 99 !important;
-    background: var(--vp-c-bg) !important;
-    border-top: 1px solid var(--vp-c-divider-soft) !important;
-    border-bottom: 1px solid var(--vp-c-divider-soft) !important;
+  .vp-doc h1 {
+    font-size: 2rem;
   }
 
-  .VPLocalNav .container,
-  .VPLocalNav .items {
-    background: var(--vp-c-bg) !important;
+  .vp-doc h1 + p {
+    font-size: 17px;
   }
 
-  body.vix-local-nav-fixed .VPLocalNav {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    width: 100% !important;
-    z-index: 999 !important;
+  .vp-doc h2 {
+    font-size: 1.3rem;
+    margin-top: 2.6rem;
   }
 
-  body.vix-local-nav-fixed .VPContent {
-    padding-top: var(--vp-local-nav-height, 48px) !important;
+  .vp-doc h3 {
+    font-size: 1.1rem;
   }
 
-  body.vix-local-nav-fixed .VPSidebar {
-    top: var(--vp-local-nav-height, 20px) !important;
-    height: calc(100vh - var(--vp-local-nav-height, 20px)) !important;
+  .vp-doc p,
+  .vp-doc li {
+    font-size: 16px;
   }
-
-  .VPSidebar {
-    z-index: 100 !important;
-    background: var(--vp-c-bg) !important;
-  }
-}
-
-
-
-@media (max-width: 640px) {
-  .VPDoc { padding-left: 16px !important; padding-right: 16px !important; }
-  .VPDoc .container { padding-left: 0 !important; padding-right: 0 !important; }
-
-  .vp-doc h1 { font-size: 1.75rem; }
-  .vp-doc h2 { font-size: 1.25rem; margin-top: 2.4rem; padding-top: 1.6rem; }
-  .vp-doc h3 { font-size: 1.05rem; }
-  .vp-doc p, .vp-doc li { font-size: 15px; }
 
   .vp-doc div[class*="language-"] pre,
   .vp-doc [class*="language-"] pre {
-    font-size: 14px !important;
-    padding: 12px 14px !important;
+    font-size: 12.5px !important;
+    padding: 14px 14px !important;
+  }
+
+  .VPDocFooter {
+    padding: 2rem 20px 0 !important;
   }
 }
 
-/* Hide VitePress theme switch */
-.VPSwitchAppearance,
-.VPNavBarAppearance {
-  display: none !important;
+@media (max-width: 480px) {
+  .vp-doc {
+    padding: 24px 16px 40px !important;
+  }
+
+  .vp-doc h1 {
+    font-size: 1.75rem;
+  }
 }
-
-/* ══════════════════════════════════════════════
-   UTILITIES
-   ══════════════════════════════════════════════ */
-
-.VPFooter { display: none !important; }

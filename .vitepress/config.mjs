@@ -4,16 +4,22 @@ export default defineConfig({
   lang: "en-US",
 
   title: "Vix.cpp Blog",
+  titleTemplate: ":title — Vix.cpp Blog",
   description:
-    "Engineering notes about Vix.cpp, modern C++ tooling, build systems, runtime design, and developer experience.",
+    "Engineering notes on Vix.cpp, modern C++ tooling, build systems, runtime design, and developer experience.",
 
   base: "/",
   cleanUrls: true,
   lastUpdated: true,
 
+  // ════════════════════════════════════════════════
+  // MARKDOWN — Code blocks: cppreference.com style
+  // ════════════════════════════════════════════════
   markdown: {
     html: true,
-    lineNumbers: true,
+    // Line numbers off by default — blog posts read better without them.
+    // Authors can opt-in per block with ```cpp:line-numbers
+    lineNumbers: false,
 
     theme: {
       light: "github-light",
@@ -120,10 +126,32 @@ export default defineConfig({
     },
   },
 
+  // ════════════════════════════════════════════════
+  // HEAD — SEO, social, fonts
+  // ════════════════════════════════════════════════
   head: [
     ["link", { rel: "icon", href: "/assets/pwa/favicon.ico" }],
     ["meta", { name: "theme-color", content: "#ffffff" }],
 
+    // Fonts (Inter + JetBrains Mono + Newsreader for serif blockquotes)
+    ["link", { rel: "preconnect", href: "https://fonts.googleapis.com" }],
+    [
+      "link",
+      {
+        rel: "preconnect",
+        href: "https://fonts.gstatic.com",
+        crossorigin: "",
+      },
+    ],
+    [
+      "link",
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Newsreader:ital,wght@0,400;0,500;1,400;1,500&display=swap",
+      },
+    ],
+
+    // Open Graph
     ["meta", { property: "og:type", content: "website" }],
     ["meta", { property: "og:title", content: "Vix.cpp Blog" }],
     [
@@ -131,23 +159,40 @@ export default defineConfig({
       {
         property: "og:description",
         content:
-          "Engineering notes about Vix.cpp, modern C++ tooling, build systems, runtime design, and developer experience.",
+          "Engineering notes on Vix.cpp, modern C++ tooling, build systems, runtime design, and developer experience.",
       },
     ],
     ["meta", { property: "og:site_name", content: "Vix.cpp Blog" }],
+    ["meta", { property: "og:url", content: "https://blog.vixcpp.com" }],
 
+    // Twitter / X
     ["meta", { name: "twitter:card", content: "summary_large_image" }],
+    ["meta", { name: "twitter:site", content: "@vixcpp" }],
     ["meta", { name: "twitter:title", content: "Vix.cpp Blog" }],
     [
       "meta",
       {
         name: "twitter:description",
         content:
-          "Engineering notes about Vix.cpp, modern C++ tooling, build systems, runtime design, and developer experience.",
+          "Engineering notes on Vix.cpp, modern C++ tooling, build systems, runtime design, and developer experience.",
+      },
+    ],
+
+    // RSS autodiscovery
+    [
+      "link",
+      {
+        rel: "alternate",
+        type: "application/rss+xml",
+        title: "Vix.cpp Blog",
+        href: "/rss.xml",
       },
     ],
   ],
 
+  // ════════════════════════════════════════════════
+  // VITE
+  // ════════════════════════════════════════════════
   vite: {
     optimizeDeps: {
       include: ["mark.js", "minisearch"],
@@ -157,33 +202,29 @@ export default defineConfig({
     },
   },
 
+  // ════════════════════════════════════════════════
+  // THEME — Blog mode
+  //   - NO sidebar (we hide it via CSS too)
+  //   - NO default nav (custom blog header in Layout.vue)
+  //   - NO outline by default (posts read top-to-bottom)
+  //   - NO edit link (it's a blog, not docs)
+  // ════════════════════════════════════════════════
   themeConfig: {
-    siteTitle: "Vix.cpp",
-    logo: "/assets/pwa/icon-192.png",
-
+    siteTitle: false, // Hide default — custom brand in Layout.vue
+    logo: false,
     appearance: false,
 
-    nav: [
-      { text: "Posts", link: "/posts/" },
-      { text: "Docs", link: "https://docs.vixcpp.com/" },
-      { text: "Registry", link: "https://registry.vixcpp.com/" },
-      { text: "GitHub", link: "https://github.com/vixcpp/vix" },
-    ],
+    // Empty nav array — our custom Layout.vue provides the blog header
+    nav: [],
 
-    sidebar: {
-      "/posts/": [
-        {
-          text: "Posts",
-          items: [
-            { text: "All posts", link: "/posts/" },
-            { text: "Why Vix.cpp exists", link: "/posts/why-vix-exists" },
-            { text: "vix.app", link: "/posts/vix-app" },
-            { text: "Vix replay", link: "/posts/vix-replay" },
-          ],
-        },
-      ],
-    },
+    // Empty sidebar — blog posts don't get a docs-style tree
+    sidebar: [],
 
+    // Disable aside (right outline) for a clean article view
+    aside: false,
+    outline: false,
+
+    // Search still useful even on a blog
     search: {
       provider: "local",
       options: {
@@ -193,48 +234,48 @@ export default defineConfig({
             prefix: true,
           },
         },
+        translations: {
+          button: {
+            buttonText: "Search articles",
+            buttonAriaLabel: "Search articles",
+          },
+          modal: {
+            displayDetails: "Show details",
+            resetButtonTitle: "Reset",
+            backButtonTitle: "Back",
+            noResultsText: "No articles found for",
+            footer: {
+              selectText: "to select",
+              navigateText: "to navigate",
+              closeText: "to close",
+            },
+          },
+        },
       },
     },
 
-    socialLinks: [
-      {
-        icon: "github",
-        link: "https://github.com/vixcpp/vix",
-      },
-      {
-        icon: "x",
-        link: "https://x.com/vix_cpp",
-      },
-    ],
-
-    outline: {
-      level: "deep",
-      label: "On this page",
-    },
-
+    // Disable doc-style features that don't fit a blog
     returnToTopLabel: "Back to top",
+    externalLinkIcon: false,
 
+    // Last updated info — useful for blog posts
     lastUpdated: {
       text: "Last updated",
       formatOptions: {
-        dateStyle: "medium",
-        timeStyle: "short",
+        dateStyle: "long",
       },
     },
 
-    editLink: {
-      pattern: "https://github.com/vixcpp/blog/edit/main/:path",
-      text: "Edit this post on GitHub",
-    },
+    // No edit-on-GitHub link by default (overridable per-page via frontmatter)
+    editLink: undefined,
 
+    // Prev/Next between posts (still useful in chronological blog)
     docFooter: {
       prev: "Previous post",
       next: "Next post",
     },
 
-    footer: {
-      message: "Released under the MIT License.",
-      copyright: "Copyright © 2026 Vix.cpp",
-    },
+    // Default footer disabled — we use custom one in Layout.vue
+    footer: false,
   },
 });

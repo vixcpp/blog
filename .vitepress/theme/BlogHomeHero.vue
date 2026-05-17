@@ -3,15 +3,15 @@ const featured = {
   tag: "Featured",
   date: "May 2026",
   title: "Why Vix.cpp exists",
-  desc: "Modern C++ has incredible power but a fractured developer experience. Vix.cpp is an attempt to give the language the kind of cohesive tooling that JavaScript, Rust, and Go developers take for granted — without compromising on performance.",
+  desc: "Modern C++ gives developers power, control, and performance. But the developer experience is still fragmented. Vix.cpp is an attempt to make native C++ development feel more direct, practical, and product-oriented.",
   href: "/posts/why-vix-exists",
-  readTime: "8 min read",
+  readTime: "8 min",
 };
 
 const posts = [
   {
     title: "vix.app",
-    desc: "A simpler project format for building C++ apps without fighting CMake complexity.",
+    desc: "A simple application manifest for building C++ projects without exposing users to CMake complexity.",
     href: "/posts/vix-app",
     tag: "Build",
     date: "May 2026",
@@ -19,84 +19,85 @@ const posts = [
   },
   {
     title: "Replay system",
-    desc: "How Vix records executions so developers can inspect and replay past runs deterministically.",
+    desc: "How Vix can record executions so developers can inspect and understand previous runs.",
     href: "/posts/vix-replay",
-    tag: "CLI",
-    date: "April 2026",
-    readTime: "9 min",
-  },
-  {
-    title: "Local-first C++",
-    desc: "Building reliable applications that keep working under unstable networks and offline conditions.",
-    href: "/posts/local-first-cpp",
     tag: "Runtime",
-    date: "April 2026",
+    date: "May 2026",
     readTime: "7 min",
   },
   {
-    title: "Diagnostics as a first-class citizen",
-    desc: "Why error messages and observability deserve as much design effort as APIs themselves.",
-    href: "/posts/diagnostics",
-    tag: "DX",
-    date: "March 2026",
-    readTime: "5 min",
+    title: "Vix build internals",
+    desc: "A technical look at how Vix plans builds, integrates with CMake, and prepares for faster native workflows.",
+    href: "/posts/how-vix-build-works",
+    tag: "Build",
+    date: "May 2026",
+    readTime: "9 min",
+  },
+  {
+    title: "Vix run modes",
+    desc: "How Vix resolves script mode, project mode, runtime arguments, and fallback execution paths.",
+    href: "/posts/how-vix-run-resolves-targets",
+    tag: "CLI",
+    date: "May 2026",
+    readTime: "8 min",
   },
 ];
 
 const topics = [
-  { label: "Build systems", count: 12 },
-  { label: "Runtime",       count: 8  },
-  { label: "Diagnostics",   count: 6  },
-  { label: "Vision",        count: 4  },
-  { label: "CLI",           count: 5  },
+  { label: "Build systems", count: 6 },
+  { label: "Runtime", count: 4 },
+  { label: "CLI", count: 5 },
+  { label: "Diagnostics", count: 3 },
+  { label: "Developer experience", count: 4 },
 ];
 </script>
 
 <template>
   <section class="bh">
-    <!-- ── Eyebrow ── -->
-    <header class="bh-header">
+    <header class="bh-hero">
       <div class="bh-eyebrow">
         <span class="bh-dot"></span>
         <span class="bh-eyebrow-label">Vix.cpp Engineering Blog</span>
       </div>
 
       <h1 class="bh-title">
-        Notes on building<br />
-        modern C++ tooling.
+        Technical notes on<br />
+        building Vix.cpp.
       </h1>
 
       <p class="bh-lead">
-        Articles on build systems, runtime design, developer experience,
-        diagnostics, local-first infrastructure, and the future of C++ tooling —
-        written by the people building Vix.cpp.
+        Deep engineering posts about C++ tooling, build systems, runtime design,
+        diagnostics, developer experience, and the internal decisions behind Vix.cpp.
       </p>
 
       <div class="bh-meta">
         <a class="bh-link" href="/posts/">
-          All posts
+          Read articles
           <svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true">
             <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </a>
+
         <span class="bh-meta-sep">·</span>
-        <a class="bh-link bh-link--muted" href="https://vixcpp.com">
-          vixcpp.com
+
+        <a class="bh-link bh-link--muted" href="https://vixcpp.com" target="_blank" rel="noreferrer">
+          Documentation
         </a>
+
         <span class="bh-meta-sep">·</span>
-        <a class="bh-link bh-link--muted" href="https://github.com/vixcpp">
+
+        <a class="bh-link bh-link--muted" href="https://github.com/vixcpp" target="_blank" rel="noreferrer">
           GitHub
         </a>
       </div>
     </header>
 
-    <!-- ── Featured article ── -->
     <a class="bh-featured" :href="featured.href">
       <div class="bh-featured-meta">
         <span class="bh-tag bh-tag--featured">{{ featured.tag }}</span>
-        <span class="bh-featured-date">{{ featured.date }}</span>
+        <span>{{ featured.date }}</span>
         <span class="bh-featured-sep">·</span>
-        <span class="bh-featured-time">{{ featured.readTime }}</span>
+        <span>{{ featured.readTime }} read</span>
       </div>
 
       <h2 class="bh-featured-title">{{ featured.title }}</h2>
@@ -110,13 +111,11 @@ const topics = [
       </span>
     </a>
 
-    <!-- ── Section heading ── -->
     <div class="bh-section">
       <h3 class="bh-section-title">Recent posts</h3>
       <a href="/posts/" class="bh-section-link">View all</a>
     </div>
 
-    <!-- ── Articles grid ── -->
     <div class="bh-grid">
       <a
         v-for="post in posts"
@@ -143,9 +142,9 @@ const topics = [
       </a>
     </div>
 
-    <!-- ── Topics ── -->
     <div class="bh-topics">
       <h3 class="bh-topics-title">Browse by topic</h3>
+
       <div class="bh-topics-list">
         <a
           v-for="topic in topics"
@@ -158,20 +157,18 @@ const topics = [
         </a>
       </div>
     </div>
-
   </section>
 </template>
 
 <style scoped>
 .bh {
-  max-width: 760px;
+  max-width: 820px;
   margin: 0 auto;
-  padding: 56px 24px 64px;
+  padding: 64px 24px 72px;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* ── Header ── */
-.bh-header {
+.bh-hero {
   margin-bottom: 56px;
 }
 
@@ -192,12 +189,6 @@ const topics = [
   border-radius: 50%;
   background: #16a34a;
   box-shadow: 0 0 0 3px rgba(22, 163, 74, .15);
-  animation: bh-pulse 2.4s ease-in-out infinite;
-}
-
-@keyframes bh-pulse {
-  0%, 100% { box-shadow: 0 0 0 3px rgba(22, 163, 74, .15); }
-  50%      { box-shadow: 0 0 0 5px rgba(22, 163, 74, .08); }
 }
 
 .bh-eyebrow-label {
@@ -209,18 +200,18 @@ const topics = [
 
 .bh-title {
   margin: 0 0 24px;
-  font-size: clamp(2.4rem, 5vw, 3.5rem);
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
   line-height: 1.02;
-  letter-spacing: -0.045em;
-  font-weight: 800;
+  letter-spacing: -0.05em;
+  font-weight: 850;
   color: #0a0a0a;
 }
 
 .bh-lead {
-  max-width: 60ch;
+  max-width: 64ch;
   margin: 0 0 28px;
   font-size: 17px;
-  line-height: 1.65;
+  line-height: 1.7;
   color: #525252;
   letter-spacing: -0.005em;
 }
@@ -241,25 +232,34 @@ const topics = [
   text-decoration: none;
   font-weight: 600;
   letter-spacing: -0.005em;
-  transition: gap .15s ease;
+  transition: gap .15s ease, color .15s ease;
 }
 
-.bh-link svg { transition: transform .15s ease; }
-.bh-link:hover { gap: 7px; }
-.bh-link:hover svg { transform: translateX(2px); }
+.bh-link:hover {
+  gap: 7px;
+}
+
+.bh-link svg {
+  transition: transform .15s ease;
+}
+
+.bh-link:hover svg {
+  transform: translateX(2px);
+}
 
 .bh-link--muted {
   color: #525252;
   font-weight: 500;
 }
 
-.bh-link--muted:hover { color: #0a0a0a; }
+.bh-link--muted:hover {
+  color: #0a0a0a;
+}
 
 .bh-meta-sep {
   color: #d4d4d4;
 }
 
-/* ── Featured ── */
 .bh-featured {
   display: block;
   padding: 32px;
@@ -267,22 +267,10 @@ const topics = [
   border-radius: 16px;
   border: 1px solid rgba(10, 10, 10, .08);
   background:
-    linear-gradient(135deg, rgba(250, 250, 250, 0) 0%, rgba(244, 244, 245, .50) 100%),
+    linear-gradient(135deg, rgba(250, 250, 250, 0) 0%, rgba(244, 244, 245, .55) 100%),
     #fafafa;
   text-decoration: none !important;
-  transition: all .2s cubic-bezier(.4, 0, .2, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-.bh-featured::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(10, 10, 10, .12), transparent);
+  transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
 }
 
 .bh-featured:hover {
@@ -296,10 +284,15 @@ const topics = [
 .bh-featured-meta {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 16px;
   font-size: 12.5px;
   color: #737373;
+}
+
+.bh-featured-sep {
+  color: #d4d4d4;
 }
 
 .bh-tag {
@@ -321,22 +314,12 @@ const topics = [
   border-color: #0a0a0a;
 }
 
-.bh-featured-date,
-.bh-featured-time {
-  font-weight: 500;
-  font-size: 12.5px;
-}
-
-.bh-featured-sep {
-  color: #d4d4d4;
-}
-
 .bh-featured-title {
   margin: 0 0 12px;
   font-size: clamp(1.5rem, 3vw, 2rem);
   line-height: 1.15;
   letter-spacing: -0.035em;
-  font-weight: 700;
+  font-weight: 750;
   color: #0a0a0a;
 }
 
@@ -345,7 +328,7 @@ const topics = [
   font-size: 15.5px;
   line-height: 1.65;
   color: #525252;
-  max-width: 58ch;
+  max-width: 62ch;
 }
 
 .bh-featured-cta {
@@ -358,10 +341,14 @@ const topics = [
   letter-spacing: -0.005em;
 }
 
-.bh-featured-cta svg { transition: transform .15s ease; }
-.bh-featured:hover .bh-featured-cta svg { transform: translateX(3px); }
+.bh-featured-cta svg {
+  transition: transform .15s ease;
+}
 
-/* ── Section heading ── */
+.bh-featured:hover .bh-featured-cta svg {
+  transform: translateX(3px);
+}
+
 .bh-section {
   display: flex;
   align-items: baseline;
@@ -371,7 +358,8 @@ const topics = [
   border-bottom: 1px solid rgba(10, 10, 10, .08);
 }
 
-.bh-section-title {
+.bh-section-title,
+.bh-topics-title {
   margin: 0;
   font-size: 13px;
   font-weight: 700;
@@ -388,9 +376,10 @@ const topics = [
   transition: color .15s ease;
 }
 
-.bh-section-link:hover { color: #0a0a0a; }
+.bh-section-link:hover {
+  color: #0a0a0a;
+}
 
-/* ── Cards grid ── */
 .bh-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -406,7 +395,7 @@ const topics = [
   border: 1px solid rgba(10, 10, 10, .08);
   background: #ffffff;
   text-decoration: none !important;
-  transition: all .2s cubic-bezier(.4, 0, .2, 1);
+  transition: border-color .2s ease, background .2s ease, transform .2s ease, box-shadow .2s ease;
 }
 
 .bh-card:hover {
@@ -469,20 +458,16 @@ const topics = [
   transition: transform .15s ease;
 }
 
-.bh-card:hover .bh-card-arrow { transform: translateX(3px); }
+.bh-card:hover .bh-card-arrow {
+  transform: translateX(3px);
+}
 
-/* ── Topics ── */
 .bh-topics {
-  margin-bottom: 64px;
+  margin-bottom: 16px;
 }
 
 .bh-topics-title {
-  margin: 0 0 16px;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: #525252;
+  margin-bottom: 16px;
 }
 
 .bh-topics-list {
@@ -504,7 +489,7 @@ const topics = [
   color: #0a0a0a;
   text-decoration: none !important;
   letter-spacing: -0.005em;
-  transition: all .15s ease;
+  transition: border-color .15s ease, background .15s ease, color .15s ease;
 }
 
 .bh-topic:hover {
@@ -521,30 +506,41 @@ const topics = [
 }
 
 .bh-topic:hover .bh-topic-count {
-  color: rgba(255, 255, 255, .60);
+  color: rgba(255, 255, 255, .65);
 }
 
-/* ── Responsive ── */
 @media (max-width: 768px) {
   .bh {
-    padding: 32px 20px 48px;
+    padding: 40px 20px 56px;
   }
 
-  .bh-header { margin-bottom: 40px; }
-  .bh-featured { padding: 24px; margin-bottom: 40px; }
+  .bh-hero {
+    margin-bottom: 40px;
+  }
+
+  .bh-featured {
+    padding: 24px;
+    margin-bottom: 40px;
+  }
 
   .bh-grid {
     grid-template-columns: 1fr;
     gap: 14px;
     margin-bottom: 48px;
   }
-
-  .bh-topics { margin-bottom: 48px; }
 }
 
 @media (max-width: 480px) {
-  .bh-title { font-size: 2rem; }
-  .bh-featured-title { font-size: 1.35rem; }
-  .bh-card { padding: 20px; }
+  .bh-title {
+    font-size: 2rem;
+  }
+
+  .bh-featured-title {
+    font-size: 1.35rem;
+  }
+
+  .bh-card {
+    padding: 20px;
+  }
 }
 </style>

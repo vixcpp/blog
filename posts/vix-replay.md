@@ -1,6 +1,6 @@
 ---
-title: Vix replay
-description: Record, inspect, and replay past C++ executions with Vix.cpp.
+title:
+description:
 date: 2026-05-17
 ---
 
