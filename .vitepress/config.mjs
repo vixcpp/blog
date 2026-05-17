@@ -14,11 +14,115 @@ export default defineConfig({
   markdown: {
     html: true,
     lineNumbers: true,
+
+    theme: {
+      light: "github-light",
+      dark: "github-light",
+    },
+
+    shikiSetup: async (highlighter) => {
+      await highlighter.loadTheme({
+        name: "cppreference",
+        type: "light",
+        colors: {
+          "editor.background": "#fafaf6",
+          "editor.foreground": "#000000",
+          "editorLineNumber.foreground": "#999999",
+        },
+        tokenColors: [
+          {
+            scope: ["comment", "punctuation.definition.comment"],
+            settings: { foreground: "#338033", fontStyle: "italic" },
+          },
+          {
+            scope: [
+              "keyword",
+              "keyword.control",
+              "keyword.other",
+              "keyword.operator.new",
+              "storage.type",
+              "storage.modifier",
+              "constant.language",
+            ],
+            settings: { foreground: "#0000ff", fontStyle: "bold" },
+          },
+          {
+            scope: [
+              "storage.type.built-in",
+              "storage.type.primitive",
+              "support.type.built-in",
+              "storage.type.c",
+              "storage.type.cpp",
+            ],
+            settings: { foreground: "#0000ff", fontStyle: "bold" },
+          },
+          {
+            scope: [
+              "meta.preprocessor",
+              "keyword.control.directive",
+              "punctuation.definition.directive",
+              "entity.name.function.preprocessor",
+            ],
+            settings: { foreground: "#7f0055", fontStyle: "bold" },
+          },
+          {
+            scope: [
+              "string.quoted.other.lt-gt.include",
+              "meta.preprocessor.include string",
+              "punctuation.definition.string.begin.c",
+              "punctuation.definition.string.end.c",
+            ],
+            settings: { foreground: "#1e8449", fontStyle: "italic" },
+          },
+          {
+            scope: [
+              "string",
+              "string.quoted.double",
+              "string.quoted.single",
+              "punctuation.definition.string",
+            ],
+            settings: { foreground: "#a31515" },
+          },
+          {
+            scope: [
+              "constant.numeric",
+              "constant.numeric.integer",
+              "constant.numeric.float",
+            ],
+            settings: { foreground: "#098658" },
+          },
+          {
+            scope: [
+              "entity.name.function",
+              "meta.function-call",
+              "support.function",
+            ],
+            settings: { foreground: "#000000" },
+          },
+          {
+            scope: ["variable", "variable.other", "meta.variable"],
+            settings: { foreground: "#000000" },
+          },
+          {
+            scope: ["keyword.operator", "punctuation"],
+            settings: { foreground: "#000000" },
+          },
+          {
+            scope: [
+              "entity.name.type",
+              "entity.name.namespace",
+              "support.type",
+            ],
+            settings: { foreground: "#000000" },
+          },
+        ],
+      });
+    },
   },
 
   head: [
     ["link", { rel: "icon", href: "/assets/pwa/favicon.ico" }],
-    ["meta", { name: "theme-color", content: "#0b0e14" }],
+    ["meta", { name: "theme-color", content: "#ffffff" }],
 
     ["meta", { property: "og:type", content: "website" }],
     ["meta", { property: "og:title", content: "Vix.cpp Blog" }],
@@ -57,10 +161,9 @@ export default defineConfig({
     siteTitle: "Vix.cpp",
     logo: "/assets/pwa/icon-192.png",
 
-    appearance: true,
+    appearance: false,
 
     nav: [
-      { text: "Blog", link: "/" },
       { text: "Posts", link: "/posts/" },
       { text: "Docs", link: "https://docs.vixcpp.com/" },
       { text: "Registry", link: "https://registry.vixcpp.com/" },
@@ -71,7 +174,12 @@ export default defineConfig({
       "/posts/": [
         {
           text: "Posts",
-          items: [{ text: "All posts", link: "/posts/" }],
+          items: [
+            { text: "All posts", link: "/posts/" },
+            { text: "Why Vix.cpp exists", link: "/posts/why-vix-exists" },
+            { text: "vix.app", link: "/posts/vix-app" },
+            { text: "Vix replay", link: "/posts/vix-replay" },
+          ],
         },
       ],
     },
@@ -95,7 +203,7 @@ export default defineConfig({
       },
       {
         icon: "x",
-        link: "https://x.com/",
+        link: "https://x.com/vix_cpp",
       },
     ],
 

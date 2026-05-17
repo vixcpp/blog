@@ -3,9 +3,6 @@
     <!-- Header -->
     <div class="cb-head">
       <div class="cb-head-left">
-        <span class="cb-dot cb-dot--r"></span>
-        <span class="cb-dot cb-dot--y"></span>
-        <span class="cb-dot cb-dot--g"></span>
         <span class="cb-title">{{ title || computedTitle }}</span>
         <span v-for="c in chipsToShow" :key="c" class="cb-chip">{{ c }}</span>
       </div>
@@ -65,7 +62,7 @@ const props = defineProps({
   note:      { type: String, default: "" },
   lang:      { type: String, default: "" },
   chips:     { type: Array,  default: () => [] },
-  maxHeight: { type: [Number, String], default: 380 },
+  maxHeight: { type: [Number, String], default: 420 },
 });
 
 const copied    = ref(false);
@@ -108,7 +105,7 @@ const chipsToShow = computed(() => (props.chips || []).filter(Boolean));
 const maxH = computed(() => {
   const v = props.maxHeight;
   if (typeof v === "number") return `${v}px`;
-  return v?.trim() ? v : "380px";
+  return v?.trim() ? v : "420px";
 });
 
 function guessLang(tabKey) {
@@ -135,76 +132,34 @@ function normalizeShellText(raw) {
     .join("\n");
 }
 
-/* ── C++ keyword sets ── */
-const KW = new Set([
-  "alignas","alignof","auto","bool","break","case","catch","char","char8_t","char16_t","char32_t",
-  "class","concept","const","consteval","constexpr","constinit","const_cast","continue",
-  "co_await","co_return","co_yield","decltype","default","delete","do","double","dynamic_cast",
-  "else","enum","explicit","export","extern","false","float","for","friend","goto","if","inline",
-  "int","long","mutable","namespace","new","noexcept","nullptr","operator","private","protected",
-  "public","register","reinterpret_cast","requires","return","short","signed","sizeof","static",
-  "static_assert","static_cast","struct","switch","template","this","thread_local","throw","true",
-  "try","typedef","typeid","typename","union","unsigned","using","virtual","void","volatile",
-  "wchar_t","while","override","final","import","module"
-]);
+/* ──────────────────────────────────────────────
+   cppreference-style highlight
+   - Keywords + fundamental types: BLUE bold
+   - Preprocessor #directive: dark purple
+   - Include headers <...>: green italic
+   - Strings / chars: dark red
+   - Comments: green italic
+   - Numbers: dark teal
+   - Identifiers, operators, punctuation: BLACK
+   ────────────────────────────────────────────── */
 
-const CTRL_FLOW = new Set([
-  "if","else","for","while","do","switch","case","default","break","continue",
-  "return","goto","throw","try","catch","co_await","co_return","co_yield"
-]);
-
-const TYPES = new Set([
-  "size_t","ssize_t","ptrdiff_t","intptr_t","uintptr_t",
-  "int8_t","int16_t","int32_t","int64_t","uint8_t","uint16_t","uint32_t","uint64_t",
-  "string","string_view","wstring","u8string","u16string","u32string",
-  "vector","array","deque","list","forward_list",
-  "map","multimap","unordered_map","unordered_multimap",
-  "set","multiset","unordered_set","unordered_multiset",
-  "stack","queue","priority_queue",
-  "pair","tuple","optional","variant","any","expected",
-  "unique_ptr","shared_ptr","weak_ptr",
-  "function","reference_wrapper","initializer_list",
-  "span","mdspan","ranges",
-  "thread","mutex","lock_guard","unique_lock","shared_lock",
-  "condition_variable","future","promise","async",
-  "atomic","atomic_ref",
-  "istream","ostream","iostream","ifstream","ofstream","fstream",
-  "istringstream","ostringstream","stringstream",
-  "regex","smatch","cmatch",
-  "chrono","filesystem","format",
-  "App","Request","Response","Context","Router","Middleware",
-  "Server","Client","Socket","Connection","Session","Handler",
-  "Config","Logger","Timer","Task","Channel","Buffer","Stream"
-]);
-
-const NS = new Set([
-  "std","vix","asio","net","http","ws","chrono","filesystem","ranges",
-  "views","this_thread","literals","placeholders","execution"
-]);
-
-const BUILTINS = new Set([
-  "cout","cerr","clog","cin","endl","flush",
-  "move","forward","swap","exchange",
-  "make_unique","make_shared","make_pair","make_tuple","make_optional",
-  "static_pointer_cast","dynamic_pointer_cast","reinterpret_pointer_cast",
-  "begin","end","cbegin","cend","rbegin","rend",
-  "size","empty","data",
-  "get","holds_alternative","visit",
-  "min","max","clamp","abs",
-  "sort","find","find_if","for_each","transform","accumulate","reduce",
-  "copy","fill","remove","remove_if","replace","reverse","unique",
-  "all_of","any_of","none_of","count","count_if",
-  "push_back","push_front","pop_back","pop_front","emplace","emplace_back",
-  "insert","erase","clear","reserve","resize","shrink_to_fit",
-  "front","back","at","substr","append","assign",
-  "open","close","read","write","seek","tell","good","eof","fail",
-  "lock","unlock","try_lock","notify_one","notify_all","wait",
-  "load","store","fetch_add","fetch_sub","compare_exchange_strong",
-  "join","detach","joinable","get_id","sleep_for","sleep_until","yield",
-  "to_string","stoi","stol","stoll","stof","stod","stold",
-  "printf","sprintf","snprintf","fprintf",
-  "malloc","calloc","realloc","free","memcpy","memset","memmove",
-  "assert","static_assert"
+/* Keywords + fundamental types — cppreference colors all of these blue */
+const KW_BLUE = new Set([
+  // Keywords
+  "alignas","alignof","and","and_eq","asm","auto","bitand","bitor","break",
+  "case","catch","class","compl","concept","const","consteval","constexpr",
+  "constinit","const_cast","continue","co_await","co_return","co_yield",
+  "decltype","default","delete","do","dynamic_cast","else","enum","explicit",
+  "export","extern","false","for","friend","goto","if","inline","mutable",
+  "namespace","new","noexcept","not","not_eq","nullptr","operator","or","or_eq",
+  "private","protected","public","register","reinterpret_cast","requires",
+  "return","sizeof","static","static_assert","static_cast","struct","switch",
+  "template","this","thread_local","throw","true","try","typedef","typeid",
+  "typename","union","using","virtual","volatile","while","xor","xor_eq",
+  "override","final","import","module",
+  // Fundamental types
+  "bool","char","char8_t","char16_t","char32_t","double","float","int","long",
+  "short","signed","unsigned","void","wchar_t"
 ]);
 
 function wrap(cls, text) { return `<span class="${cls}">${esc(text)}</span>`; }
@@ -225,10 +180,10 @@ function splitComment(line) {
 }
 
 function hlDirective(line) {
-  const m = line.match(/^(\s*#\s*(?:include|define|pragma|if|ifdef|ifndef|endif|elif|else|undef|error|warning|line)\b)(.*)/);
+  const m = line.match(/^(\s*)(#\s*(?:include|define|pragma|if|ifdef|ifndef|endif|elif|else|undef|error|warning|line)\b)(.*)/);
   if (!m) return null;
-  let out = wrap("cb-dir", m[1]);
-  const rest = m[2] || "";
+  let out = esc(m[1]) + wrap("cb-dir", m[2]);
+  const rest = m[3] || "";
   const angle = rest.match(/^(\s*)(<[^>\n]*>)(.*)/);
   if (angle) { out += esc(angle[1]) + wrap("cb-inc", angle[2]) + hlInline(angle[3]||""); return out; }
   const quote = rest.match(/^(\s*)("(?:[^"\\]|\\.)*")(.*)/);
@@ -271,44 +226,13 @@ function hlInline(s) {
       let j = i+1;
       while (j < s.length && isId(s[j])) j++;
       const id = s.slice(i, j);
-      const nextNonSp = (() => { for (let k=j; k<s.length; k++) if (s[k]!==" "&&s[k]!=="\t") return s[k]; return ""; })();
-      const prevNonSp = (() => { for (let k=i-1; k>=0; k--) if (s[k]!==" "&&s[k]!=="\t") return s[k]; return ""; })();
 
-      if (CTRL_FLOW.has(id))     out += wrap("cb-ctrl", id);
-      else if (KW.has(id))       out += wrap("cb-kw",   id);
-      else if (TYPES.has(id))    out += wrap("cb-type", id);
-      else if (NS.has(id))       out += wrap("cb-ns",   id);
-      else if (BUILTINS.has(id)) out += wrap("cb-blt",  id);
-      else if (nextNonSp === "(") out += wrap("cb-fn",  id);
-      else if (nextNonSp === "<" && /^[A-Z]/.test(id)) out += wrap("cb-type", id);
-      else if (prevNonSp === "." || prevNonSp === ">") out += wrap("cb-mem", id);
-      else if (/^[A-Z][A-Z0-9_]+$/.test(id)) out += wrap("cb-const", id);
-      else                        out += wrap("cb-id",  id);
+      if (KW_BLUE.has(id))  out += wrap("cb-kw", id);
+      else                  out += wrap("cb-id", id);
       i = j; continue;
     }
 
-    /* Operators */
-    if (s.startsWith("::", i))  { out += wrap("cb-op", "::"); i+=2; continue; }
-    if (s.startsWith("->", i))  { out += wrap("cb-arrow", "->"); i+=2; continue; }
-    if (s.startsWith("<<", i))  { out += wrap("cb-op", "<<"); i += 2; continue; }
-    if (s.startsWith(">>", i))  { out += wrap("cb-op", ">>"); i += 2; continue; }
-    if (s.startsWith("<=", i))  { out += wrap("cb-op", "<="); i += 2; continue; }
-    if (s.startsWith(">=", i))  { out += wrap("cb-op", ">="); i += 2; continue; }
-    if (s.startsWith("==", i))  { out += wrap("cb-op", "=="); i+=2; continue; }
-    if (s.startsWith("!=", i))  { out += wrap("cb-op", "!="); i+=2; continue; }
-    if (s.startsWith("&&", i))  { out += wrap("cb-op", "&amp;&amp;"); i+=2; continue; }
-    if (s.startsWith("||", i))  { out += wrap("cb-op", "||"); i+=2; continue; }
-    if (s.startsWith("+=", i))  { out += wrap("cb-op", "+="); i+=2; continue; }
-    if (s.startsWith("-=", i))  { out += wrap("cb-op", "-="); i+=2; continue; }
-    if (/[\(\)\{\}\[\];\,\.\:\=\+\-\*\/\<\>\!\&\|\?\~\%\^]/.test(ch)) {
-      /* Braces get special class */
-      if (ch === '{' || ch === '}') { out += wrap("cb-brace", ch); }
-      else if (ch === '(' || ch === ')') { out += wrap("cb-paren", ch); }
-      else if (ch === '[' || ch === ']') { out += wrap("cb-bracket", ch); }
-      else if (ch === ';') { out += wrap("cb-semi", ch); }
-      else { out += wrap("cb-op", ch); }
-      i++; continue;
-    }
+    /* Operators & punctuation — black (no special class) */
     out += esc(ch); i++;
   }
   return out.replace(/(https?:\/\/[^\s<]+)/g, `<span class="cb-url">$1</span>`);
@@ -337,33 +261,19 @@ function highlightShell(raw) {
 
 function normalizeLang(lang) {
   const l = String(lang || "").toLowerCase().trim();
-
-  if (["sh", "bash", "zsh", "shell", "console", "terminal"].includes(l)) {
-    return "shell";
-  }
-
-  if (["cpp", "c++", "cc", "cxx", "hpp", "hxx"].includes(l)) {
-    return "cpp";
-  }
-
-  if (["txt", "text", "plain", "plaintext"].includes(l)) {
-    return "text";
-  }
-
+  if (["sh", "bash", "zsh", "shell", "console", "terminal"].includes(l)) return "shell";
+  if (["cpp", "c++", "cc", "cxx", "hpp", "hxx"].includes(l)) return "cpp";
+  if (["txt", "text", "plain", "plaintext"].includes(l)) return "text";
   return l || "text";
 }
 
-function highlightText(raw) {
-  return esc(raw ?? "");
-}
+function highlightText(raw) { return esc(raw ?? ""); }
 
 const activeHtml = computed(() => {
   const text = activeText.value || "";
   const lang = normalizeLang(activeLang.value);
-
   if (lang === "shell") return highlightShell(text);
   if (lang === "cpp") return highlightCpp(text);
-
   return highlightText(text);
 });
 
@@ -387,223 +297,222 @@ async function copy(text) {
 </script>
 
 <style>
-/* ── Card ── */
+/* ════════════════════════════════════════════════
+   Code Block — cppreference.com style
+   Light cream background, classic syntax colors
+   ════════════════════════════════════════════════ */
+
 .cb {
   width: 100%;
-  border-radius: 12px;
+  border-radius: 8px;
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,.10);
-  background: #0d1117;
-  box-shadow: 0 8px 28px rgba(0,0,0,.40);
-  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  border: 1px solid #d4d2c8;
+  background: #fafaf6;
+  font-family: 'JetBrains Mono', 'Consolas', 'Courier New', ui-monospace, monospace;
+  transition: border-color .15s ease;
+  margin: 20px 0;
 }
 
-html:not(.dark) .cb {
-  border-color: rgba(0,0,0,.10);
-  background: #1a1e26;
-  box-shadow: 0 4px 18px rgba(0,0,0,.18);
+.cb:hover {
+  border-color: #b8b6ac;
 }
 
 /* ── Header ── */
 .cb-head {
-  display: flex; align-items: center; justify-content: space-between; gap: 10px;
-  padding: 9px 12px;
-  background: #161b22;
-  border-bottom: 1px solid rgba(255,255,255,.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  background: #f0eee4;
+  border-bottom: 1px solid #d4d2c8;
 }
 
-html:not(.dark) .cb-head {
-  background: #21262d;
-  border-color: rgba(255,255,255,.10);
-}
-
-.cb-head-left  { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.cb-head-left  { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .cb-head-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 
-.cb-dot { width: 10px; height: 10px; border-radius: 50%; }
-.cb-dot--r { background: #f97316; }
-.cb-dot--y { background: #facc15; }
-.cb-dot--g { background: #22c55e; }
-
 .cb-title {
-  font-size: .78rem; font-weight: 600; color: rgba(230,232,238,.70);
-  white-space: nowrap; letter-spacing: .01em;
+  font-size: 12px;
+  font-weight: 600;
+  color: #555;
+  white-space: nowrap;
+  letter-spacing: -0.005em;
+  font-family: 'Inter', -apple-system, sans-serif;
 }
 
 .cb-chip {
-  display: inline-flex; align-items: center;
-  padding: 2px 8px; border-radius: 999px;
-  font-size: .67rem; font-weight: 700;
-  color: #4ade80;
-  border: 1px solid rgba(34,197,94,.25);
-  background: rgba(34,197,94,.08);
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: #555;
+  border: 1px solid #d4d2c8;
+  background: #fafaf6;
+  font-family: 'Inter', -apple-system, sans-serif;
 }
 
 /* Tabs */
 .cb-tabs {
-  display: flex; align-items: center; gap: 3px;
-  padding: 3px; border-radius: 999px;
-  background: rgba(255,255,255,.04);
-  border: 1px solid rgba(255,255,255,.08);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 7px;
+  background: rgba(0, 0, 0, .04);
 }
 
 .cb-tab {
-  border: 0; background: transparent;
-  color: rgba(230,232,238,.55); font-size: .72rem; font-weight: 600;
-  padding: 4px 10px; border-radius: 999px; cursor: pointer;
+  border: 0;
+  background: transparent;
+  color: #666;
+  font-size: 11.5px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 5px;
+  cursor: pointer;
   transition: background .12s, color .12s;
+  font-family: 'Inter', -apple-system, sans-serif;
+  letter-spacing: -0.005em;
 }
-.cb-tab:hover { color: rgba(230,232,238,.88); }
-.cb-tab--active { background: rgba(34,197,94,.15); color: #86efac; }
+
+.cb-tab:hover { color: #222; }
+
+.cb-tab--active {
+  background: #fafaf6;
+  color: #0a0a0a;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .06);
+}
 
 /* Copy */
 .cb-copy {
-  width: 30px; height: 30px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.04);
-  color: rgba(230,232,238,.65);
-  border-radius: 8px; cursor: pointer;
-  display: grid; place-items: center;
-  opacity: 0; pointer-events: none;
-  transition: opacity .14s, background .12s, color .12s, transform .1s;
+  width: 28px;
+  height: 28px;
+  border: 1px solid #d4d2c8;
+  background: #fafaf6;
+  color: #666;
+  border-radius: 6px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .15s, background .12s, color .12s;
 }
-.cb-copy--visible { opacity: 1; pointer-events: auto; }
-.cb-copy:hover { background: rgba(34,197,94,.12); border-color: rgba(34,197,94,.28); color: #86efac; transform: translateY(-1px); }
-.cb-ico { width: 15px; height: 15px; display: block; }
+
+.cb-copy--visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.cb-copy:hover {
+  background: #ffffff;
+  border-color: #b8b6ac;
+  color: #0a0a0a;
+}
+
+.cb-ico { width: 14px; height: 14px; display: block; }
 
 /* ── Body ── */
 .cb-body {
   overflow: auto;
   -webkit-overflow-scrolling: touch;
-  background: #0d1117;
-}
-
-html:not(.dark) .cb-body { background: #1a1e26; }
-
-.cb-pre {
-  margin: 0; padding: 14px 16px;
-  white-space: pre; line-height: 1.7;
-  font-size: .875rem; color: #e6edf3;
-  background: transparent;
-  min-width: max-content;
-}
-
-.cb-code { display: inline-block; min-width: 100%; }
-
-/* Scrollbars */
-.cb-body::-webkit-scrollbar { height: 7px; width: 7px; }
-.cb-body::-webkit-scrollbar-thumb { background: rgba(34,197,94,.30); border-radius: 999px; }
-.cb-body::-webkit-scrollbar-track { background: rgba(0,0,0,.20); }
-
-/* ── Footer ── */
-.cb-foot { border-top: 1px solid rgba(255,255,255,.07); padding: 10px 14px; background: rgba(0,0,0,.18); }
-.cb-note { margin: 0; color: rgba(230,232,238,.50); font-size: .82rem; line-height: 1.55; font-family: system-ui,-apple-system,sans-serif; }
-
-/* ═══════════════════════════════════════════════════
-   C++ SYNTAX TOKENS — High-contrast palette
-   Inspired by One Dark Pro / GitHub Dark High Contrast
-   ═══════════════════════════════════════════════════ */
-
-/* Preprocessor directives: #include, #define, etc. */
-.cb-dir      { color: #c586c0; font-weight: 600; }
-
-/* Include paths: <vix.hpp> or "file.h" */
-.cb-inc      { color: #ce9178; }
-
-/* Control flow: if, else, for, while, return, throw, etc. */
-.cb-ctrl     { color: #c586c0; font-weight: 600; }
-
-/* Other keywords: class, struct, const, static, template, etc. */
-.cb-kw       { color: #569cd6; font-weight: 600; }
-
-/* Types: string, vector, optional, App, Request, Response, etc. */
-.cb-type     { color: #4ec9b0; font-weight: 600; }
-
-/* Namespaces: std, vix, chrono, etc. */
-.cb-ns       { color: #4fc1ff; }
-
-/* Function calls: app.get(...), res.json(...), etc. */
-.cb-fn       { color: #dcdcaa; }
-
-/* Builtin functions: cout, move, make_unique, push_back, etc. */
-.cb-blt      { color: #dcdcaa; font-style: italic; }
-
-/* Member access: .name, ->value, etc. */
-.cb-mem      { color: #9cdcfe; }
-
-/* Regular identifiers / variables */
-.cb-id       { color: #e6edf3; }
-
-/* SCREAMING_CASE constants */
-.cb-const    { color: #4fc1ff; font-weight: 600; }
-
-/* String literals */
-.cb-str      { color: #ce9178; }
-
-/* Char literals */
-.cb-char     { color: #d7ba7d; }
-
-/* Numeric literals */
-.cb-num      { color: #b5cea8; font-weight: 500; }
-
-/* Comments */
-.cb-cmt      { color: #6a9955; font-style: italic; }
-
-/* Operators: ::, +, =, <, >, etc. */
-.cb-op       { color: rgba(230,237,243,.50); }
-
-/* Arrow operator -> (slightly brighter) */
-.cb-arrow    { color: rgba(230,237,243,.65); }
-
-/* Braces {} */
-.cb-brace    { color: #ffd700; }
-
-/* Parentheses () */
-.cb-paren    { color: rgba(230,237,243,.55); }
-
-/* Brackets [] */
-.cb-bracket  { color: #da70d6; }
-
-/* Semicolons */
-.cb-semi     { color: rgba(230,237,243,.30); }
-
-/* URLs in code */
-.cb-url      { color: #4fc1ff; text-decoration: underline; text-underline-offset: 2px; }
-
-
-/* ═══════════════════════════
-   Shell tokens
-   ═══════════════════════════ */
-.cb-sh-prompt  { color: #22c55e; font-weight: 800; }
-.cb-sh-cmd     { color: #38bdf8; font-weight: 700; }
-.cb-sh-flag    { color: #fb923c; }
-.cb-sh-path    { color: #a5b4fc; }
-.cb-sh-url     { color: #38bdf8; text-decoration: underline; text-underline-offset: 2px; }
-.cb-sh-port    { color: #b5cea8; }
-.cb-sh-http    { color: #dcdcaa; font-weight: 700; }
-.cb-sh-comment { color: #6a9955; font-style: italic; }
-
-@media (max-width: 640px) {
-  .cb-pre { font-size: .82rem; padding: 12px 12px; }
-  .cb-title { max-width: 28vw; overflow: hidden; text-overflow: ellipsis; }
-}
-.cb-code {
-  display: inline-block;
-  min-width: 100%;
-  color: #f8fafc;
+  background: #fafaf6;
 }
 
 .cb-pre {
   margin: 0;
   padding: 14px 16px;
   white-space: pre;
-  line-height: 1.7;
-  font-size: .875rem;
-  color: #f8fafc;
+  line-height: 1.55;
+  font-size: 13.5px;
+  color: #000000;
   background: transparent;
   min-width: max-content;
 }
-.cb-semi {
-  color: rgba(230, 237, 243, .82);
+
+.cb-code {
+  display: inline-block;
+  min-width: 100%;
+  color: #000000;
+}
+
+/* Scrollbars */
+.cb-body::-webkit-scrollbar { height: 6px; width: 6px; }
+.cb-body::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, .15);
+  border-radius: 999px;
+}
+.cb-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, .28);
+}
+.cb-body::-webkit-scrollbar-track { background: transparent; }
+
+/* ── Footer ── */
+.cb-foot {
+  border-top: 1px solid #d4d2c8;
+  padding: 10px 14px;
+  background: #f0eee4;
+}
+
+.cb-note {
+  margin: 0;
+  color: #555;
+  font-size: 12.5px;
+  line-height: 1.55;
+  font-family: 'Inter', -apple-system, sans-serif;
+  letter-spacing: -0.005em;
+}
+
+/* ═══════════════════════════════════════════════
+   C++ SYNTAX TOKENS — cppreference.com palette
+   ═══════════════════════════════════════════════ */
+
+/* Keywords + fundamental types: BLUE bold
+   (int, auto, const, void, class, for, return, true, false, ...) */
+.cb-kw       { color: #0000ff; font-weight: 600; }
+
+/* Regular identifiers: BLACK */
+.cb-id       { color: #000000; }
+
+/* Preprocessor directive (#include, #define): dark magenta */
+.cb-dir      { color: #7f0055; font-weight: 600; }
+
+/* Include headers <iostream>, "file.h": green italic */
+.cb-inc      { color: #1e8449; font-style: italic; }
+
+/* String literals: dark red */
+.cb-str      { color: #a31515; }
+
+/* Char literals: dark red */
+.cb-char     { color: #a31515; }
+
+/* Numeric literals: dark teal/green */
+.cb-num      { color: #098658; }
+
+/* Comments: green italic (cppreference signature) */
+.cb-cmt      { color: #338033; font-style: italic; }
+
+/* URLs in code */
+.cb-url      { color: #0066cc; text-decoration: underline; text-underline-offset: 2px; }
+
+/* ═══════════════════════════
+   Shell tokens — same palette family
+   ═══════════════════════════ */
+.cb-sh-prompt  { color: #098658; font-weight: 700; }
+.cb-sh-cmd     { color: #0000ff; font-weight: 600; }
+.cb-sh-flag    { color: #a31515; }
+.cb-sh-path    { color: #7f0055; }
+.cb-sh-url     { color: #0066cc; text-decoration: underline; text-underline-offset: 2px; }
+.cb-sh-port    { color: #098658; }
+.cb-sh-http    { color: #0000ff; font-weight: 700; }
+.cb-sh-comment { color: #338033; font-style: italic; }
+
+@media (max-width: 640px) {
+  .cb-pre { font-size: 12.5px; padding: 12px 12px; }
+  .cb-title { max-width: 28vw; overflow: hidden; text-overflow: ellipsis; }
+  .cb-head { padding: 7px 10px; }
 }
 </style>

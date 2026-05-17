@@ -83,7 +83,7 @@ function onTabsKeydown(e) {
         :run="current?.run || ''"
         :out="current?.out || ''"
         :note="current?.note || ''"
-        :maxHeight="440"
+        :maxHeight="460"
       />
     </div>
   </div>
@@ -91,74 +91,135 @@ function onTabsKeydown(e) {
 
 <style scoped>
 .ct {
-  border-radius: 12px; overflow: hidden;
-  border: 1px solid var(--vp-c-divider);
-  background: var(--vp-c-bg-soft);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(10, 10, 10, .08);
+  background: #ffffff;
+  margin: 24px 0;
+  transition: border-color .15s ease;
+}
+
+.ct:hover {
+  border-color: rgba(10, 10, 10, .14);
 }
 
 /* Head */
 .ct-head {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  padding: 10px 12px;
-  border-bottom: 1px solid var(--vp-c-divider);
-  background: var(--vp-c-bg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(10, 10, 10, .06);
+  background: #fafafa;
 }
 
 .ct-title {
-  font-size: 13.5px; font-weight: 800;
-  color: var(--vp-c-text-1); line-height: 1.2;
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: #0a0a0a;
+  line-height: 1.2;
 }
 
 .ct-sub {
-  margin-top: 2px; font-size: 12px;
-  color: var(--vp-c-text-2); line-height: 1.4;
+  margin-top: 3px;
+  font-size: 12.5px;
+  color: #525252;
+  line-height: 1.4;
+  letter-spacing: -0.005em;
 }
 
 /* Tabs */
 .ct-tabs {
-  display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end;
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  padding: 3px;
+  background: rgba(10, 10, 10, .04);
+  border-radius: 8px;
 }
 
 .ct-tab {
-  border: 1px solid var(--vp-c-divider);
-  background: transparent; color: var(--vp-c-text-2);
-  padding: 5px 10px; border-radius: 999px;
-  font-size: 12px; font-weight: 600; cursor: pointer; outline: none;
-  transition: border-color .12s, background .12s, color .12s;
+  border: 0;
+  background: transparent;
+  color: #525252;
+  padding: 5px 11px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  letter-spacing: -0.005em;
+  transition: all .12s ease;
+  font-family: inherit;
 }
-.ct-tab:hover { color: var(--vp-c-text-1); border-color: rgba(34,197,94,.30); }
+
+.ct-tab:hover {
+  color: #0a0a0a;
+  background: rgba(10, 10, 10, .04);
+}
+
 .ct-tab--active {
-  color: #22c55e; background: rgba(34,197,94,.10);
-  border-color: rgba(34,197,94,.30);
+  color: #0a0a0a;
+  background: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .06);
 }
-.ct-tab:focus-visible { box-shadow: 0 0 0 2px rgba(34,197,94,.35); }
+
+.ct-tab:focus-visible {
+  box-shadow: 0 0 0 2px rgba(10, 10, 10, .20);
+}
 
 /* Body */
-.ct-body { padding: 10px 10px 12px; }
+.ct-body {
+  padding: 12px;
+  background: #ffffff;
+}
 
 /* File info */
 .ct-file {
-  display: flex; align-items: center; gap: 8px;
-  padding: 6px 10px; margin-bottom: 8px;
-  border: 1px dashed var(--vp-c-divider); border-radius: 9px;
-  background: var(--vp-c-bg); color: var(--vp-c-text-2); font-size: 12.5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  border: 1px solid #d4d2c8;
+  border-radius: 8px;
+  background: #f0eee4;
+  color: #555;
+  font-size: 12.5px;
 }
 
 .ct-lang-badge {
-  font-weight: 800; text-transform: uppercase; font-size: 10px;
-  padding: 2px 7px; border-radius: 999px;
-  border: 1px solid rgba(34,197,94,.25);
-  background: rgba(34,197,94,.08); color: #22c55e;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: #0000ff;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
 }
 
 .ct-filename {
-  font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 12.5px;
-  color: var(--vp-c-text-1);
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 12.5px;
+  color: #0a0a0a;
+  font-weight: 500;
 }
 
 /* Responsive */
 @media (max-width: 640px) {
-  .ct-head { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .ct-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+  }
   .ct-tabs { justify-content: flex-start; }
+  .ct-body { padding: 10px; }
 }
 </style>

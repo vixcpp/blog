@@ -2,7 +2,7 @@ import DefaultTheme from "vitepress/theme";
 import "./custom.css";
 
 import Layout from "./Layout.vue";
-import DocsHomeHero from "./DocsHomeHero.vue";
+import BlogHomeHero from "./BlogHomeHero.vue";
 import CodeTabs from "./CodeTabs.vue";
 
 export default {
@@ -14,7 +14,7 @@ export default {
 
     const { app } = ctx;
 
-    app.component("DocsHomeHero", DocsHomeHero);
+    app.component("BlogHomeHero", BlogHomeHero);
     app.component("CodeTabs", CodeTabs);
 
     if (typeof window === "undefined") {
