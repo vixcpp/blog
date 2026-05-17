@@ -4,7 +4,7 @@ export default defineConfig({
   lang: "en-US",
 
   title: "Vix.cpp Blog",
-  titleTemplate: ":title — Vix.cpp Blog",
+  titleTemplate: ":title | Vix.cpp Blog",
   description:
     "Engineering notes on Vix.cpp, modern C++ tooling, build systems, runtime design, and developer experience.",
 
