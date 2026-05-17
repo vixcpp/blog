@@ -2,53 +2,37 @@
 const featured = {
   tag: "Featured",
   date: "May 2026",
-  title: "Why Vix.cpp exists",
-  desc: "Modern C++ gives developers power, control, and performance. But the developer experience is still fragmented. Vix.cpp is an attempt to make native C++ development feel more direct, practical, and product-oriented.",
-  href: "/posts/why-vix-exists",
-  readTime: "8 min",
+  title: "vix.app",
+  desc: "A simple application manifest for building C++ projects without exposing users directly to CMake complexity.",
+  href: "/posts/vix-app/",
+  readTime: "6 articles",
 };
 
 const posts = [
   {
-    title: "vix.app",
-    desc: "A simple application manifest for building C++ projects without exposing users to CMake complexity.",
-    href: "/posts/vix-app",
+    title: "vix build",
+    desc: "Technical notes about how Vix configures, plans, caches, and executes native C++ builds.",
+    href: "/posts/vix-build/",
     tag: "Build",
     date: "May 2026",
-    readTime: "6 min",
+    readTime: "6 articles",
   },
   {
-    title: "Replay system",
-    desc: "How Vix can record executions so developers can inspect and understand previous runs.",
-    href: "/posts/vix-replay",
-    tag: "Runtime",
-    date: "May 2026",
-    readTime: "7 min",
-  },
-  {
-    title: "Vix build internals",
-    desc: "A technical look at how Vix plans builds, integrates with CMake, and prepares for faster native workflows.",
-    href: "/posts/how-vix-build-works",
-    tag: "Build",
-    date: "May 2026",
-    readTime: "9 min",
-  },
-  {
-    title: "Vix run modes",
-    desc: "How Vix resolves script mode, project mode, runtime arguments, and fallback execution paths.",
-    href: "/posts/how-vix-run-resolves-targets",
+    title: "vix run",
+    desc: "How Vix resolves files, scripts, projects, targets, CMake fallback, and runtime arguments.",
+    href: "/posts/vix-run/",
     tag: "CLI",
     date: "May 2026",
-    readTime: "8 min",
+    readTime: "5 articles",
   },
-];
-
-const topics = [
-  { label: "Build systems", count: 6 },
-  { label: "Runtime", count: 4 },
-  { label: "CLI", count: 5 },
-  { label: "Diagnostics", count: 3 },
-  { label: "Developer experience", count: 4 },
+  {
+    title: "Vix Replay",
+    desc: "How Vix records executions so developers can inspect and understand previous runs.",
+    href: "/posts/vix-replay/",
+    tag: "Runtime",
+    date: "May 2026",
+    readTime: "1 article",
+  },
 ];
 </script>
 
@@ -97,7 +81,7 @@ const topics = [
         <span class="bh-tag bh-tag--featured">{{ featured.tag }}</span>
         <span>{{ featured.date }}</span>
         <span class="bh-featured-sep">·</span>
-        <span>{{ featured.readTime }} read</span>
+        <span>{{ featured.readTime }}</span>
       </div>
 
       <h2 class="bh-featured-title">{{ featured.title }}</h2>
@@ -132,7 +116,7 @@ const topics = [
         <p class="bh-card-desc">{{ post.desc }}</p>
 
         <div class="bh-card-footer">
-          <span class="bh-card-time">{{ post.readTime }} read</span>
+          <span class="bh-card-time">{{ post.readTime }}</span>
           <span class="bh-card-arrow">
             <svg viewBox="0 0 16 16" width="13" height="13" fill="none" aria-hidden="true">
               <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
@@ -142,21 +126,6 @@ const topics = [
       </a>
     </div>
 
-    <div class="bh-topics">
-      <h3 class="bh-topics-title">Browse by topic</h3>
-
-      <div class="bh-topics-list">
-        <a
-          v-for="topic in topics"
-          :key="topic.label"
-          class="bh-topic"
-          :href="`/topics/${topic.label.toLowerCase().replace(/\s+/g, '-')}`"
-        >
-          {{ topic.label }}
-          <span class="bh-topic-count">{{ topic.count }}</span>
-        </a>
-      </div>
-    </div>
   </section>
 </template>
 

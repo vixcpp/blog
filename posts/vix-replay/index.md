@@ -409,9 +409,3 @@ The `--` separates replay options from arguments appended to the replayed comman
 | `vix build` | Configure and compile |
 | `vix check` | Validate build, tests, runtime, and sanitizers |
 | `vix tests` | Run tests |
-
-## Next step
-
-Continue with development mode.
-
-Open the vix dev guide

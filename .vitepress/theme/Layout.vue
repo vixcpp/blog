@@ -10,7 +10,6 @@ const route = useRoute();
 /* ── Navigation links ── */
 const navLinks = [
   { text: "Articles",  href: "/posts/" },
-  { text: "Topics",    href: "/topics/" },
   { text: "About",     href: "/about" },
 ];
 
@@ -192,7 +191,8 @@ const isPost      = computed(() => !!frontmatter.value?.date || route.path.start
               v-for="l in navLinks"
               :key="l.text"
               :href="l.href"
-              class="bh-mobile-link"
+            class="bh-mobile-link"
+:class="{ 'bh-mobile-link--active': route.path.startsWith(l.href) && l.href !== '/' }"
               @click="menuOpen = false"
             >
               {{ l.text }}
@@ -276,7 +276,6 @@ const isPost      = computed(() => !!frontmatter.value?.date || route.path.start
               <h4 class="bf-col-title">Blog</h4>
               <ul class="bf-list">
                 <li><a href="/posts/">All articles</a></li>
-                <li><a href="/topics/">Topics</a></li>
                 <li><a href="/authors/">Authors</a></li>
                 <li><a href="/rss.xml">RSS feed</a></li>
               </ul>
@@ -298,7 +297,7 @@ const isPost      = computed(() => !!frontmatter.value?.date || route.path.start
               <h4 class="bf-col-title">Community</h4>
               <ul class="bf-list">
                 <li><a href="https://discord.gg/vixcpp">Discord</a></li>
-                <li><a href="https://x.com/vixcpp">X / Twitter</a></li>
+                <li><a href="https://x.com/vix_cpp">X / Twitter</a></li>
                 <li><a href="https://www.youtube.com/@vixcpp">YouTube</a></li>
                 <li><a href="/contribute">Contribute</a></li>
               </ul>
@@ -868,5 +867,43 @@ const isPost      = computed(() => !!frontmatter.value?.date || route.path.start
     grid-template-columns: 1fr;
     gap: 32px;
   }
+}
+.bh-mobile-link:hover {
+  color: #15803d;
+  background: rgba(22, 163, 74, 0.07);
+}
+.bh-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 7px 12px;
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  color: #525252;
+  text-decoration: none !important;
+  border-radius: 7px;
+  transition:
+    color .15s ease,
+    background .15s ease,
+    border-color .15s ease;
+}
+
+.bh-nav-link:hover {
+  color: #15803d;
+  background: rgba(22, 163, 74, 0.07);
+}
+
+.bh-nav-link--active {
+  color: #15803d;
+  font-weight: 700;
+  background: rgba(22, 163, 74, 0.10);
+  box-shadow: inset 0 0 0 1px rgba(22, 163, 74, 0.18);
+}
+.bh-mobile-link[aria-current="page"],
+.bh-mobile-link--active {
+  color: #15803d;
+  font-weight: 700;
+  background: rgba(22, 163, 74, 0.10);
 }
 </style>
