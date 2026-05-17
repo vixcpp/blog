@@ -27,12 +27,12 @@ const social = [
   },
   {
     label: "X / Twitter",
-    href:  "https://x.com/vixcpp",
+    href:  "https://x.com/vix_cpp",
     icon: `<path d="M18.9 2H22l-6.8 7.8L23 22h-6.7l-5.2-6.8L5.3 22H2l7.3-8.4L1.7 2h6.9l4.7 6.1L18.9 2Zm-1.2 18h1.7L7.7 3.9H5.9L17.7 20Z"/>`,
   },
   {
     label: "Discord",
-    href:  "https://discord.gg/vixcpp",
+    href:  "https://discord.gg/acbvZXyPN",
     icon: `<path d="M20 4.5a16.3 16.3 0 0 0-4-1.3l-.2.4a15.5 15.5 0 0 1 3 1.2 11.9 11.9 0 0 0-3.7-1.1c-.6.8-1 1.7-1.2 2.1a14.5 14.5 0 0 0-3.8 0c-.2-.4-.6-1.3-1.2-2.1A11.9 11.9 0 0 0 5.2 4.8a15.5 15.5 0 0 1 3-1.2l-.2-.4a16.3 16.3 0 0 0-4 1.3C2.4 7 1.8 9.4 2 12c1.3 2 3.3 3.2 5.6 3.7l.4-.6a9.4 9.4 0 0 1-1.8-.9l.4-.3c1.1.5 2.3.9 3.5 1.1a13 13 0 0 0 4.8 0c1.2-.2 2.4-.6 3.5-1.1l.4.3c-.6.4-1.2.7-1.8.9l.4.6c2.3-.5 4.3-1.7 5.6-3.7.3-2.6-.4-5-2-7.5ZM9.2 12.9c-.7 0-1.3-.6-1.3-1.4s.6-1.4 1.3-1.4 1.3.6 1.3 1.4-.6 1.4-1.3 1.4Zm5.6 0c-.7 0-1.3-.6-1.3-1.4s.6-1.4 1.3-1.4 1.3.6 1.3 1.4-.6 1.4-1.3 1.4Z"/>`,
   },
   {
@@ -256,18 +256,23 @@ const isPost      = computed(() => !!frontmatter.value?.date || route.path.start
 
               <div class="bf-social">
                 <a
-                  v-for="s in social"
-                  :key="s.label"
-                  :href="s.href"
-                  class="bf-social-icon"
-                  :target="s.href.startsWith('http') ? '_blank' : undefined"
-                  :rel="s.href.startsWith('http') ? 'noreferrer' : undefined"
-                  :aria-label="s.label"
-                >
-                  <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true">
-                    <path v-html="s.icon"></path>
-                  </svg>
-                </a>
+  v-for="s in social"
+  :key="s.label"
+  :href="s.href"
+  class="bf-social-icon"
+  :target="s.href.startsWith('http') ? '_blank' : undefined"
+  :rel="s.href.startsWith('http') ? 'noreferrer' : undefined"
+  :aria-label="s.label"
+>
+  <svg
+    viewBox="0 0 24 24"
+    width="15"
+    height="15"
+    fill="currentColor"
+    aria-hidden="true"
+    v-html="s.icon"
+  ></svg>
+</a>
               </div>
             </div>
 
@@ -905,5 +910,24 @@ const isPost      = computed(() => !!frontmatter.value?.date || route.path.start
   color: #15803d;
   font-weight: 700;
   background: rgba(22, 163, 74, 0.10);
+}
+.bf-social-icon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  color: #0a0a0a;
+  text-decoration: none !important;
+  border-radius: 7px;
+  border: 1px solid rgba(10, 10, 10, 0.14);
+  background: #f4f4f5;
+  transition: all .15s ease;
+}
+
+.bf-social-icon:hover {
+  color: #15803d;
+  background: rgba(22, 163, 74, 0.10);
+  border-color: rgba(22, 163, 74, 0.28);
+  transform: translateY(-1px);
 }
 </style>
