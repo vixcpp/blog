@@ -10,6 +10,7 @@ Technical notes about how `vix build` configures, plans, caches, and executes na
 
 ## Articles
 
+- [Vix Build Graph Target Executor by Default](./graph-target-executor-default.md)
 - [How vix build works](/posts/vix-build/how-vix-build-works)
 - [vix build CMake compatibility](/posts/vix-build/vix-build-cmake-compatibility)
 - [vix build graph design](/posts/vix-build/vix-build-graph-design)
