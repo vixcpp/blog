@@ -519,17 +519,18 @@ const isPost      = computed(() => !!frontmatter.value?.date || route.path.start
 /* Mobile toggle */
 .bh-mobile-toggle {
   display: none;
-  width: 34px;
-  height: 34px;
+  width: 40px;
+  height: 40px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  background: transparent;
-  border: 1px solid rgba(10, 10, 10, 0.08);
-  border-radius: 7px;
+  gap: 5px;
+  background: #ffffff;
+  border: 1px solid rgba(10, 10, 10, 0.12);
+  border-radius: 10px;
   cursor: pointer;
   padding: 0;
+  flex-shrink: 0;
   transition: all .15s ease;
 }
 
@@ -865,6 +866,27 @@ const isPost      = computed(() => !!frontmatter.value?.date || route.path.start
     padding: 16px 20px;
     gap: 10px;
   }
+
+.bh-header-inner {
+  padding: 12px 20px;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.bh-brand {
+  min-width: 0;
+}
+
+.bh-actions {
+  margin-left: auto;
+  gap: 10px;
+}
+
+.bh-mobile-toggle {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+}
 }
 
 @media (max-width: 480px) {
