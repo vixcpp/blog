@@ -15,7 +15,7 @@ const posts = [
     href: "/posts/vix-build/",
     tag: "Build",
     date: "May 2026",
-    readTime: "6 articles",
+    readTime: "9 articles",
   },
   {
     title: "vix run",

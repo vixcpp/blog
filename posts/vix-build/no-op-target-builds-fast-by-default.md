@@ -1,11 +1,8 @@
 # No-op target builds are now fast by default
 
 `vix build` keeps getting faster, but the most important part is not just speed.
-
 The important part is correctness.
-
 A build tool should never say that a target is up to date unless it can prove it.
-
 The latest work on `vix build` focused on that balance:
 
 ```
@@ -19,7 +16,6 @@ This article explains the latest improvement: normal no-op target builds are now
 ## The previous result
 
 In the previous benchmark, the `--fast` path was clearly the fastest path.
-
 The result looked like this:
 
 ```
@@ -33,13 +29,11 @@ That was a strong result.
 It showed that `--fast` could skip the heavy build pipeline when the project state proved that nothing had changed.
 
 But it also meant that the user needed to know about `--fast`.
-
 The normal target build was still much slower.
 
 ## The new result
 
 After the latest build-state and cache routing improvements, the benchmark changed.
-
 On the same Vix.cpp repository, the new result is:
 
 ```
@@ -57,7 +51,6 @@ This is the important change:
 ## What changed
 
 Before, `--fast` had the highest-level shortcut.
-
 The normal build path could still pay for work such as:
 
 - load project metadata
@@ -72,9 +65,7 @@ The normal build path could still pay for work such as:
 - ask Ninja
 
 That is safe, but it is not always necessary.
-
 Now the build-state validation can help the normal target build too.
-
 The normal path can return early when the state proves:
 
 - same build signature
@@ -107,13 +98,11 @@ This is better than making only `--fast` fast.
 
 A special flag is useful for power users.
 But the best developer experience is when the default command is already smart.
-
 The user should not need to think:
 
 > Should I use `--fast` here?
 
 For a clean target, Vix can now make the normal command fast when it can prove correctness.
-
 That makes the common workflow simpler:
 
 ```sh
@@ -127,9 +116,7 @@ vix build --build-target vix
 ## Safety still comes first
 
 The speedup is only valid because Vix does not trust one signal blindly.
-
 For example, a build state hit is not enough.
-
 The final binary must still exist.
 The target must match.
 The project inputs must match.
@@ -155,7 +142,6 @@ the target output must still be valid
 ## ArtifactCache makes clean rebuilds faster
 
 The latest work also improved target artifact restoration.
-
 If the final binary exists in the artifact cache, Vix can restore it directly.
 
 Example:
@@ -175,7 +161,6 @@ Restoring vix (dev)
 ```
 
 That means even after deleting the build directory, Vix can restore the final target without recompiling.
-
 This is a different layer from the object cache.
 
 ```
@@ -196,7 +181,6 @@ CMake/Ninja    -> compatibility fallback
 ## The safety test suite
 
 This work is now protected by a build safety test script.
-
 The script checks the fragile paths:
 
 - build target all
@@ -220,15 +204,12 @@ Failed: 0
 ```
 
 This matters because build optimizations can be dangerous.
-
 A build system is not allowed to be fast by being wrong.
-
 Every shortcut must prove that it is safe.
 
 ## `--explain` also improved
 
 The latest work also improved `--explain`.
-
 For source changes, Vix can now explain the rebuild:
 
 ```sh
@@ -264,9 +245,7 @@ Relinking vix
 ```
 
 Then Ninja decides the exact files to rebuild.
-
 That is the right behavior.
-
 If Vix cannot prove the target is clean, it must not claim that it is clean.
 
 ## Why Graph Executor still matters
@@ -278,11 +257,8 @@ The benchmark now shows similar times for:
 - Graph Executor disabled
 
 That does not mean the Graph Executor is useless.
-
 It means the no-op path is now being solved earlier.
-
 For clean builds, the fastest layer wins before the graph executor needs to do much work.
-
 But when the project changes, the graph executor still matters because it gives Vix target awareness.
 
 It can:
@@ -334,7 +310,6 @@ The conclusion is not:
 ```
 
 That was the previous result.
-
 The new conclusion is:
 
 **normal no-op target builds are now fast by default**
@@ -372,12 +347,9 @@ Before:
 Now:
 
 - normal no-op target builds are fast too
-
 That is an important step.
-
 It means Vix is not only adding special fast paths.
 It is making the ordinary command smarter.
-
 For developers, that is the real win:
 
 ```sh
@@ -387,5 +359,4 @@ vix build --build-target vix
 - If nothing changed, it returns in about 300 ms.
 - If something changed, it rebuilds.
 - If Vix is unsure, it falls back.
-
 That is the kind of build behavior Vix is moving toward.

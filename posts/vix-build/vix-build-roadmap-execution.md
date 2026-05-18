@@ -33,7 +33,6 @@ This article summarizes what changed and why it matters.
 ## 1. Stabilizing the build routing
 
 The first step was to make the build path predictable.
-
 The rules are now clearer:
 
 ```
@@ -79,7 +78,6 @@ ambiguous target -> CMake/Ninja path
 ## 2. Cleaner user output
 
 The second step was to make the output more stable and less noisy.
-
 A no-op fast path should look like this:
 
 ```
@@ -110,16 +108,13 @@ VIX_LOG_LEVEL=debug vix build -v
 ```
 
 Internal details should not pollute normal builds.
-
 Users should see what matters.
 Developers debugging Vix internals can still access the deeper logs.
 
 ## 3. Safer `--fast`
 
 The `--fast` path is only useful if it is safe.
-
 It should never say `Up to date` unless the target is really up to date.
-
 The build state validation was strengthened to check:
 
 - project fingerprint
@@ -136,7 +131,6 @@ The build state validation was strengthened to check:
 - artifact root exists
 
 Some values such as launcher, linker and CMake variables are already part of the build signature.
-
 The important rule is:
 
 ```
@@ -159,7 +153,6 @@ The last command must not return a false `Up to date`.
 ## 4. Build safety tests
 
 The next step was adding a dedicated safety test script.
-
 The script covers the most fragile paths:
 
 - build target all
@@ -176,9 +169,7 @@ The script covers the most fragile paths:
 - changed build target
 
 The goal is regression protection.
-
 Every optimization must prove that it does not break correctness.
-
 The test script creates a small temporary CMake project, runs `vix build` in different modes, and checks the output behavior.
 
 This gives Vix a safety net before adding more aggressive caching or native build execution.
@@ -186,7 +177,6 @@ This gives Vix a safety net before adding more aggressive caching or native buil
 ## 5. Faster no-op builds without `--fast`
 
 Before this step, the normal build path could still pay for:
-
 - scan project
 - load compile_commands.json
 - load build.ninja
@@ -194,9 +184,7 @@ Before this step, the normal build path could still pay for:
 - propagate dirty state
 
 even when nothing changed.
-
 The improvement was to allow a valid build state hit to return early even without `--fast`.
-
 That means:
 
 ```sh
@@ -204,7 +192,6 @@ vix build --build-target vix
 ```
 
 can also become fast when the build state proves that nothing changed.
-
 The ideal no-op path becomes:
 
 ```
@@ -221,7 +208,6 @@ This turns the build state from a `--fast`-only feature into a general no-op opt
 
 Speed is not the only goal.
 A build tool should also explain its decisions.
-
 The new `--explain` path is designed for this:
 
 ```sh
@@ -242,7 +228,6 @@ Relinking vix
 ```
 
 The first version uses the current graph and the previous graph to compare:
-
 - task existence
 - command hash
 - missing outputs
@@ -254,7 +239,6 @@ The first version uses the current graph and the previous graph to compare:
 This starts the foundation for a bigger feature:
 
 > Vix should not only rebuild. Vix should explain why it rebuilt.
-
 That is very important for large C++ projects.
 When a single header causes many files to rebuild, users should be able to see the reason.
 
@@ -264,7 +248,6 @@ Vix imports `build.ninja` so it can understand the generated build graph.
 
 The goal is not to blindly reimplement Ninja.
 The goal is to use Ninja metadata safely.
-
 The improved rules are:
 
 ```
@@ -275,7 +258,6 @@ ambiguous target         -> CMake/Ninja
 ```
 
 This means Vix can import more Ninja edges, but still avoid unsafe execution.
-
 The safer import path improves:
 
 - link edges
@@ -302,9 +284,7 @@ The correction rule is more important than speed: if unsure, use CMake/Ninja.
 ## 8. Stronger ObjectCache
 
 ObjectCache is responsible for avoiding unnecessary recompilation.
-
 The cache key must be strong enough to prevent wrong reuse.
-
 A compile cache key now depends on:
 
 - source content hash
@@ -336,7 +316,6 @@ for each compile task:
 ```
 
 A key improvement is making the object cache survive build directory deletion.
-
 Instead of only living under the build directory, the object cache can live under:
 
 ```
@@ -412,7 +391,6 @@ vix.app -> generated CMake -> CMake/Ninja
 ```
 
 That is good because it supports more features safely.
-
 The new direction is to add a native path for simple cases:
 
 ```
@@ -439,9 +417,7 @@ Vix already has:
 
 So the native path should reuse the existing AppManifest.
 It should not create a second parser.
-
 The safe V1 supports simple executable projects.
-
 Complex features still fallback to generated CMake:
 
 - packages
@@ -457,7 +433,6 @@ This keeps compatibility while letting Vix start owning the native build path.
 
 A faster build is not enough.
 When a build fails, the output should help the developer fix it quickly.
-
 The diagnostic improvements focus on:
 
 - compiler errors with code frame
@@ -515,7 +490,6 @@ This keeps normal output clean and makes internal debugging possible.
 ## 12. CI and official benchmarks
 
 The last step was adding a reproducible way to prove the gains.
-
 The standard benchmark is:
 
 ```sh
