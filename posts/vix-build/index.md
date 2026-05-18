@@ -10,6 +10,8 @@ Technical notes about how `vix build` configures, plans, caches, and executes na
 
 ## Articles
 
+- [No-op target builds are now fast by default](./no-op-target-builds-fast-by-default.md)
+- [Vix Build Roadmap Execution](./vix-build-roadmap-execution.md)
 - [Vix Build Graph Target Executor by Default](./graph-target-executor-default.md)
 - [How vix build works](/posts/vix-build/how-vix-build-works)
 - [vix build CMake compatibility](/posts/vix-build/vix-build-cmake-compatibility)
