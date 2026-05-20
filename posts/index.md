@@ -34,6 +34,10 @@ Technical notes about the design, implementation, and evolution of Vix.cpp.
 - [vix run CMake fallback](/posts/vix-run/vix-run-cmake-fallback)
 - [vix run runtime arguments](/posts/vix-run/vix-run-runtime-arguments)
 
+## vix dev
+
+- [Vue frontend with a Vix C++ backend](/posts/vix-dev/vue-fullstack-dev-workflow)
+
 ## vix replay
 
 - [Vix Replay](/posts/vix-replay/)
