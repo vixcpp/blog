@@ -26,6 +26,14 @@ const posts = [
     readTime: "5 articles",
   },
   {
+    title: "vix dev",
+    desc: "How Vix runs development workflows, watch mode, reloads, and Vue + Vix full-stack projects.",
+    href: "/posts/vix-dev/",
+    tag: "Dev",
+    date: "May 2026",
+    readTime: "1 article",
+  },
+  {
     title: "Vix Replay",
     desc: "How Vix records executions so developers can inspect and understand previous runs.",
     href: "/posts/vix-replay/",
