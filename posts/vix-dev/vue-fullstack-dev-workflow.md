@@ -7,11 +7,8 @@ date: 2026-05-21
 # Vue frontend with a Vix C++ backend
 
 C++ is usually seen as a systems language.
-
 That is true, but it does not mean C++ should stay far away from modern web development workflows.
-
 With Vix.cpp v2.6.0, we started experimenting with a full-stack development workflow where a Vue frontend can run next to a Vix-powered C++ backend.
-
 The idea is simple:
 
 ```txt
@@ -23,9 +20,7 @@ One development workflow
 ## The problem
 
 Modern frontend developers already have a strong workflow.
-
 They use tools like Vue, Vite, hot reload, browser devtools, and fast feedback loops.
-
 C++ developers often have something very different:
 
 ```txt
@@ -37,7 +32,6 @@ runtime configuration
 ```
 
 Both worlds are powerful, but they are usually separated.
-
 Vix is trying to reduce that gap.
 
 ## The new workflow
@@ -65,29 +59,21 @@ vix dev
 ```
 
 In this mode, Vix starts the backend and the Vue/Vite frontend together.
-
 The frontend runs with Vite.
-
 The backend runs with Vix.
-
 The API stays powered by C++.
 
 ## Why Vue?
 
 Vue is simple, progressive, and approachable.
-
 That matters because the goal is not to force frontend developers to abandon what they already know.
-
 The goal is to give them a path into C++ without destroying their existing frontend experience.
-
 A developer can keep writing Vue components while using Vix for backend APIs, performance-sensitive logic, local-first systems, networking, storage, or runtime features.
 
 ## Why not put this in vix run?
 
 `vix run` should stay focused.
-
 It runs the Vix application or target.
-
 For a full development environment, the right command is:
 
 ```bash
@@ -137,19 +123,14 @@ const data = await response.json();
 ```
 
 The browser talks to Vue.
-
 Vue talks to `/api`.
-
 Vix handles the backend.
 
 ## What this means for Vix.cpp
 
 This is not about replacing Vue.
-
 This is not about replacing Vite.
-
 This is about making Vix a better bridge between modern frontend workflows and C++ backend development.
-
 The long-term direction is clear:
 
 ```txt

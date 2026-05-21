@@ -10,6 +10,7 @@ Technical notes about how `vix build` configures, plans, caches, and executes na
 
 ## Articles
 
+- [Building the Vix Game Foundation](./vix-game-module-foundation.md)
 - [No-op target builds are now fast by default](./no-op-target-builds-fast-by-default.md)
 - [Vix Build Roadmap Execution](./vix-build-roadmap-execution.md)
 - [Vix Build Graph Target Executor by Default](./graph-target-executor-default.md)
