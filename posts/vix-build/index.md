@@ -10,7 +10,7 @@ Technical notes about how `vix build` configures, plans, caches, and executes na
 
 ## Articles
 
-- [From Runtime to Export: vix/game V4 and V5](./from-runtime-to-export-vix-game-v4-v5.md)
+- [From Runtime to Export: vix/game V4 and V5](./vix-game-runtime-export-workflow.md)
 - [Building the Vix Game Foundation](./vix-game-module-foundation.md)
 - [No-op target builds are now fast by default](./no-op-target-builds-fast-by-default.md)
 - [Vix Build Roadmap Execution](./vix-build-roadmap-execution.md)

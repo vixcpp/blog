@@ -1,6 +1,6 @@
 ---
-title: From Runtime to Export: vix/game V4 and V5
-description: How vix/game evolved from a runtime foundation into SDL rendering, game templates, and an export workflow.
+title: "From Runtime to Export: vix/game V4 and V5"
+description: "How vix/game evolved from a runtime foundation into SDL rendering, game templates, and an export workflow."
 date: 2026-05-22
 ---
 
