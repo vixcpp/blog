@@ -127,7 +127,7 @@ export default defineConfig({
   },
 
   // ════════════════════════════════════════════════
-  // HEAD — SEO, social, fonts
+  // HEAD — SEO, social, fonts, analytics
   // ════════════════════════════════════════════════
   head: [
     ["link", { rel: "icon", href: "/assets/pwa/favicon.ico" }],
@@ -176,6 +176,25 @@ export default defineConfig({
         content:
           "Engineering notes on Vix.cpp, modern C++ tooling, build systems, runtime design, and developer experience.",
       },
+    ],
+
+    // Google tag (gtag.js)
+    [
+      "script",
+      {
+        async: "",
+        src: "https://www.googletagmanager.com/gtag/js?id=G-1B67VYZMXF",
+      },
+    ],
+    [
+      "script",
+      {},
+      `
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag("js", new Date());
+gtag("config", "G-1B67VYZMXF");
+`,
     ],
 
     // RSS autodiscovery
