@@ -1,12 +1,19 @@
 ---
-title: Articles
-description: Technical articles and engineering notes about Vix.cpp.
-date: 2026-05-17
+title: "Articles"
+description: "Technical articles, engineering notes, roadmap documents, and implementation deep dives about Vix.cpp."
+date: 2026-05-23
 ---
 
 # Articles
 
-Technical notes about the design, implementation, and evolution of Vix.cpp.
+Technical articles about the design, implementation, and evolution of Vix.cpp.
+
+These notes document how Vix works internally, why specific architectural decisions were made, and how the runtime, CLI, build system, diagnostics, development workflow, replay system, and roadmap evolve over time.
+
+## Roadmap
+
+- [Roadmap](/posts/roadmap/)
+- [Production simplicity checklist](/posts/roadmap/production-simplicity-checklist)
 
 ## vix.app
 
@@ -28,7 +35,7 @@ Technical notes about the design, implementation, and evolution of Vix.cpp.
 
 ## vix error diagnostics
 
-- [How Vix Turns C++ Errors Into Actionable Diagnostics](/posts/vix-error-diagnostics/)
+- [How Vix turns C++ errors into actionable diagnostics](/posts/vix-error-diagnostics/)
 
 ## vix run
 

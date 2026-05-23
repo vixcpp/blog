@@ -1,14 +1,30 @@
 <script setup>
 const featured = {
-  tag: "Featured",
+  tag: "Latest",
   date: "May 2026",
-  title: "vix.app",
-  desc: "A simple application manifest for building C++ projects without exposing users directly to CMake complexity.",
-  href: "/posts/vix-app/",
-  readTime: "6 articles",
+  title: "Vix.cpp Changelog",
+  desc: "Version-by-version release notes covering runtime architecture, CLI workflows, SDK packaging, diagnostics, production tooling, and ecosystem changes.",
+  href: "/posts/changelog/",
+  readTime: "32 releases",
 };
 
 const posts = [
+  {
+    title: "vix.app",
+    desc: "A simple application manifest for building C++ projects without exposing users directly to CMake complexity.",
+    href: "/posts/vix-app/",
+    tag: "Application",
+    date: "May 2026",
+    readTime: "6 articles",
+  },
+  {
+    title: "Roadmap",
+    desc: "The technical direction for Vix.cpp: production backend tooling, deployment workflows, service management, health checks, logs, and operational reliability.",
+    href: "/posts/roadmap/",
+    tag: "Roadmap",
+    date: "May 2026",
+    readTime: "2 articles",
+  },
   {
     title: "vix build",
     desc: "Technical notes about how Vix configures, plans, caches, and executes native C++ builds.",
@@ -65,16 +81,22 @@ const posts = [
       </h1>
 
       <p class="bh-lead">
-        Technical articles about the build system, runtime design, CLI behavior,
-        diagnostics, and the decisions behind a modern C++ developer workflow.
+        Technical articles about the runtime architecture, build system, CLI behavior,
+        diagnostics, production tooling, and the engineering decisions behind Vix.cpp.
       </p>
 
       <div class="bh-meta">
-        <a class="bh-link" href="/posts/">
-          Read articles
+        <a class="bh-link" href="/posts/changelog/">
+          View changelog
           <svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true">
             <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
+        </a>
+
+        <span class="bh-meta-sep">·</span>
+
+        <a class="bh-link bh-link--muted" href="/posts/">
+          Read articles
         </a>
 
         <span class="bh-meta-sep">·</span>
@@ -103,7 +125,7 @@ const posts = [
       <p class="bh-featured-desc">{{ featured.desc }}</p>
 
       <span class="bh-featured-cta">
-        Read the article
+        Read the changelog
         <svg viewBox="0 0 16 16" width="13" height="13" fill="none" aria-hidden="true">
           <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -111,7 +133,7 @@ const posts = [
     </a>
 
     <div class="bh-section">
-      <h3 class="bh-section-title">Recent posts</h3>
+      <h3 class="bh-section-title">Engineering notes</h3>
       <a href="/posts/" class="bh-section-link">View all</a>
     </div>
 
@@ -140,7 +162,6 @@ const posts = [
         </div>
       </a>
     </div>
-
   </section>
 </template>
 
