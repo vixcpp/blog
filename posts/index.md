@@ -26,6 +26,10 @@ Technical notes about the design, implementation, and evolution of Vix.cpp.
 - [vix artifact cache design](/posts/vix-build/vix-artifact-cache-design)
 - [Toward native vix.app builds](/posts/vix-build/toward-native-vix-app-builds)
 
+## vix error diagnostics
+
+- [How Vix Turns C++ Errors Into Actionable Diagnostics](/posts/vix-error-diagnostics/)
+
 ## vix run
 
 - [How vix run resolves targets](/posts/vix-run/how-vix-run-resolves-targets)

@@ -18,6 +18,14 @@ const posts = [
     readTime: "11 articles",
   },
   {
+    title: "vix error diagnostics",
+    desc: "How Vix turns raw C++ compiler errors, runtime crashes, sanitizer logs, and template failures into actionable diagnostics.",
+    href: "/posts/vix-error-diagnostics/",
+    tag: "Diagnostics",
+    date: "May 2026",
+    readTime: "1 article",
+  },
+  {
     title: "vix run",
     desc: "How Vix resolves files, scripts, projects, targets, CMake fallback, and runtime arguments.",
     href: "/posts/vix-run/",
