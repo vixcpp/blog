@@ -427,7 +427,7 @@ Vix should make this easier to operate and debug.
 - [x] Provide heartbeat diagnostics.
 - [x] Provide backpressure or slow-client protection.
 - [x] Avoid logging normal disconnects as errors.
-- [] Add `vix ws check`.
+- [x] Add `vix ws check`.
 
 Example:
 
