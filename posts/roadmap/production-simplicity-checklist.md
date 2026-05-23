@@ -379,7 +379,7 @@ Vix already handles normal disconnects while reading. The same logic must be app
 ### Checklist
 
 - [x] Detect normal disconnects in HTTP read path.
-- [ ] Detect normal disconnects in HTTP response write path.
+- [x] Detect normal disconnects in HTTP response write path.
 - [ ] Log client disconnects at Debug level.
 - [ ] Keep unexpected write failures at Error level.
 - [ ] Apply similar logic to WebSocket writes.
@@ -417,17 +417,17 @@ Vix should make this easier to operate and debug.
 
 ### Checklist
 
-- [ ] Detect WebSocket port.
-- [ ] Detect WebSocket route/path.
-- [ ] Validate Nginx WebSocket proxy config.
-- [ ] Detect missing upgrade headers.
-- [ ] Provide WebSocket health check.
-- [ ] Provide active session count.
-- [ ] Provide disconnect reason classification.
-- [ ] Provide heartbeat diagnostics.
-- [ ] Provide backpressure or slow-client protection.
-- [ ] Avoid logging normal disconnects as errors.
-- [ ] Add `vix ws check`.
+- [x] Detect WebSocket port.
+- [x] Detect WebSocket route/path.
+- [x] Validate Nginx WebSocket proxy config.
+- [x] Detect missing upgrade headers.
+- [x] Provide WebSocket health check.
+- [x] Provide active session count.
+- [x] Provide disconnect reason classification.
+- [x] Provide heartbeat diagnostics.
+- [x] Provide backpressure or slow-client protection.
+- [x] Avoid logging normal disconnects as errors.
+- [] Add `vix ws check`.
 
 Example:
 
