@@ -578,4 +578,102 @@ const posts = [
     padding: 20px;
   }
 }
+/* ============================================================
+   Blog home density — cleaner editorial homepage
+   ============================================================ */
+
+.bh {
+  max-width: 860px;
+  padding: 44px 24px 64px;
+}
+
+.bh-hero {
+  margin-bottom: 40px;
+}
+
+.bh-eyebrow {
+  margin-bottom: 20px;
+}
+
+.bh-title {
+  margin-bottom: 18px;
+}
+
+.bh-lead {
+  margin-bottom: 22px;
+  line-height: 1.68;
+}
+
+.bh-featured {
+  padding: 28px;
+  margin-bottom: 42px;
+}
+
+.bh-featured-desc {
+  margin-bottom: 16px;
+}
+
+.bh-section {
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+}
+
+.bh-grid {
+  gap: 16px;
+  margin-bottom: 48px;
+}
+
+.bh-card {
+  padding: 22px;
+}
+
+.bh-card-meta {
+  margin-bottom: 10px;
+}
+
+.bh-card-title {
+  margin-bottom: 8px;
+}
+
+.bh-card-desc {
+  margin-bottom: 16px;
+  line-height: 1.55;
+}
+
+.bh-card-footer {
+  padding-top: 12px;
+}
+.bh-title {
+  max-width: 760px;
+  margin: 0 0 18px;
+  font-size: clamp(2.2rem, 4.4vw, 3.1rem);
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+  font-weight: 680;
+  color: #0a0a0a;
+}
+.bh-tag--featured {
+  background: var(--vix-brand);
+  color: #ffffff;
+  border-color: var(--vix-brand);
+}
+@media (max-width: 768px) {
+  .bh {
+    padding: 34px 20px 52px;
+  }
+
+  .bh-hero {
+    margin-bottom: 34px;
+  }
+
+  .bh-featured {
+    padding: 22px;
+    margin-bottom: 34px;
+  }
+
+  .bh-grid {
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+}
 </style>

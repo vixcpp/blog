@@ -293,7 +293,7 @@ const isPost      = computed(() => !!frontmatter.value?.date || route.path.start
                 <li><a href="https://vixcpp.com">Documentation</a></li>
                 <li><a href="https://registry.vixcpp.com">Registry</a></li>
                 <li><a href="https://github.com/vixcpp">GitHub</a></li>
-                <li><a href="https://github.com/vixcpp/vix.cpp/releases">Releases</a></li>
+                <li><a href="/posts/changelog/">Read the changelog</a></li>
               </ul>
             </div>
 
@@ -343,15 +343,22 @@ const isPost      = computed(() => !!frontmatter.value?.date || route.path.start
    ════════════════════════════════════════════════ */
 
 .bh-header {
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 100;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+
   width: 100%;
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(20px) saturate(1.4);
   -webkit-backdrop-filter: blur(20px) saturate(1.4);
+
   border-bottom: 1px solid transparent;
   transition: background .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.VPContent {
+  padding-top: 64px !important;
 }
 
 .bh-header--scrolled {
@@ -603,9 +610,12 @@ const isPost      = computed(() => !!frontmatter.value?.date || route.path.start
 
 /* Reading progress bar (for post pages) */
 .bh-progress {
-  position: sticky;
+  position: fixed;
   top: 64px;
-  z-index: 99;
+  left: 0;
+  right: 0;
+  z-index: 999;
+
   height: 2px;
   background: transparent;
   pointer-events: none;
@@ -621,7 +631,9 @@ const isPost      = computed(() => !!frontmatter.value?.date || route.path.start
 /* ── Hide default VitePress nav since we replace it ── */
 .VPNav { display: none !important; }
 .VPLocalNav { display: none !important; }
-.VPContent { padding-top: 0 !important; }
+.VPContent {
+  padding-top: 64px !important;
+}
 
 
 /* ════════════════════════════════════════════════

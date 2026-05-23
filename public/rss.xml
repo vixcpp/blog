@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>Vix.cpp Engineering Blog</title>
+    <link>https://blog.vixcpp.com/</link>
+    <description>Technical articles about Vix.cpp runtime architecture, build system, CLI behavior, diagnostics, production tooling, and engineering decisions.</description>
+    <language>en</language>
+    <lastBuildDate>Sat, 23 May 2026 00:00:00 +0300</lastBuildDate>
+
+    <item>
+      <title>Vix.cpp Changelog</title>
+      <link>https://blog.vixcpp.com/posts/changelog/</link>
+      <guid>https://blog.vixcpp.com/posts/changelog/</guid>
+      <description>Version-by-version release notes covering runtime architecture, CLI workflows, SDK packaging, diagnostics, production tooling, and ecosystem changes.</description>
+      <pubDate>Sat, 23 May 2026 00:00:00 +0300</pubDate>
+    </item>
+
+    <item>
+      <title>vix.app</title>
+      <link>https://blog.vixcpp.com/posts/vix-app/</link>
+      <guid>https://blog.vixcpp.com/posts/vix-app/</guid>
+      <description>A simple application manifest for building C++ projects without exposing users directly to CMake complexity.</description>
+      <pubDate>Sat, 23 May 2026 00:00:00 +0300</pubDate>
+    </item>
+
+    <item>
+      <title>vix build</title>
+      <link>https://blog.vixcpp.com/posts/vix-build/</link>
+      <guid>https://blog.vixcpp.com/posts/vix-build/</guid>
+      <description>Technical notes about how Vix configures, plans, caches, and executes native C++ builds.</description>
+      <pubDate>Sat, 23 May 2026 00:00:00 +0300</pubDate>
+    </item>
+
+    <item>
+      <title>vix error diagnostics</title>
+      <link>https://blog.vixcpp.com/posts/vix-error-diagnostics/</link>
+      <guid>https://blog.vixcpp.com/posts/vix-error-diagnostics/</guid>
+      <description>How Vix turns raw C++ compiler errors, runtime crashes, sanitizer logs, and template failures into actionable diagnostics.</description>
+      <pubDate>Sat, 23 May 2026 00:00:00 +0300</pubDate>
+    </item>
+
+    <item>
+      <title>vix run</title>
+      <link>https://blog.vixcpp.com/posts/vix-run/</link>
+      <guid>https://blog.vixcpp.com/posts/vix-run/</guid>
+      <description>How Vix resolves files, scripts, projects, targets, CMake fallback, and runtime arguments.</description>
+      <pubDate>Sat, 23 May 2026 00:00:00 +0300</pubDate>
+    </item>
+
+    <item>
+      <title>vix dev</title>
+      <link>https://blog.vixcpp.com/posts/vix-dev/</link>
+      <guid>https://blog.vixcpp.com/posts/vix-dev/</guid>
+      <description>How Vix runs development workflows, watch mode, reloads, and Vue + Vix full-stack projects.</description>
+      <pubDate>Sat, 23 May 2026 00:00:00 +0300</pubDate>
+    </item>
+
+    <item>
+      <title>Vix Replay</title>
+      <link>https://blog.vixcpp.com/posts/vix-replay/</link>
+      <guid>https://blog.vixcpp.com/posts/vix-replay/</guid>
+      <description>How Vix records executions so developers can inspect and understand previous runs.</description>
+      <pubDate>Sat, 23 May 2026 00:00:00 +0300</pubDate>
+    </item>
+  </channel>
+</rss>

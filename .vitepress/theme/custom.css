@@ -743,3 +743,151 @@ html, body { overflow-x: hidden; }
   background: rgba(22, 163, 74, 0.10);
   box-shadow: inset 0 0 0 1px rgba(22, 163, 74, 0.18);
 }
+/* ============================================================
+   Blog reading density — book-like article spacing
+   ============================================================ */
+
+.vp-doc {
+  max-width: 760px !important;
+  padding: 44px 24px 72px !important;
+}
+
+/* Headings closer to the text they introduce */
+.vp-doc h1 {
+  margin: 0 0 1rem !important;
+}
+
+.vp-doc h1 + p {
+  margin: 0 0 1.6rem !important;
+  line-height: 1.6 !important;
+}
+
+.vp-doc h2 {
+  margin-top: 2.4rem !important;
+  margin-bottom: 0.75rem !important;
+}
+
+.vp-doc h3 {
+  margin-top: 1.8rem !important;
+  margin-bottom: 0.55rem !important;
+}
+
+.vp-doc h4 {
+  margin-top: 1.4rem !important;
+  margin-bottom: 0.45rem !important;
+}
+
+/* Paragraphs: closer, like a real article */
+.vp-doc p {
+  margin: 0.85rem 0 !important;
+  line-height: 1.72 !important;
+}
+
+/* Avoid huge gaps after headings */
+.vp-doc h2 + p,
+.vp-doc h3 + p,
+.vp-doc h4 + p {
+  margin-top: 0 !important;
+}
+
+/* Lists should read as part of the paragraph flow */
+.vp-doc ul,
+.vp-doc ol {
+  margin: 0.85rem 0 1rem !important;
+  line-height: 1.68 !important;
+}
+
+.vp-doc li {
+  margin: 0.28rem 0 !important;
+}
+
+.vp-doc li > ul,
+.vp-doc li > ol {
+  margin: 0.35rem 0 0.45rem !important;
+}
+
+/* Code blocks: still readable, but less separated */
+.vp-doc div[class*="language-"],
+.vp-doc [class*="language-"] {
+  margin: 18px 0 !important;
+}
+
+.vp-doc div[class*="language-"] pre,
+.vp-doc [class*="language-"] pre {
+  padding: 14px 16px !important;
+  line-height: 1.55 !important;
+}
+
+/* Tables, blockquotes, images: reduce vertical gaps */
+.vp-doc table {
+  margin: 20px 0 !important;
+}
+
+.vp-doc blockquote {
+  margin: 20px 0 !important;
+}
+
+.vp-doc img {
+  margin: 1.2rem auto !important;
+}
+
+.vp-doc hr {
+  margin: 2.2rem auto !important;
+}
+
+/* Custom containers closer to article flow */
+.vp-doc .tip,
+.vp-doc .warning,
+.vp-doc .danger,
+.vp-doc .info {
+  margin: 18px 0 !important;
+}
+
+/* Footer navigation less detached */
+.VPDocFooter {
+  margin: 3rem auto 0 !important;
+  padding-top: 2rem !important;
+}
+
+/* Mobile density */
+@media (max-width: 768px) {
+  .vp-doc {
+    padding: 30px 20px 52px !important;
+  }
+
+  .vp-doc p {
+    margin: 0.75rem 0 !important;
+    line-height: 1.68 !important;
+  }
+
+  .vp-doc h2 {
+    margin-top: 2rem !important;
+  }
+
+  .vp-doc h3 {
+    margin-top: 1.5rem !important;
+  }
+}
+.vp-doc li {
+  margin: 0 !important;
+}
+.vp-doc :not(pre) > code {
+  font-family: var(--vix-font-mono);
+  font-size: 0.86em;
+  font-weight: 500;
+  line-height: 1.35;
+
+  padding: 0.12em 0.38em;
+  border-radius: 5px;
+
+  color: #111827;
+  background: #f6f4ea;
+  border: 1px solid #ddd8c8;
+
+  white-space: break-spaces;
+  word-break: break-word;
+}
+.vp-doc {
+    max-width: 760px !important;
+    padding: 44px 24px 0px !important;
+}
