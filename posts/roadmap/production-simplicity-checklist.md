@@ -4,8 +4,8 @@ This checklist comes from analyzing PulseGrid running in production.
 PulseGrid showed an important reality:
 
 > Vix can build and run a real C++ backend, but production still requires too much manual work.
-The goal of this checklist is to make Vix extremely simple for real production apps.
-A developer should be able to build, run, deploy, inspect, debug, and operate a Vix app without manually wiring systemd, Nginx, logs, health checks, ports, services, and production diagnostics.
+> The goal of this checklist is to make Vix extremely simple for real production apps.
+> A developer should be able to build, run, deploy, inspect, debug, and operate a Vix app without manually wiring systemd, Nginx, logs, health checks, ports, services, and production diagnostics.
 
 ---
 
@@ -347,10 +347,10 @@ vix logs errors
 - [x] Filter by time.
 - [x] Follow logs live.
 - [x] Show last N lines.
-- [ ] Detect repeated errors.
-- [ ] Group common network disconnects.
-- [ ] Hide normal disconnect noise by default.
-- [ ] Support JSON logs later.
+- [x] Detect repeated errors.
+- [x] Group common network disconnects.
+- [x] Hide normal disconnect noise by default.
+- [x] Support JSON logs later.
 
 Example:
 
@@ -380,18 +380,18 @@ Vix already handles normal disconnects while reading. The same logic must be app
 
 - [x] Detect normal disconnects in HTTP read path.
 - [x] Detect normal disconnects in HTTP response write path.
-- [ ] Log client disconnects at Debug level.
-- [ ] Keep unexpected write failures at Error level.
-- [ ] Apply similar logic to WebSocket writes.
-- [ ] Classify common errors:
-  - [ ] Broken pipe
-  - [ ] Connection reset by peer
-  - [ ] Operation canceled
-  - [ ] EOF
-- [ ] Add tests for response write disconnects.
-- [ ] Add tests for WebSocket disconnects.
-- [ ] Avoid noisy logs in production.
-- [ ] Improve log messages with context.
+- [x] Log client disconnects at Debug level.
+- [x] Keep unexpected write failures at Error level.
+- [x] Apply similar logic to WebSocket writes.
+- [x] Classify common errors:
+  - [x] Broken pipe
+  - [x] Connection reset by peer
+  - [x] Operation canceled
+  - [x] EOF
+- [x] Add tests for response write disconnects.
+- [x] Add tests for WebSocket disconnects.
+- [x] Avoid noisy logs in production.
+- [x] Improve log messages with context.
 
 Expected behavior:
 
@@ -417,14 +417,16 @@ Vix should make this easier to operate and debug.
 
 ### Checklist
 
+## 8. WebSocket production support
+
 - [x] Detect WebSocket port.
 - [x] Detect WebSocket route/path.
-- [x] Validate Nginx WebSocket proxy config.
+- [x] Validate Nginx WebSocket proxy config. // via `vix proxy nginx check`
 - [x] Detect missing upgrade headers.
 - [x] Provide WebSocket health check.
 - [x] Provide active session count.
 - [x] Provide disconnect reason classification.
-- [x] Provide heartbeat diagnostics.
+- [x] Provide heartbeat diagnostics. // diagnostic temporaire, ping natif désactivé
 - [x] Provide backpressure or slow-client protection.
 - [x] Avoid logging normal disconnects as errors.
 - [x] Add `vix ws check`.
@@ -488,16 +490,16 @@ Vix should understand this pattern.
 
 ### Checklist
 
-- [ ] Detect SQLite usage.
-- [ ] Detect database path.
-- [ ] Detect WAL mode files.
-- [ ] Detect storage directory.
-- [ ] Warn if storage directory is missing.
-- [ ] Warn if permissions are wrong.
-- [ ] Support migrations directory.
-- [ ] Add `vix db status`.
-- [ ] Add `vix db migrate` later.
-- [ ] Add backup helper later.
+- [x] Detect SQLite usage.
+- [x] Detect database path.
+- [x] Detect WAL mode files.
+- [x] Detect storage directory.
+- [x] Warn if storage directory is missing.
+- [x] Warn if permissions are wrong.
+- [x] Support migrations directory.
+- [x] Add `vix db status`.
+- [x] Add `vix db migrate` later.
+- [x] Add backup helper later.
 
 Example:
 
