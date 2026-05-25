@@ -15,7 +15,7 @@ const posts = [
     href: "/posts/vix-app/",
     tag: "Application",
     date: "May 2026",
-    readTime: "6 articles",
+    readTime: "8 articles",
   },
   {
     title: "Roadmap",
@@ -76,38 +76,57 @@ const posts = [
         <span class="bh-eyebrow-label">Vix.cpp Engineering Blog</span>
       </div>
 
-      <h1 class="bh-title">
-        Engineering notes from the Vix.cpp project.
-      </h1>
+      <h1 class="bh-title">Engineering notes from the Vix.cpp project.</h1>
 
       <p class="bh-lead">
-        Technical articles about the runtime architecture, build system, CLI behavior,
-        diagnostics, production tooling, and the engineering decisions behind Vix.cpp.
+        Technical articles about the runtime architecture, build system, CLI
+        behavior, diagnostics, production tooling, and the engineering decisions
+        behind Vix.cpp.
       </p>
 
       <div class="bh-meta">
         <a class="bh-link" href="/posts/changelog/">
           View changelog
-          <svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true">
-            <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <svg
+            viewBox="0 0 16 16"
+            width="14"
+            height="14"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M6 3l5 5-5 5"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
           </svg>
         </a>
 
         <span class="bh-meta-sep">·</span>
 
-        <a class="bh-link bh-link--muted" href="/posts/">
-          Read articles
-        </a>
+        <a class="bh-link bh-link--muted" href="/posts/"> Read articles </a>
 
         <span class="bh-meta-sep">·</span>
 
-        <a class="bh-link bh-link--muted" href="https://vixcpp.com" target="_blank" rel="noreferrer">
+        <a
+          class="bh-link bh-link--muted"
+          href="https://vixcpp.com"
+          target="_blank"
+          rel="noreferrer"
+        >
           Documentation
         </a>
 
         <span class="bh-meta-sep">·</span>
 
-        <a class="bh-link bh-link--muted" href="https://github.com/vixcpp" target="_blank" rel="noreferrer">
+        <a
+          class="bh-link bh-link--muted"
+          href="https://github.com/vixcpp"
+          target="_blank"
+          rel="noreferrer"
+        >
           GitHub
         </a>
       </div>
@@ -126,8 +145,20 @@ const posts = [
 
       <span class="bh-featured-cta">
         Read the changelog
-        <svg viewBox="0 0 16 16" width="13" height="13" fill="none" aria-hidden="true">
-          <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <svg
+          viewBox="0 0 16 16"
+          width="13"
+          height="13"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M6 3l5 5-5 5"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
         </svg>
       </span>
     </a>
@@ -155,8 +186,20 @@ const posts = [
         <div class="bh-card-footer">
           <span class="bh-card-time">{{ post.readTime }}</span>
           <span class="bh-card-arrow">
-            <svg viewBox="0 0 16 16" width="13" height="13" fill="none" aria-hidden="true">
-              <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <svg
+              viewBox="0 0 16 16"
+              width="13"
+              height="13"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M6 3l5 5-5 5"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
             </svg>
           </span>
         </div>
@@ -170,7 +213,13 @@ const posts = [
   max-width: 820px;
   margin: 0 auto;
   padding: 64px 24px 72px;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
 }
 
 .bh-hero {
@@ -183,9 +232,9 @@ const posts = [
   gap: 8px;
   margin-bottom: 28px;
   padding: 5px 11px 5px 9px;
-  border: 1px solid rgba(10, 10, 10, .10);
+  border: 1px solid rgba(10, 10, 10, 0.1);
   border-radius: 999px;
-  background: rgba(250, 250, 250, .80);
+  background: rgba(250, 250, 250, 0.8);
 }
 
 .bh-dot {
@@ -193,7 +242,7 @@ const posts = [
   height: 6px;
   border-radius: 50%;
   background: #16a34a;
-  box-shadow: 0 0 0 3px rgba(22, 163, 74, .15);
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15);
 }
 
 .bh-eyebrow-label {
@@ -237,7 +286,9 @@ const posts = [
   text-decoration: none;
   font-weight: 600;
   letter-spacing: -0.005em;
-  transition: gap .15s ease, color .15s ease;
+  transition:
+    gap 0.15s ease,
+    color 0.15s ease;
 }
 
 .bh-link:hover {
@@ -245,7 +296,7 @@ const posts = [
 }
 
 .bh-link svg {
-  transition: transform .15s ease;
+  transition: transform 0.15s ease;
 }
 
 .bh-link:hover svg {
@@ -270,20 +321,27 @@ const posts = [
   padding: 32px;
   margin-bottom: 56px;
   border-radius: 16px;
-  border: 1px solid rgba(10, 10, 10, .08);
+  border: 1px solid rgba(10, 10, 10, 0.08);
   background:
-    linear-gradient(135deg, rgba(250, 250, 250, 0) 0%, rgba(244, 244, 245, .55) 100%),
+    linear-gradient(
+      135deg,
+      rgba(250, 250, 250, 0) 0%,
+      rgba(244, 244, 245, 0.55) 100%
+    ),
     #fafafa;
   text-decoration: none !important;
-  transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .bh-featured:hover {
-  border-color: rgba(10, 10, 10, .18);
+  border-color: rgba(10, 10, 10, 0.18);
   transform: translateY(-2px);
   box-shadow:
-    0 1px 2px rgba(0, 0, 0, .04),
-    0 10px 30px rgba(0, 0, 0, .06);
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 10px 30px rgba(0, 0, 0, 0.06);
 }
 
 .bh-featured-meta {
@@ -308,9 +366,9 @@ const posts = [
   font-size: 11px;
   font-weight: 600;
   letter-spacing: -0.005em;
-  background: rgba(10, 10, 10, .06);
+  background: rgba(10, 10, 10, 0.06);
   color: #0a0a0a;
-  border: 1px solid rgba(10, 10, 10, .08);
+  border: 1px solid rgba(10, 10, 10, 0.08);
 }
 
 .bh-tag--featured {
@@ -347,7 +405,7 @@ const posts = [
 }
 
 .bh-featured-cta svg {
-  transition: transform .15s ease;
+  transition: transform 0.15s ease;
 }
 
 .bh-featured:hover .bh-featured-cta svg {
@@ -360,7 +418,7 @@ const posts = [
   justify-content: space-between;
   margin-bottom: 24px;
   padding-bottom: 16px;
-  border-bottom: 1px solid rgba(10, 10, 10, .08);
+  border-bottom: 1px solid rgba(10, 10, 10, 0.08);
 }
 
 .bh-section-title,
@@ -368,7 +426,7 @@ const posts = [
   margin: 0;
   font-size: 13px;
   font-weight: 700;
-  letter-spacing: .08em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #525252;
 }
@@ -378,7 +436,7 @@ const posts = [
   font-weight: 500;
   color: #737373;
   text-decoration: none;
-  transition: color .15s ease;
+  transition: color 0.15s ease;
 }
 
 .bh-section-link:hover {
@@ -397,19 +455,23 @@ const posts = [
   flex-direction: column;
   padding: 24px;
   border-radius: 12px;
-  border: 1px solid rgba(10, 10, 10, .08);
+  border: 1px solid rgba(10, 10, 10, 0.08);
   background: #ffffff;
   text-decoration: none !important;
-  transition: border-color .2s ease, background .2s ease, transform .2s ease, box-shadow .2s ease;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .bh-card:hover {
-  border-color: rgba(10, 10, 10, .18);
+  border-color: rgba(10, 10, 10, 0.18);
   background: #fafafa;
   transform: translateY(-2px);
   box-shadow:
-    0 1px 2px rgba(0, 0, 0, .03),
-    0 8px 20px rgba(0, 0, 0, .05);
+    0 1px 2px rgba(0, 0, 0, 0.03),
+    0 8px 20px rgba(0, 0, 0, 0.05);
 }
 
 .bh-card-meta {
@@ -447,7 +509,7 @@ const posts = [
   align-items: center;
   justify-content: space-between;
   padding-top: 14px;
-  border-top: 1px solid rgba(10, 10, 10, .06);
+  border-top: 1px solid rgba(10, 10, 10, 0.06);
 }
 
 .bh-card-time {
@@ -460,7 +522,7 @@ const posts = [
   display: inline-flex;
   align-items: center;
   color: #0a0a0a;
-  transition: transform .15s ease;
+  transition: transform 0.15s ease;
 }
 
 .bh-card:hover .bh-card-arrow {
@@ -487,14 +549,17 @@ const posts = [
   gap: 8px;
   padding: 8px 14px;
   border-radius: 999px;
-  border: 1px solid rgba(10, 10, 10, .10);
+  border: 1px solid rgba(10, 10, 10, 0.1);
   background: #ffffff;
   font-size: 13px;
   font-weight: 500;
   color: #0a0a0a;
   text-decoration: none !important;
   letter-spacing: -0.005em;
-  transition: border-color .15s ease, background .15s ease, color .15s ease;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease;
 }
 
 .bh-topic:hover {
@@ -507,18 +572,24 @@ const posts = [
   font-size: 11px;
   color: #737373;
   font-weight: 600;
-  transition: color .15s ease;
+  transition: color 0.15s ease;
 }
 
 .bh-topic:hover .bh-topic-count {
-  color: rgba(255, 255, 255, .65);
+  color: rgba(255, 255, 255, 0.65);
 }
 
 .bh {
   max-width: 860px;
   margin: 0 auto;
   padding: 48px 24px 72px;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
 }
 
 .bh-hero {

@@ -10,6 +10,8 @@ Technical notes about `vix.app`, the simple manifest used to describe C++ applic
 
 ## Articles
 
+- [vix.app internal modules](/posts/vix-app/vix-app-internal-modules)
+- [vix.app registry dependencies](/posts/vix-app/vix-app-registry-dependencies)
 - [Why vix.app exists](/posts/vix-app/why-vix-app-exists)
 - [vix.app manifest design](/posts/vix-app/vix-app-manifest-design)
 - [vix.app generated CMake](/posts/vix-app/vix-app-generated-cmake)
