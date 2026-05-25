@@ -44,14 +44,14 @@ Logs: available
 - [x] Detect whether the binary exists.
 - [x] Detect whether the binary is currently running.
 - [x] Detect systemd service linked to the app.
-- [ ] Detect service status.
-- [ ] Detect service restart policy.
-- [ ] Detect app working directory from systemd.
-- [ ] Detect environment variables from systemd.
+- [x] Detect service status.
+- [x] Detect service restart policy.
+- [x] Detect app working directory from systemd.
+- [x] Detect environment variables from systemd.
 - [x] Detect HTTP listening port.
-- [ ] Detect WebSocket listening port.
+- [x] Detect WebSocket listening port.
 - [x] Detect Nginx config for the app domain.
-- [ ] Detect proxy target.
+- [x] Detect proxy target.
 - [x] Detect TLS certificate presence.
 - [x] Detect local health endpoint.
 - [x] Detect public HTTPS health.
@@ -92,8 +92,8 @@ vix service logs
 - [x] Support service restart.
 - [x] Support service status.
 - [x] Support service logs through `journalctl`.
-- [ ] Warn when service points to an old build directory.
-- [ ] Warn when service uses a different Vix installation than the current CLI.
+- [x] Warn when service points to an old build directory.
+- [x] Warn when service uses a different Vix installation than the current CLI.
 
 Example generated service:
 
@@ -148,7 +148,11 @@ vix proxy nginx reload
 - [x] Support custom WebSocket path such as `/ws`.
 - [x] Support HTTPS redirect.
 - [x] Support TLS certificate paths.
-- [ ] Support Let's Encrypt integration later.
+- [x] Validate TLS certificate file.
+- [x] Detect invalid PEM X.509 certificate.
+- [x] Detect expired TLS certificate.
+- [x] Detect TLS certificate domain mismatch.
+- [x] Support automatic Let's Encrypt / Certbot integration.
 - [x] Validate Nginx config before reload.
 - [x] Detect wrong upstream port.
 - [x] Detect missing WebSocket upgrade headers.
@@ -293,7 +297,7 @@ vix deploy
 - [x] Run local health check.
 - [x] Run public health check.
 - [x] Show last logs on failure.
-- [ ] Roll back later if needed.
+- [x] Roll back later if needed.
 - [x] Support dry run.
 - [x] Support verbose mode.
 - [x] Support production config from `vix.json`.
@@ -535,15 +539,15 @@ Vix should help verify production environment variables.
 
 ### Checklist
 
-- [ ] Detect `.env`.
-- [ ] Detect `.env.example`.
-- [ ] Compare missing variables.
-- [ ] Show which variables are loaded.
-- [ ] Never print secrets by default.
-- [ ] Support masked output.
-- [ ] Validate required production env vars.
-- [ ] Warn when systemd env differs from project env.
-- [ ] Add `vix env check`.
+- [x] Detect `.env`.
+- [x] Detect `.env.example`.
+- [x] Compare missing variables.
+- [x] Show which variables are loaded.
+- [x] Never print secrets by default.
+- [x] Support masked output.
+- [x] Validate required production env vars.
+- [x] Warn when systemd env differs from project env.
+- [x] Add `vix env check`.
 
 Example:
 
@@ -600,14 +604,14 @@ A future `vix.json` should support:
 
 ### Checklist
 
-- [ ] Define production schema.
-- [ ] Validate production schema.
-- [ ] Keep config simple.
-- [ ] Avoid too much magic.
-- [ ] Generate systemd from config.
-- [ ] Generate Nginx from config.
-- [ ] Run health checks from config.
-- [ ] Show production status from config.
+- [x] Define production schema.
+- [x] Validate production schema.
+- [x] Keep config simple.
+- [x] Avoid too much magic.
+- [x] Generate systemd from config.
+- [x] Generate Nginx from config.
+- [x] Run health checks from config.
+- [x] Show production status from config.
 
 ---
 
@@ -641,19 +645,19 @@ vix new myapp --template backend
 
 ### Checklist
 
-- [ ] Generate clean `main.cpp`.
-- [ ] Generate `AppBootstrap`.
-- [ ] Generate route registry.
-- [ ] Generate middleware registry.
-- [ ] Generate health controller.
-- [ ] Generate static public folder.
-- [ ] Generate storage folder.
-- [ ] Generate migrations folder.
-- [ ] Generate tests folder.
-- [ ] Generate `vix.json`.
-- [ ] Generate `vix.app`.
-- [ ] Generate production config scaffold.
-- [ ] Keep `main()` minimal.
+- [x] Generate clean `main.cpp`.
+- [x] Generate `AppBootstrap`.
+- [x] Generate route registry.
+- [x] Generate middleware registry.
+- [x] Generate health controller.
+- [x] Generate static public folder.
+- [x] Generate storage folder.
+- [x] Generate migrations folder.
+- [x] Generate tests folder.
+- [x] Generate `vix.json`.
+- [x] Generate `vix.app`.
+- [x] Generate production config scaffold.
+- [x] Keep `main()` minimal.
 
 Example `main.cpp`:
 
@@ -694,14 +698,14 @@ vix command != Vix_DIR used by project/service
 
 ### Checklist
 
-- [ ] Detect current `vix` binary path.
-- [ ] Detect `Vix_DIR`.
-- [ ] Detect `CMAKE_PREFIX_PATH`.
-- [ ] Detect Vix version used by CLI.
+- [x] Detect current `vix` binary path.
+- [x] Detect `Vix_DIR`.
+- [x] Detect `CMAKE_PREFIX_PATH`.
+- [x] Detect Vix version used by CLI.
 - [ ] Detect Vix version used by project build.
-- [ ] Warn when they differ.
-- [ ] Suggest exact fix.
-- [ ] Add `vix doctor toolchain`.
+- [x] Warn when they differ.
+- [x] Suggest exact fix.
+- [x] Add `vix doctor toolchain`.
 
 Example warning:
 
@@ -721,46 +725,22 @@ This can cause confusing builds.
 
 ## 15. Better deploy script generation
 
-### Goal
+### Status
 
-Until `vix deploy` is complete, Vix should at least generate a safe deploy script.
+Replaced by `vix deploy`.
 
-```bash
-vix deploy init
-```
-
-Should generate:
-
-```bash
-#!/usr/bin/env bash
-set -euo pipefail
-
-cd /home/gaspard/PulseGrid
-
-git pull origin main
-
-vix build --with-sqlite
-
-sudo systemctl restart pulsegrid
-sudo systemctl is-active --quiet pulsegrid
-
-curl -fsS http://127.0.0.1:8080/ >/dev/null
-curl -fsS https://pulsegrid.softadastra.com/ >/dev/null
-
-echo "PulseGrid deployed successfully"
-```
+The original goal was to generate a safe deployment script while the deployment workflow was incomplete. Since `vix deploy` now supports pull, build, tests, service restart, service status, health checks, proxy checks, logs on failure, dry-run, verbose mode, and production config from `vix.json`, a generated deploy script is no longer required for the v2.6 production workflow.
 
 ### Checklist
 
-- [ ] Use `set -euo pipefail`.
-- [ ] Use correct project directory.
-- [ ] Use correct branch.
-- [ ] Use correct build command.
-- [ ] Use correct service name.
-- [ ] Use local health endpoint.
-- [ ] Use public health endpoint.
-- [ ] Fail on health error.
-- [ ] Show logs on failure.
+- [x] Replaced by `vix deploy`.
+- [x] Use production config from `vix.json`.
+- [x] Pull latest code optionally.
+- [x] Build app with correct command.
+- [x] Restart service through `vix service`.
+- [x] Run health checks through `vix health`.
+- [x] Validate proxy through `vix proxy nginx check`.
+- [x] Show logs on failure.
 
 ---
 
@@ -791,12 +771,12 @@ WARN deploy rollback not configured
 
 ### Checklist
 
-- [ ] Define scoring rules.
-- [ ] Show OK/WARN/FAIL.
-- [ ] Keep output simple.
-- [ ] Make fixes actionable.
-- [ ] Do not hide important details.
-- [ ] Support JSON output for CI.
+- [x] Define scoring rules.
+- [x] Show OK/WARN/FAIL.
+- [x] Keep output simple.
+- [x] Make fixes actionable.
+- [x] Do not hide important details.
+- [x] Support JSON output for CI.
 
 ---
 
@@ -806,38 +786,38 @@ These are the first concrete improvements to implement in Vix.
 
 ### Priority 1
 
-- [ ] Fix HTTP response write disconnect logging.
-- [ ] Move normal write disconnects to Debug level.
-- [ ] Keep unexpected write failures at Error level.
-- [ ] Add test for `Broken pipe` during response write.
+- [x] Fix HTTP response write disconnect logging.
+- [x] Move normal write disconnects to Debug level.
+- [x] Keep unexpected write failures at Error level.
+- [x] Add test for `Broken pipe` during response write.
 
 ### Priority 2
 
-- [ ] Add `vix doctor production`.
-- [ ] Detect service, port, proxy, TLS, and health state.
-- [ ] Detect CLI/library mismatch.
+- [x] Add `vix doctor production`.
+- [x] Detect service, port, proxy, TLS, and health state.
+- [x] Detect CLI/library mismatch.
 
 ### Priority 3
 
-- [ ] Add `vix logs`.
-- [ ] Read systemd logs.
-- [ ] Read Nginx logs.
-- [ ] Group common disconnect noise.
+- [x] Add `vix logs`.
+- [x] Read systemd logs.
+- [x] Read Nginx logs.
+- [x] Group common disconnect noise.
 
 ### Priority 4
 
-- [ ] Add `vix service`.
-- [ ] Generate and manage systemd service.
+- [x] Add `vix service`.
+- [x] Generate and manage systemd service.
 
 ### Priority 5
 
-- [ ] Add `vix proxy nginx`.
-- [ ] Generate and validate Nginx config.
+- [x] Add `vix proxy nginx`.
+- [x] Generate and validate Nginx config.
 
 ### Priority 6
 
-- [ ] Add `vix deploy`.
-- [ ] Build, restart, health check, and show logs on failure.
+- [x] Add `vix deploy`.
+- [x] Build, restart, health check, and show logs on failure.
 
 ---
 
