@@ -15,6 +15,10 @@ These notes document how Vix works internally, why specific architectural decisi
 - [Roadmap](/posts/roadmap/)
 - [Production simplicity checklist](/posts/roadmap/production-simplicity-checklist)
 
+## Vix Core
+
+- [Vix Core v2.6.3 benchmark baseline](/posts/vix-core/vix-core-benchmark-baseline-v263)
+
 ## vix.app
 
 - [Why vix.app exists](/posts/vix-app/why-vix-app-exists)
