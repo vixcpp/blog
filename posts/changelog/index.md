@@ -12,6 +12,12 @@ Each entry documents the technical changes behind a specific version: runtime ar
 
 ## Latest releases
 
+- [Vix.cpp v2.6.3](./v2.6.3.md) — stability-focused release with stronger Core lifecycle guarantees, official Core benchmark baselines, improved `vix run` and `vix tests` behavior, broader sanitizer coverage, stricter CI, JSON fixes, and more reliable module tests.
+
+- [Vix.cpp v2.6.2](./v2.6.2.md) — dependency workflow reliability, registry fixes, cleaner `vix run` behavior, smarter `vix install`, `vix update`, `vix list`, `vix outdated`, Windows SDK packaging fixes, crypto helpers, and better diagnostics.
+
+- [Vix.cpp v2.6.1](./v2.6.1.md) — post-v2.6.0 patch release with clearer runtime diagnostics, improved build and test error reporting, stronger SDK release validation, and safer full-SDK consumer linking through `vix::vix`.
+
 - [Vix.cpp v2.6.0](./v2.6.0.md) — AI agent module, official `vix.app`, Vue + Vix workflows, target-aware builds, async-powered `vix dev`, production backend tooling, and the new game runtime foundation.
 
 - [Vix.cpp v2.5.6](./v2.5.6.md) — generated library workflow fixes, header-only build guidance, Ninja target diagnostics, and cleaner CLI output.
@@ -19,12 +25,6 @@ Each entry documents the technical changes behind a specific version: runtime ar
 - [Vix.cpp v2.5.5](./v2.5.5.md) — `vix run` registry dependency linking, installed module consistency, package export cleanup, and the first experimental `vix.app` workflow.
 
 - [Vix.cpp v2.5.3](./v2.5.3.md) — execution replay, runtime diagnostics, incremental build graph foundations, improved test/check output, and a dedicated dev session engine.
-
-- [Vix.cpp v2.5.2](./v2.5.2.md) — stable `vix::print`, `vix::input`, runtime targets, binary export, smarter `vix run`, and optional HTTPS support.
-
-- [Vix.cpp v2.5.1](./v2.5.1.md) — HTTP session lifecycle fixes, `.env` standardization, cleaner examples, and production-oriented WebSocket examples.
-
-- [Vix.cpp v2.5.0](./v2.5.0.md) — runtime shutdown stability, async cleanup, WebSocket session write fixes, benchmark paths, and module build reliability.
 
 ## Ecosystem releases
 
