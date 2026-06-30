@@ -12,6 +12,8 @@ Each entry documents the technical changes behind a specific version: runtime ar
 
 ## Latest releases
 
+- [Vix.cpp v2.7.0](./v2.7.0.md) — foundation release with CLI-first installation, SDK profiles through `vix upgrade --sdk`, cleaner optional dependency separation, improved upgrade workflow, stronger registry direction, Vix Note, Pico validation, v2.7 benchmark notes, and a post-v2.7 focus on module quality, CI, tests, diagnostics, documentation, and release reliability.
+
 - [Vix.cpp v2.6.3](./v2.6.3.md) — stability-focused release with stronger Core lifecycle guarantees, official Core benchmark baselines, improved `vix run` and `vix tests` behavior, broader sanitizer coverage, stricter CI, JSON fixes, and more reliable module tests.
 
 - [Vix.cpp v2.6.2](./v2.6.2.md) — dependency workflow reliability, registry fixes, cleaner `vix run` behavior, smarter `vix install`, `vix update`, `vix list`, `vix outdated`, Windows SDK packaging fixes, crypto helpers, and better diagnostics.
