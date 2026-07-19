@@ -1,41 +1,29 @@
 ---
-title: "Authors"
-description: "Authors and maintainers of the Vix.cpp engineering blog."
-date: 2026-05-23
+title: "Gaspard Kirira"
+description: "Author of the Vix.cpp Engineering Blog, founder of Softadastra, and creator of Vix.cpp."
+date: 2026-07-19
+article: false
 ---
 
-# Authors
+# Gaspard Kirira
 
-The Vix.cpp engineering blog is maintained by the Vix.cpp project.
-It documents the technical evolution of Vix.cpp: runtime architecture, CLI workflows, build system design, diagnostics, SDK packaging, production tooling, and roadmap decisions.
+Gaspard Kirira is the founder of Softadastra and the creator of Vix.cpp.
 
-## Maintainer
+He writes about the architecture, runtime, CLI, build system, package workflows, performance, diagnostics, and engineering decisions behind Vix.cpp.
 
-### Gaspard Kirira
+His work focuses on making modern C++ development easier to understand and more practical for application developers, without hiding the native toolchain or weakening the language’s performance model.
 
-Creator and maintainer of Vix.cpp.
+## Current work
 
-Focus areas:
+- Vix.cpp and its modular SDK
+- Vix Registry and public package workflows
+- Softadastra Cloud for private Vix packages and shared project state
+- Cgride, an independent modular C++ build architecture
+- Open tooling for native application development
 
-- C++ runtime architecture
-- CLI developer workflows
-- native build systems
-- diagnostics and error reporting
-- SDK packaging
-- production backend tooling
-- local-first and reliability-oriented systems
+## Follow his work
 
-Profiles:
-
-- [LinkedIn](https://www.linkedin.com/in/gaspard-kirira-bab908294)
-- [X](https://x.com/g_kirira)
-
-## Editorial direction
-
-Articles should be technical, precise, and useful for experienced C++ developers.
-The goal is to explain real engineering decisions behind Vix.cpp, including problems, tradeoffs, implementation direction, compatibility notes, and future roadmap work.
-
-## Contributions
-
-External contributions are welcome when they improve technical clarity, fix mistakes, or document real behavior in the Vix.cpp ecosystem.
-See the [contribution guide](/contribute) for writing rules and article structure.
+- [Personal website](https://gaspardkirira.softadastra.com)
+- [Softadastra](https://softadastra.com)
+- [Vix.cpp](https://vixcpp.com)
+- [GitHub](https://github.com/GaspardKirira)

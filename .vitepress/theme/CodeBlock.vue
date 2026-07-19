@@ -1,405 +1,500 @@
 <template>
-  <div class="cb" @mouseenter="hover = true" @mouseleave="hover = false">
-    <!-- Header -->
+  <figure
+    class="cb"
+    :class="`cb--${normalizeLang(activeLang)}`"
+    @mouseenter="hover = true"
+    @mouseleave="hover = false"
+  >
     <div class="cb-head">
       <div class="cb-head-left">
-        <span class="cb-title">{{ title || computedTitle }}</span>
-        <span v-for="c in chipsToShow" :key="c" class="cb-chip">{{ c }}</span>
+        <span class="cb-dot cb-dot--red" aria-hidden="true"></span>
+        <span class="cb-dot cb-dot--yellow" aria-hidden="true"></span>
+        <span class="cb-dot cb-dot--green" aria-hidden="true"></span>
+
+        <figcaption class="cb-title">
+          {{ title || computedTitle }}
+        </figcaption>
+
+        <span v-for="chip in chipsToShow" :key="chip" class="cb-chip">
+          {{ chip }}
+        </span>
       </div>
 
       <div class="cb-head-right">
-        <div class="cb-tabs" v-if="tabs.length > 1">
+        <div
+          v-if="tabs.length > 1"
+          class="cb-tabs"
+          role="tablist"
+          aria-label="Code block views"
+          @keydown="onTabsKeydown"
+        >
           <button
-            v-for="t in tabs"
-            :key="t.key"
+            v-for="tab in tabs"
+            :key="tab.key"
             type="button"
+            role="tab"
             class="cb-tab"
-            :class="{ 'cb-tab--active': activeTab === t.key }"
-            @click="activeTab = t.key"
-          >{{ t.label }}</button>
+            :class="{ 'cb-tab--active': activeTab === tab.key }"
+            :aria-selected="activeTab === tab.key"
+            :tabindex="activeTab === tab.key ? 0 : -1"
+            :data-key="tab.key"
+            @click="activeTab = tab.key"
+          >
+            {{ tab.label }}
+          </button>
         </div>
 
         <button
           v-if="activeText"
           type="button"
           class="cb-copy"
-          :class="{ 'cb-copy--visible': hover }"
+          :class="{
+            'cb-copy--visible': hover || copied,
+            'cb-copy--copied': copied,
+          }"
+          :title="copied ? 'Copied' : 'Copy code'"
+          :aria-label="copied ? 'Code copied' : 'Copy code'"
           @click="copy(activeText)"
-          :title="copied ? 'Copied!' : 'Copy'"
-          aria-label="Copy code"
         >
-          <svg v-if="!copied" viewBox="0 0 24 24" fill="none" class="cb-ico">
-            <path d="M9 9h10v10H9V9Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
-            <path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+          <svg
+            v-if="!copied"
+            viewBox="0 0 24 24"
+            fill="none"
+            class="cb-icon"
+            aria-hidden="true"
+          >
+            <path
+              d="M9 9h10v10H9V9Z"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
           </svg>
-          <svg v-else viewBox="0 0 24 24" fill="none" class="cb-ico">
-            <path d="M20 7L10 17l-4-4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+
+          <svg
+            v-else
+            viewBox="0 0 24 24"
+            fill="none"
+            class="cb-icon"
+            aria-hidden="true"
+          >
+            <path
+              d="M20 7 10 17l-4-4"
+              stroke="currentColor"
+              stroke-width="1.9"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
           </svg>
         </button>
       </div>
     </div>
 
-    <!-- Body -->
-    <div class="cb-body" :style="{ maxHeight: maxH }" role="region" aria-label="Code">
-      <pre class="cb-pre"><code class="cb-code" v-html="activeHtml"></code></pre>
+    <div
+      class="cb-body"
+      :style="{ maxHeight: maxH }"
+      role="region"
+      :aria-label="`${computedTitle} source`"
+    >
+      <pre
+        class="cb-pre"
+      ><code class="cb-code" v-html="activeHtml"></code></pre>
     </div>
 
-    <!-- Footer note -->
     <div v-if="note" class="cb-foot">
       <p class="cb-note">{{ note }}</p>
     </div>
-  </div>
+  </figure>
 </template>
 
 <script setup>
 import { computed, ref, watch } from "vue";
+import { highlight, normalizeLang } from "./highlighter";
 
 const props = defineProps({
-  title:     { type: String, default: "" },
-  code:      { type: String, default: "" },
-  run:       { type: String, default: "" },
-  out:       { type: String, default: "" },
-  note:      { type: String, default: "" },
-  lang:      { type: String, default: "" },
-  chips:     { type: Array,  default: () => [] },
+  title: { type: String, default: "" },
+  code: { type: String, default: "" },
+  run: { type: String, default: "" },
+  out: { type: String, default: "" },
+  note: { type: String, default: "" },
+  lang: { type: String, default: "" },
+  chips: { type: Array, default: () => [] },
   maxHeight: { type: [Number, String], default: 420 },
 });
 
-const copied    = ref(false);
+const copied = ref(false);
 const activeTab = ref("code");
-const hover     = ref(false);
+const hover = ref(false);
+let copyTimer;
 
 const tabs = computed(() => {
-  const list = [];
-  if (props.code?.trim()) list.push({ key: "code",  label: "Code",   lang: guessLang("code") });
-  if (props.run?.trim())  list.push({ key: "run",   label: "Run",    lang: "shell" });
-  if (props.out?.trim())  list.push({ key: "out",   label: "Output", lang: "shell" });
-  return list;
+  const result = [];
+
+  if (props.code?.trim()) {
+    result.push({
+      key: "code",
+      label: "Code",
+      lang: guessLang("code"),
+    });
+  }
+
+  if (props.run?.trim()) {
+    result.push({
+      key: "run",
+      label: "Run",
+      lang: "shell",
+    });
+  }
+
+  if (props.out?.trim()) {
+    result.push({
+      key: "out",
+      label: "Output",
+      lang: "shell",
+    });
+  }
+
+  return result;
 });
 
 watch(
-  () => tabs.value.map(t => t.key).join(","),
+  () => tabs.value.map((tab) => tab.key).join(","),
   () => {
-    if (!tabs.value.find(t => t.key === activeTab.value))
+    if (!tabs.value.some((tab) => tab.key === activeTab.value)) {
       activeTab.value = tabs.value[0]?.key || "code";
+    }
   },
-  { immediate: true }
+  { immediate: true },
 );
 
-const active     = computed(() => tabs.value.find(t => t.key === activeTab.value) || tabs.value[0]);
+const active = computed(
+  () =>
+    tabs.value.find((tab) => tab.key === activeTab.value) ||
+    tabs.value[0] ||
+    null,
+);
+
 const activeText = computed(() => {
-  if (activeTab.value === "run")  return props.run  || "";
-  if (activeTab.value === "out")  return props.out  || "";
+  if (activeTab.value === "run") return props.run || "";
+  if (activeTab.value === "out") return props.out || "";
   return props.code || "";
 });
-const activeLang = computed(() => active.value?.lang || guessLang(activeTab.value));
+
+const activeLang = computed(
+  () => active.value?.lang || guessLang(activeTab.value),
+);
+
+const activeHtml = computed(() =>
+  highlight(activeText.value || "", normalizeLang(activeLang.value)),
+);
 
 const computedTitle = computed(() => {
   if (activeTab.value === "run") return "Terminal";
   if (activeTab.value === "out") return "Output";
-  return activeLang.value === "shell" ? "Shell" : "C++";
+
+  const lang = normalizeLang(activeLang.value);
+
+  const labels = {
+    cpp: "C++",
+    shell: "Shell",
+    html: "HTML",
+    css: "CSS",
+    js: "JavaScript",
+    json: "JSON",
+    ini: "Manifest",
+    cmake: "CMake",
+    text: "Text",
+  };
+
+  return labels[lang] || lang.toUpperCase();
 });
 
-const chipsToShow = computed(() => (props.chips || []).filter(Boolean));
+const chipsToShow = computed(() =>
+  (props.chips || []).filter(
+    (chip) => typeof chip === "string" && chip.trim().length > 0,
+  ),
+);
 
 const maxH = computed(() => {
-  const v = props.maxHeight;
-  if (typeof v === "number") return `${v}px`;
-  return v?.trim() ? v : "420px";
+  if (typeof props.maxHeight === "number") {
+    return `${props.maxHeight}px`;
+  }
+
+  return props.maxHeight?.trim() || "420px";
 });
 
 function guessLang(tabKey) {
-  if (props.lang) return props.lang;
+  if (props.lang) return normalizeLang(props.lang);
   if (tabKey === "run" || tabKey === "out") return "shell";
-  const s = (props.code || "").trim();
-  if (s.includes("#include") || s.includes("int main") || s.includes("std::")) return "cpp";
-  if (s.startsWith("~$") || s.includes(" vix ") || s.startsWith("$ ")) return "shell";
+
+  const source = (props.code || "").trim();
+
+  if (
+    source.includes("#include") ||
+    source.includes("int main") ||
+    source.includes("std::")
+  ) {
+    return "cpp";
+  }
+
+  if (
+    source.startsWith("$ ") ||
+    source.startsWith("~$") ||
+    source.includes(" vix ")
+  ) {
+    return "shell";
+  }
+
+  if (
+    /^\s*<(template|div|span|section|html|script|style|!DOCTYPE)\b/i.test(
+      source,
+    ) ||
+    /<\/[a-z][\w-]*>/.test(source)
+  ) {
+    return "html";
+  }
+
+  if (
+    /[.#&][\w-]+\s*\{/.test(source) ||
+    /^\s*@(media|import|keyframes|supports)/m.test(source)
+  ) {
+    return "css";
+  }
+
+  if (
+    /^\s*[{\[]/.test(source) &&
+    /["}\]]\s*$/.test(source) &&
+    /":/.test(source)
+  ) {
+    return "json";
+  }
+
+  if (/\b(const|let|function|import|export|=>)\b/.test(source)) {
+    return "js";
+  }
+
   return "cpp";
 }
 
-/* ── Syntax highlight ── */
-function esc(s) {
-  return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
-}
+function onTabsKeydown(event) {
+  const keys = tabs.value.map((tab) => tab.key);
+  if (!keys.length) return;
 
-function normalizeShellText(raw) {
-  return String(raw ?? "")
-    .split("\n")
-    .map(line => line
-      .replace(/^\s*>\s?/, "")
-      .replace(/\s*>\s*:(\d{2,5})/g, " :$1")
-    )
-    .join("\n");
-}
+  const currentIndex = Math.max(0, keys.indexOf(activeTab.value));
+  let nextIndex = currentIndex;
 
-/* ──────────────────────────────────────────────
-   cppreference-style highlight
-   - Keywords + fundamental types: BLUE bold
-   - Preprocessor #directive: dark purple
-   - Include headers <...>: green italic
-   - Strings / chars: dark red
-   - Comments: green italic
-   - Numbers: dark teal
-   - Identifiers, operators, punctuation: BLACK
-   ────────────────────────────────────────────── */
-
-/* Keywords + fundamental types — cppreference colors all of these blue */
-const KW_BLUE = new Set([
-  // Keywords
-  "alignas","alignof","and","and_eq","asm","auto","bitand","bitor","break",
-  "case","catch","class","compl","concept","const","consteval","constexpr",
-  "constinit","const_cast","continue","co_await","co_return","co_yield",
-  "decltype","default","delete","do","dynamic_cast","else","enum","explicit",
-  "export","extern","false","for","friend","goto","if","inline","mutable",
-  "namespace","new","noexcept","not","not_eq","nullptr","operator","or","or_eq",
-  "private","protected","public","register","reinterpret_cast","requires",
-  "return","sizeof","static","static_assert","static_cast","struct","switch",
-  "template","this","thread_local","throw","true","try","typedef","typeid",
-  "typename","union","using","virtual","volatile","while","xor","xor_eq",
-  "override","final","import","module",
-  // Fundamental types
-  "bool","char","char8_t","char16_t","char32_t","double","float","int","long",
-  "short","signed","unsigned","void","wchar_t"
-]);
-
-function wrap(cls, text) { return `<span class="${cls}">${esc(text)}</span>`; }
-
-function splitComment(line) {
-  let inStr = false, inChar = false;
-  for (let i = 0; i < line.length - 1; i++) {
-    const c = line[i];
-    if (!inChar && c === '"' && line[i-1] !== "\\") inStr = !inStr;
-    if (!inStr  && c === "'" && line[i-1] !== "\\") inChar = !inChar;
-    if (!inStr && !inChar && line[i] === "/" && line[i+1] === "/") {
-      const before = line.slice(0, i);
-      if (before.endsWith("http:") || before.endsWith("https:")) continue;
-      return { code: before, comment: line.slice(i) };
-    }
+  if (event.key === "ArrowRight") {
+    nextIndex = (currentIndex + 1) % keys.length;
+  } else if (event.key === "ArrowLeft") {
+    nextIndex = (currentIndex - 1 + keys.length) % keys.length;
+  } else if (event.key === "Home") {
+    nextIndex = 0;
+  } else if (event.key === "End") {
+    nextIndex = keys.length - 1;
+  } else {
+    return;
   }
-  return { code: line, comment: "" };
+
+  event.preventDefault();
+  activeTab.value = keys[nextIndex];
+
+  requestAnimationFrame(() => {
+    event.currentTarget
+      ?.querySelector(`button[data-key="${activeTab.value}"]`)
+      ?.focus();
+  });
 }
-
-function hlDirective(line) {
-  const m = line.match(/^(\s*)(#\s*(?:include|define|pragma|if|ifdef|ifndef|endif|elif|else|undef|error|warning|line)\b)(.*)/);
-  if (!m) return null;
-  let out = esc(m[1]) + wrap("cb-dir", m[2]);
-  const rest = m[3] || "";
-  const angle = rest.match(/^(\s*)(<[^>\n]*>)(.*)/);
-  if (angle) { out += esc(angle[1]) + wrap("cb-inc", angle[2]) + hlInline(angle[3]||""); return out; }
-  const quote = rest.match(/^(\s*)("(?:[^"\\]|\\.)*")(.*)/);
-  if (quote) { out += esc(quote[1]) + wrap("cb-inc", quote[2]) + hlInline(quote[3]||""); return out; }
-  return out + hlInline(rest);
-}
-
-function hlInline(s) {
-  let out = "", i = 0;
-  const isStart = c => /[A-Za-z_]/.test(c);
-  const isId    = c => /[A-Za-z0-9_]/.test(c);
-
-  while (i < s.length) {
-    const ch = s[i];
-
-    /* Strings */
-    if (ch === '"') {
-      let j = i+1;
-      while (j < s.length) { if (s[j] === '"' && s[j-1] !== "\\") break; j++; }
-      const str = s.slice(i, Math.min(j+1, s.length));
-      out += wrap("cb-str", str); i += str.length; continue;
-    }
-
-    /* Char literals */
-    if (ch === "'") {
-      let j = i+1;
-      while (j < s.length) { if (s[j] === "'" && s[j-1] !== "\\") break; j++; }
-      const lit = s.slice(i, Math.min(j+1, s.length));
-      out += wrap("cb-char", lit); i += lit.length; continue;
-    }
-
-    /* Numbers */
-    if (/[0-9]/.test(ch)) {
-      const m = s.slice(i).match(/^(0[xX][0-9A-Fa-f']+|0[bB][01']+|0[0-7']+|[0-9][0-9']*(?:\.[0-9']+)?(?:[eE][+-]?[0-9']+)?)([uUlLfFzZ]{0,3}\b)?/);
-      if (m) { out += wrap("cb-num", m[0]); i += m[0].length; continue; }
-    }
-
-    /* Identifiers & keywords */
-    if (isStart(ch)) {
-      let j = i+1;
-      while (j < s.length && isId(s[j])) j++;
-      const id = s.slice(i, j);
-
-      if (KW_BLUE.has(id))  out += wrap("cb-kw", id);
-      else                  out += wrap("cb-id", id);
-      i = j; continue;
-    }
-
-    /* Operators & punctuation — black (no special class) */
-    out += esc(ch); i++;
-  }
-  return out.replace(/(https?:\/\/[^\s<]+)/g, `<span class="cb-url">$1</span>`);
-}
-
-function highlightCpp(raw) {
-  return String(raw ?? "").split("\n").map(line => {
-    const { code, comment } = splitComment(line);
-    const dir = hlDirective(code);
-    return (dir ?? hlInline(code)) + (comment ? wrap("cb-cmt", comment) : "");
-  }).join("\n");
-}
-
-function highlightShell(raw) {
-  let s = esc(normalizeShellText(raw));
-  s = s.replace(/^(\s*(?:~|\/[^$]*)?\s*\$)/gm,      `<span class="cb-sh-prompt">$1</span>`);
-  s = s.replace(/(^\s*(?:<span[^>]*>.*?<\/span>\s*)?)([a-zA-Z0-9_.\/-]+)(\s+)/gm, `$1<span class="cb-sh-cmd">$2</span>$3`);
-  s = s.replace(/(\s--?[a-zA-Z0-9_-]+(?:=[^\s]+)?)/g, `<span class="cb-sh-flag">$1</span>`);
-  s = s.replace(/(https?:\/\/[^\s]+)/g,              `<span class="cb-sh-url">$1</span>`);
-  s = s.replace(/(\s(?:\.{0,2}\/[^\s]+))/g,          `<span class="cb-sh-path">$1</span>`);
-  s = s.replace(/(:\d{2,5}\b)/g,                     `<span class="cb-sh-port">$1</span>`);
-  s = s.replace(/^(HTTP\/\d\.\d\s+\d+\s+.*)$/gm,     `<span class="cb-sh-http">$1</span>`);
-  s = s.replace(/#([^\n]*)/g,                         `<span class="cb-sh-comment">#$1</span>`);
-  return s;
-}
-
-function normalizeLang(lang) {
-  const l = String(lang || "").toLowerCase().trim();
-  if (["sh", "bash", "zsh", "shell", "console", "terminal"].includes(l)) return "shell";
-  if (["cpp", "c++", "cc", "cxx", "hpp", "hxx"].includes(l)) return "cpp";
-  if (["txt", "text", "plain", "plaintext"].includes(l)) return "text";
-  return l || "text";
-}
-
-function highlightText(raw) { return esc(raw ?? ""); }
-
-const activeHtml = computed(() => {
-  const text = activeText.value || "";
-  const lang = normalizeLang(activeLang.value);
-  if (lang === "shell") return highlightShell(text);
-  if (lang === "cpp") return highlightCpp(text);
-  return highlightText(text);
-});
 
 async function copy(text) {
+  if (!text) return;
+
   try {
     await navigator.clipboard.writeText(text);
-    copied.value = true;
-    clearTimeout(copy._t);
-    copy._t = setTimeout(() => (copied.value = false), 1200);
+    showCopiedState();
   } catch {
-    const ta = Object.assign(document.createElement("textarea"), {
+    const textarea = Object.assign(document.createElement("textarea"), {
       value: text,
-      style: "position:fixed;opacity:0;left:-9999px",
+      style: "position:fixed;left:-9999px;top:0;opacity:0;pointer-events:none",
     });
-    document.body.appendChild(ta);
-    ta.select();
-    try { document.execCommand("copy"); copied.value = true; clearTimeout(copy._t); copy._t = setTimeout(() => (copied.value = false), 1200); }
-    finally { document.body.removeChild(ta); }
+
+    document.body.appendChild(textarea);
+    textarea.select();
+
+    try {
+      document.execCommand("copy");
+      showCopiedState();
+    } finally {
+      document.body.removeChild(textarea);
+    }
   }
+}
+
+function showCopiedState() {
+  copied.value = true;
+  window.clearTimeout(copyTimer);
+  copyTimer = window.setTimeout(() => {
+    copied.value = false;
+  }, 1400);
 }
 </script>
 
 <style>
-/* ════════════════════════════════════════════════
-   Code Block — cppreference.com style
-   Light cream background, classic syntax colors
-   ════════════════════════════════════════════════ */
-
 .cb {
   width: 100%;
-  border-radius: 8px;
+  margin: 28px 0;
   overflow: hidden;
-  border: 1px solid #d4d2c8;
-  background: #fafaf6;
-  font-family: 'JetBrains Mono', 'Consolas', 'Courier New', ui-monospace, monospace;
-  transition: border-color .15s ease;
-  margin: 20px 0;
+  border: 1px solid var(--line-strong, rgba(255, 255, 255, 0.12));
+  border-radius: var(--radius-md, 10px);
+  background: var(--bg-ink, #0f1215);
+  box-shadow: var(--shadow-soft, 0 4px 24px rgba(0, 0, 0, 0.35));
+  font-family: var(
+    --font-mono,
+    "JetBrains Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace
+  );
 }
 
-.cb:hover {
-  border-color: #b8b6ac;
-}
-
-/* ── Header ── */
 .cb-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 8px 12px;
-  background: #f0eee4;
-  border-bottom: 1px solid #d4d2c8;
+  min-height: 46px;
+  padding: 8px 10px 8px 13px;
+  border-bottom: 1px solid var(--line-ink, rgba(255, 255, 255, 0.08));
+  background: var(--bg-ink-soft, #15191d);
 }
 
-.cb-head-left  { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.cb-head-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.cb-head-left,
+.cb-head-right {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.cb-head-left {
+  gap: 7px;
+}
+
+.cb-head-right {
+  flex-shrink: 0;
+  gap: 8px;
+}
+
+.cb-dot {
+  flex: 0 0 auto;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.cb-dot--red {
+  background: #f87171;
+}
+
+.cb-dot--yellow {
+  background: #fbbf24;
+}
+
+.cb-dot--green {
+  margin-right: 3px;
+  background: var(--green, #22c55e);
+}
 
 .cb-title {
-  font-size: 12px;
-  font-weight: 600;
-  color: #555;
-  white-space: nowrap;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-soft, rgba(255, 255, 255, 0.64));
+  font-size: 11.5px;
+  font-weight: 650;
   letter-spacing: -0.005em;
-  font-family: 'Inter', -apple-system, sans-serif;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .cb-chip {
   display: inline-flex;
   align-items: center;
-  padding: 2px 8px;
+  min-height: 22px;
+  padding: 3px 7px;
+  border: 1px solid rgba(34, 197, 94, 0.18);
   border-radius: 999px;
-  font-size: 10.5px;
-  font-weight: 600;
-  letter-spacing: -0.005em;
-  color: #555;
-  border: 1px solid #d4d2c8;
-  background: #fafaf6;
-  font-family: 'Inter', -apple-system, sans-serif;
+  color: var(--green-bright, #86efac);
+  background: var(--green-faint, rgba(34, 197, 94, 0.1));
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
-/* Tabs */
 .cb-tabs {
   display: flex;
   align-items: center;
   gap: 2px;
-  padding: 2px;
-  border-radius: 7px;
-  background: rgba(0, 0, 0, .04);
+  padding: 3px;
+  border: 1px solid var(--line-ink, rgba(255, 255, 255, 0.08));
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.025);
 }
 
 .cb-tab {
+  min-height: 26px;
+  padding: 4px 9px;
   border: 0;
+  border-radius: 6px;
+  color: var(--text-muted, rgba(255, 255, 255, 0.43));
   background: transparent;
-  color: #666;
-  font-size: 11.5px;
-  font-weight: 500;
-  padding: 4px 10px;
-  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 650;
   cursor: pointer;
-  transition: background .12s, color .12s;
-  font-family: 'Inter', -apple-system, sans-serif;
-  letter-spacing: -0.005em;
+  transition:
+    color 140ms ease,
+    background 140ms ease;
 }
 
-.cb-tab:hover { color: #222; }
+.cb-tab:hover {
+  color: var(--text, rgba(255, 255, 255, 0.92));
+}
 
 .cb-tab--active {
-  background: #fafaf6;
-  color: #0a0a0a;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, .06);
+  color: var(--green-bright, #86efac);
+  background: var(--green-faint, rgba(34, 197, 94, 0.1));
 }
 
-/* Copy */
+.cb-tab:focus-visible,
+.cb-copy:focus-visible {
+  outline: 2px solid var(--green-soft, #4ade80);
+  outline-offset: 2px;
+}
+
 .cb-copy {
-  width: 28px;
-  height: 28px;
-  border: 1px solid #d4d2c8;
-  background: #fafaf6;
-  color: #666;
-  border-radius: 6px;
-  cursor: pointer;
   display: grid;
   place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid var(--line-strong, rgba(255, 255, 255, 0.12));
+  border-radius: 7px;
+  color: var(--text-muted, rgba(255, 255, 255, 0.43));
+  background: rgba(255, 255, 255, 0.035);
+  cursor: pointer;
   opacity: 0;
   pointer-events: none;
-  transition: opacity .15s, background .12s, color .12s;
+  transition:
+    opacity 140ms ease,
+    color 140ms ease,
+    border-color 140ms ease,
+    background 140ms ease,
+    transform 140ms ease;
 }
 
 .cb-copy--visible {
@@ -407,112 +502,111 @@ async function copy(text) {
   pointer-events: auto;
 }
 
-.cb-copy:hover {
-  background: #ffffff;
-  border-color: #b8b6ac;
-  color: #0a0a0a;
+.cb-copy:hover,
+.cb-copy--copied {
+  color: var(--green-bright, #86efac);
+  border-color: var(--green-line, rgba(34, 197, 94, 0.35));
+  background: var(--green-faint, rgba(34, 197, 94, 0.1));
+  transform: translateY(-1px);
 }
 
-.cb-ico { width: 14px; height: 14px; display: block; }
+.cb-icon {
+  width: 15px;
+  height: 15px;
+}
 
-/* ── Body ── */
 .cb-body {
   overflow: auto;
+  color: rgba(255, 255, 255, 0.9);
+  background: var(--bg-ink, #0f1215);
   -webkit-overflow-scrolling: touch;
-  background: #fafaf6;
 }
 
 .cb-pre {
-  margin: 0;
-  padding: 14px 16px;
-  white-space: pre;
-  line-height: 1.55;
-  font-size: 13.5px;
-  color: #000000;
-  background: transparent;
   min-width: max-content;
+  margin: 0;
+  padding: 18px 20px;
+  color: inherit;
+  background: transparent;
+  font-size: 13.5px;
+  line-height: 1.7;
+  tab-size: 2;
+  white-space: pre;
 }
 
 .cb-code {
   display: inline-block;
   min-width: 100%;
-  color: #000000;
+  color: inherit;
+  font: inherit;
 }
 
-/* Scrollbars */
-.cb-body::-webkit-scrollbar { height: 6px; width: 6px; }
+.cb-body::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
 .cb-body::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, .15);
   border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
 }
-.cb-body::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, .28);
-}
-.cb-body::-webkit-scrollbar-track { background: transparent; }
 
-/* ── Footer ── */
+.cb-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(34, 197, 94, 0.34);
+}
+
+.cb-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 .cb-foot {
-  border-top: 1px solid #d4d2c8;
-  padding: 10px 14px;
-  background: #f0eee4;
+  padding: 11px 14px;
+  border-top: 1px solid var(--line-ink, rgba(255, 255, 255, 0.08));
+  background: rgba(255, 255, 255, 0.018);
 }
 
 .cb-note {
   margin: 0;
-  color: #555;
-  font-size: 12.5px;
-  line-height: 1.55;
-  font-family: 'Inter', -apple-system, sans-serif;
-  letter-spacing: -0.005em;
+  color: var(--text-muted, rgba(255, 255, 255, 0.43));
+  font-family: var(--font-sans, Inter, ui-sans-serif, system-ui, sans-serif);
+  font-size: 12px;
+  line-height: 1.58;
 }
 
-/* ═══════════════════════════════════════════════
-   C++ SYNTAX TOKENS — cppreference.com palette
-   ═══════════════════════════════════════════════ */
-
-/* Keywords + fundamental types: BLUE bold
-   (int, auto, const, void, class, for, return, true, false, ...) */
-.cb-kw       { color: #0000ff; font-weight: 600; }
-
-/* Regular identifiers: BLACK */
-.cb-id       { color: #000000; }
-
-/* Preprocessor directive (#include, #define): dark magenta */
-.cb-dir      { color: #7f0055; font-weight: 600; }
-
-/* Include headers <iostream>, "file.h": green italic */
-.cb-inc      { color: #1e8449; font-style: italic; }
-
-/* String literals: dark red */
-.cb-str      { color: #a31515; }
-
-/* Char literals: dark red */
-.cb-char     { color: #a31515; }
-
-/* Numeric literals: dark teal/green */
-.cb-num      { color: #098658; }
-
-/* Comments: green italic (cppreference signature) */
-.cb-cmt      { color: #338033; font-style: italic; }
-
-/* URLs in code */
-.cb-url      { color: #0066cc; text-decoration: underline; text-underline-offset: 2px; }
-
-/* ═══════════════════════════
-   Shell tokens — same palette family
-   ═══════════════════════════ */
-.cb-sh-prompt  { color: #098658; font-weight: 700; }
-.cb-sh-cmd     { color: #0000ff; font-weight: 600; }
-.cb-sh-flag    { color: #a31515; }
-.cb-sh-path    { color: #7f0055; }
-.cb-sh-url     { color: #0066cc; text-decoration: underline; text-underline-offset: 2px; }
-.cb-sh-port    { color: #098658; }
-.cb-sh-http    { color: #0000ff; font-weight: 700; }
-.cb-sh-comment { color: #338033; font-style: italic; }
+@media (hover: none) {
+  .cb-copy {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
 
 @media (max-width: 640px) {
-  .cb-pre { font-size: 12.5px; padding: 12px 12px; }
-  .cb-title { max-width: 28vw; overflow: hidden; text-overflow: ellipsis; }
-  .cb-head { padding: 7px 10px; }
+  .cb {
+    margin: 22px 0;
+  }
+
+  .cb-head {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .cb-head-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .cb-tabs {
+    overflow-x: auto;
+  }
+
+  .cb-title {
+    max-width: 52vw;
+  }
+
+  .cb-pre {
+    padding: 15px 14px;
+    font-size: 12.5px;
+  }
 }
 </style>

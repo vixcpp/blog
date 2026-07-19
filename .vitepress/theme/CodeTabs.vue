@@ -3,76 +3,107 @@ import { computed, ref, watch } from "vue";
 import CodeBlock from "./CodeBlock.vue";
 
 const props = defineProps({
-  title:      { type: String, default: "Examples" },
-  subtitle:   { type: String, default: "" },
-  examples:   { type: Array,  required: true },
+  title: { type: String, default: "Examples" },
+  subtitle: { type: String, default: "" },
+  examples: { type: Array, required: true },
   defaultKey: { type: String, default: "" },
 });
 
-const active = ref(props.defaultKey || (props.examples?.[0]?.key ?? ""));
+const active = ref(props.defaultKey || props.examples?.[0]?.key || "");
 
 watch(
-  () => [props.defaultKey, props.examples?.map(e => e.key).join("|")].join("::"),
+  () =>
+    [
+      props.defaultKey,
+      props.examples?.map((example) => example.key).join("|"),
+    ].join("::"),
   () => {
-    const wanted = props.defaultKey || active.value;
-    const exists = props.examples?.some(e => e.key === wanted);
-    active.value = exists ? wanted : (props.examples?.[0]?.key ?? "");
+    const requested = props.defaultKey || active.value;
+    const exists = props.examples?.some((example) => example.key === requested);
+
+    active.value = exists ? requested : props.examples?.[0]?.key || "";
   },
-  { immediate: true }
+  { immediate: true },
 );
 
-const current = computed(() =>
-  props.examples.find(e => e.key === active.value) || props.examples[0] || null
+const current = computed(
+  () =>
+    props.examples.find((example) => example.key === active.value) ||
+    props.examples[0] ||
+    null,
 );
 
-function setTab(key) { active.value = key; }
+function setTab(key) {
+  active.value = key;
+}
 
-function onTabsKeydown(e) {
-  const keys = props.examples?.map(x => x.key) ?? [];
+function onTabsKeydown(event) {
+  const keys = props.examples?.map((example) => example.key) || [];
   if (!keys.length) return;
-  const idx = Math.max(0, keys.indexOf(active.value));
-  let next = idx;
-  if (e.key === "ArrowRight") next = (idx + 1) % keys.length;
-  else if (e.key === "ArrowLeft") next = (idx - 1 + keys.length) % keys.length;
-  else if (e.key === "Home") next = 0;
-  else if (e.key === "End") next = keys.length - 1;
-  else return;
-  e.preventDefault();
-  active.value = keys[next];
-  e.currentTarget?.querySelector?.(`button[data-key="${active.value}"]`)?.focus?.();
+
+  const currentIndex = Math.max(0, keys.indexOf(active.value));
+  let nextIndex = currentIndex;
+
+  if (event.key === "ArrowRight") {
+    nextIndex = (currentIndex + 1) % keys.length;
+  } else if (event.key === "ArrowLeft") {
+    nextIndex = (currentIndex - 1 + keys.length) % keys.length;
+  } else if (event.key === "Home") {
+    nextIndex = 0;
+  } else if (event.key === "End") {
+    nextIndex = keys.length - 1;
+  } else {
+    return;
+  }
+
+  event.preventDefault();
+  active.value = keys[nextIndex];
+
+  requestAnimationFrame(() => {
+    event.currentTarget
+      ?.querySelector(`button[data-key="${active.value}"]`)
+      ?.focus();
+  });
 }
 </script>
 
 <template>
-  <div class="ct">
-    <!-- Header -->
-    <div class="ct-head">
+  <section class="ct" aria-label="Code examples">
+    <header class="ct-head">
       <div class="ct-meta">
-        <div class="ct-title">{{ title }}</div>
-        <div v-if="subtitle" class="ct-sub">{{ subtitle }}</div>
+        <h3 class="ct-title">{{ title }}</h3>
+        <p v-if="subtitle" class="ct-subtitle">{{ subtitle }}</p>
       </div>
 
-      <div class="ct-tabs" role="tablist" aria-label="Code examples" @keydown="onTabsKeydown">
+      <div
+        class="ct-tabs"
+        role="tablist"
+        aria-label="Choose an example"
+        @keydown="onTabsKeydown"
+      >
         <button
-          v-for="ex in examples"
-          :key="ex.key"
-          class="ct-tab"
-          :class="{ 'ct-tab--active': ex.key === active }"
-          :aria-selected="ex.key === active"
-          :tabindex="ex.key === active ? 0 : -1"
-          role="tab"
+          v-for="example in examples"
+          :key="example.key"
           type="button"
-          :data-key="ex.key"
-          @click="setTab(ex.key)"
-        >{{ ex.label }}</button>
+          role="tab"
+          class="ct-tab"
+          :class="{ 'ct-tab--active': example.key === active }"
+          :aria-selected="example.key === active"
+          :tabindex="example.key === active ? 0 : -1"
+          :data-key="example.key"
+          @click="setTab(example.key)"
+        >
+          {{ example.label }}
+        </button>
       </div>
-    </div>
+    </header>
 
-    <!-- File badge -->
     <div class="ct-body">
-      <div class="ct-file" v-if="current?.file">
-        <span class="ct-lang-badge">{{ current.lang || "txt" }}</span>
-        <span class="ct-filename">{{ current.file }}</span>
+      <div v-if="current?.file" class="ct-file">
+        <span class="ct-language">
+          {{ current.lang || "text" }}
+        </span>
+        <code>{{ current.file }}</code>
       </div>
 
       <CodeBlock
@@ -83,143 +114,154 @@ function onTabsKeydown(e) {
         :run="current?.run || ''"
         :out="current?.out || ''"
         :note="current?.note || ''"
-        :maxHeight="460"
+        :max-height="current?.maxHeight || 440"
       />
     </div>
-  </div>
+  </section>
 </template>
 
 <style scoped>
 .ct {
-  border-radius: 10px;
+  margin: 32px 0;
   overflow: hidden;
-  border: 1px solid rgba(10, 10, 10, .08);
-  background: #ffffff;
-  margin: 24px 0;
-  transition: border-color .15s ease;
+  border: 1px solid var(--line, rgba(255, 255, 255, 0.075));
+  border-radius: var(--radius-lg, 16px);
+  background: var(--bg-panel, #1a1e22);
+  box-shadow: var(--shadow-soft, 0 4px 24px rgba(0, 0, 0, 0.35));
 }
 
-.ct:hover {
-  border-color: rgba(10, 10, 10, .14);
-}
-
-/* Head */
 .ct-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 14px 16px;
-  border-bottom: 1px solid rgba(10, 10, 10, .06);
-  background: #fafafa;
+  gap: 18px;
+  padding: 15px 16px;
+  border-bottom: 1px solid var(--line, rgba(255, 255, 255, 0.075));
+  background: var(--bg-panel-strong, #20252a);
+}
+
+.ct-meta {
+  min-width: 0;
 }
 
 .ct-title {
-  font-size: 13.5px;
+  margin: 0;
+  color: var(--text, rgba(255, 255, 255, 0.92));
+  font-size: 13px;
   font-weight: 700;
-  letter-spacing: -0.015em;
-  color: #0a0a0a;
-  line-height: 1.2;
+  letter-spacing: -0.012em;
 }
 
-.ct-sub {
-  margin-top: 3px;
-  font-size: 12.5px;
-  color: #525252;
-  line-height: 1.4;
-  letter-spacing: -0.005em;
+.ct-subtitle {
+  margin: 4px 0 0;
+  color: var(--text-muted, rgba(255, 255, 255, 0.43));
+  font-size: 11.5px;
+  line-height: 1.45;
 }
 
-/* Tabs */
 .ct-tabs {
   display: flex;
-  gap: 2px;
   flex-wrap: wrap;
   justify-content: flex-end;
-  padding: 3px;
-  background: rgba(10, 10, 10, .04);
-  border-radius: 8px;
+  gap: 4px;
 }
 
 .ct-tab {
-  border: 0;
+  min-height: 30px;
+  padding: 5px 10px;
+  border: 1px solid var(--line-strong, rgba(255, 255, 255, 0.12));
+  border-radius: 7px;
+  color: var(--text-muted, rgba(255, 255, 255, 0.43));
   background: transparent;
-  color: #525252;
-  padding: 5px 11px;
-  border-radius: 5px;
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 10.5px;
+  font-weight: 650;
   cursor: pointer;
-  outline: none;
-  letter-spacing: -0.005em;
-  transition: all .12s ease;
-  font-family: inherit;
+  transition:
+    color 140ms ease,
+    border-color 140ms ease,
+    background 140ms ease;
 }
 
 .ct-tab:hover {
-  color: #0a0a0a;
-  background: rgba(10, 10, 10, .04);
+  color: var(--text, rgba(255, 255, 255, 0.92));
+  border-color: rgba(34, 197, 94, 0.24);
 }
 
 .ct-tab--active {
-  color: #0a0a0a;
-  background: #ffffff;
-  font-weight: 600;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, .06);
+  color: var(--green-bright, #86efac);
+  border-color: rgba(34, 197, 94, 0.28);
+  background: var(--green-faint, rgba(34, 197, 94, 0.1));
 }
 
 .ct-tab:focus-visible {
-  box-shadow: 0 0 0 2px rgba(10, 10, 10, .20);
+  outline: 2px solid var(--green-soft, #4ade80);
+  outline-offset: 2px;
 }
 
-/* Body */
 .ct-body {
   padding: 12px;
-  background: #ffffff;
 }
 
-/* File info */
 .ct-file {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 12px;
-  margin-bottom: 10px;
-  border: 1px solid #d4d2c8;
+  gap: 9px;
+  margin-bottom: 9px;
+  padding: 7px 9px;
+  border: 1px dashed var(--line-strong, rgba(255, 255, 255, 0.12));
   border-radius: 8px;
-  background: #f0eee4;
-  color: #555;
-  font-size: 12.5px;
+  color: var(--text-soft, rgba(255, 255, 255, 0.64));
+  background: rgba(255, 255, 255, 0.018);
+  font-size: 11.5px;
 }
 
-.ct-lang-badge {
+.ct-language {
+  padding: 3px 7px;
+  border: 1px solid rgba(34, 197, 94, 0.18);
+  border-radius: 999px;
+  color: var(--green-bright, #86efac);
+  background: var(--green-faint, rgba(34, 197, 94, 0.1));
+  font-family: var(
+    --font-mono,
+    "JetBrains Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace
+  );
+  font-size: 8.5px;
   font-weight: 700;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  font-size: 10px;
-  padding: 2px 7px;
-  border-radius: 4px;
-  background: #0000ff;
-  color: #ffffff;
-  letter-spacing: 0.04em;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
 }
 
-.ct-filename {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 12.5px;
-  color: #0a0a0a;
-  font-weight: 500;
+.ct-file code {
+  overflow: hidden;
+  color: var(--text, rgba(255, 255, 255, 0.92));
+  background: transparent;
+  font-family: var(
+    --font-mono,
+    "JetBrains Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace
+  );
+  font-size: 11.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* Responsive */
-@media (max-width: 640px) {
+.ct-body :deep(.cb) {
+  margin: 0;
+}
+
+@media (max-width: 680px) {
   .ct-head {
-    flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
-    padding: 12px 14px;
+    flex-direction: column;
   }
-  .ct-tabs { justify-content: flex-start; }
-  .ct-body { padding: 10px; }
+
+  .ct-tabs {
+    justify-content: flex-start;
+  }
 }
 </style>

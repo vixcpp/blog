@@ -1,10 +1,13 @@
 import DefaultTheme from "vitepress/theme";
 import "./custom.css";
+import "./codeblocks.css";
 
 import Layout from "./Layout.vue";
 import BlogHomeHero from "./BlogHomeHero.vue";
 import CodeTabs from "./CodeTabs.vue";
 import CodeBlock from "./CodeBlock.vue";
+
+import { highlight, normalizeLang } from "./highlighter";
 
 export default {
   ...DefaultTheme,
@@ -12,34 +15,86 @@ export default {
 
   enhanceApp(ctx) {
     DefaultTheme.enhanceApp?.(ctx);
-    const { app } = ctx;
 
-    // Register global blog components — usable in any .md file
+    const { app, router } = ctx;
+
     app.component("BlogHomeHero", BlogHomeHero);
     app.component("CodeTabs", CodeTabs);
     app.component("CodeBlock", CodeBlock);
 
-    // SSR-safe guard
-    if (typeof window === "undefined") return;
-
-    // Disable browser scroll restoration so SPA nav always starts at top
-    if ("scrollRestoration" in window.history) {
-      window.history.scrollRestoration = "manual";
+    if (typeof window === "undefined") {
+      return;
     }
 
-    // Reading progress bar for post pages
-    const updateProgressBar = () => {
-      const bar = document.querySelector(".bh-progress-bar");
-      if (!bar) return;
+    const highlightMarkdownBlocks = () => {
+      const blocks = document.querySelectorAll(
+        [
+          '.vp-doc div[class*="language-"] code',
+          '.vp-doc [class*="language-"] code',
+        ].join(","),
+      );
 
-      const docHeight =
-        document.documentElement.scrollHeight - window.innerHeight;
-      const scrolled = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
-      bar.style.width = `${Math.min(100, Math.max(0, scrolled))}%`;
+      blocks.forEach((codeElement) => {
+        if (codeElement.dataset.vixHighlighted === "1") {
+          return;
+        }
+
+        const container = codeElement.closest('[class*="language-"]');
+        if (!container || container.closest(".cb")) {
+          return;
+        }
+
+        const className =
+          typeof container.className === "string" ? container.className : "";
+
+        const match = className.match(/language-([\w+-]+)/);
+        const language = normalizeLang(match?.[1] || "text");
+        const source = codeElement.textContent || "";
+
+        codeElement.innerHTML = highlight(source, language);
+        codeElement.dataset.vixHighlighted = "1";
+        container.classList.add("vix-styled");
+      });
     };
 
-    window.addEventListener("scroll", updateProgressBar, { passive: true });
-    window.addEventListener("resize", updateProgressBar);
-    window.requestAnimationFrame(updateProgressBar);
+    let frameId = 0;
+
+    const queueHighlight = () => {
+      if (frameId) {
+        return;
+      }
+
+      frameId = window.requestAnimationFrame(() => {
+        frameId = 0;
+        highlightMarkdownBlocks();
+      });
+    };
+
+    const refresh = () => {
+      queueHighlight();
+      window.setTimeout(queueHighlight, 60);
+      window.setTimeout(queueHighlight, 180);
+    };
+
+    window.requestAnimationFrame(refresh);
+
+    const observer = new MutationObserver(queueHighlight);
+    const appRoot = document.querySelector("#app");
+
+    if (appRoot) {
+      observer.observe(appRoot, {
+        childList: true,
+        subtree: true,
+      });
+    }
+
+    if (router) {
+      const previousAfterRouteChanged = router.onAfterRouteChanged;
+
+      router.onAfterRouteChanged = (to) => {
+        previousAfterRouteChanged?.(to);
+        refresh();
+      };
+    }
   },
 };

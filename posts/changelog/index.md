@@ -1,85 +1,115 @@
 ---
 title: "Vix.cpp Changelog"
-description: "Version-by-version release notes for Vix.cpp, covering runtime architecture, CLI workflows, SDK packaging, build system improvements, diagnostics, and ecosystem changes."
-date: 2026-05-23
+description: "Version-by-version release notes for Vix.cpp, covering the runtime, CLI, SDK profiles, application modules, package workflows, diagnostics, development tools, and ecosystem changes."
+date: 2026-07-19
+---
+
 ---
 
 # Vix.cpp Changelog
 
-This changelog tracks the evolution of Vix.cpp release by release.
+This changelog documents the evolution of Vix.cpp across its public releases.
 
-Each entry documents the technical changes behind a specific version: runtime architecture, CLI behavior, build system improvements, SDK packaging, module boundaries, diagnostics, examples, and developer experience.
+Each page explains the purpose of the release, the technical changes it introduced, the workflows affected, and the compatibility or validation work behind it. Releases are grouped by development period so related architectural changes remain easy to follow.
 
-## Latest releases
+## V2.7 releases
 
-- [Vix.cpp v2.7.0](./v2.7.0.md) — foundation release with CLI-first installation, SDK profiles through `vix upgrade --sdk`, cleaner optional dependency separation, improved upgrade workflow, stronger registry direction, Vix Note, Pico validation, v2.7 benchmark notes, and a post-v2.7 focus on module quality, CI, tests, diagnostics, documentation, and release reliability.
+The v2.7 line expands Vix beyond the core build and runtime workflow. It introduces specialized SDK profiles, Vix Note, Vix UI, Vix Requests, application modules, Softadastra Cloud integration, composable SDK installations, improved package management, and the first package-based Note extension system.
 
-- [Vix.cpp v2.6.3](./v2.6.3.md) — stability-focused release with stronger Core lifecycle guarantees, official Core benchmark baselines, improved `vix run` and `vix tests` behavior, broader sanitizer coverage, stricter CI, JSON fixes, and more reliable module tests.
+- [Vix.cpp v2.7.7](./v2.7.7.md) — introduces package-based extensions for Vix Note, extension discovery and management, registry-aware extension commands, a modernized Vix Reply editor, and more reliable global installation of CLI packages.
 
-- [Vix.cpp v2.6.2](./v2.6.2.md) — dependency workflow reliability, registry fixes, cleaner `vix run` behavior, smarter `vix install`, `vix update`, `vix list`, `vix outdated`, Windows SDK packaging fixes, crypto helpers, and better diagnostics.
+- [Vix.cpp v2.7.6](./v2.7.6.md) — adds secure browser-based authentication for Softadastra Cloud, preserves terminal login for scripts and fallback environments, and fixes Cloud API connectivity and HTTPS transport lifetime handling.
 
-- [Vix.cpp v2.6.1](./v2.6.1.md) — post-v2.6.0 patch release with clearer runtime diagnostics, improved build and test error reporting, stronger SDK release validation, and safer full-SDK consumer linking through `vix::vix`.
+- [Vix.cpp v2.7.5](./v2.7.5.md) — fixes composed SDK generation for multi-profile installations and adds safe automatic migration of obsolete lockfile integrity metadata during `vix install`.
 
-- [Vix.cpp v2.6.0](./v2.6.0.md) — AI agent module, official `vix.app`, Vue + Vix workflows, target-aware builds, async-powered `vix dev`, production backend tooling, and the new game runtime foundation.
+- [Vix.cpp v2.7.4](./v2.7.4.md) — makes installed SDK profiles composable, allowing projects to combine modules from profiles such as `web` and `data` without installing the complete `all` SDK.
 
-- [Vix.cpp v2.5.6](./v2.5.6.md) — generated library workflow fixes, header-only build guidance, Ninja target diagnostics, and cleaner CLI output.
+- [Vix.cpp v2.7.3](./v2.7.3.md) — adds generated WebSocket modules, API-only backend projects, the first Softadastra Cloud CLI workflow, Git dependencies, global package installation, faster single-file execution, and safer public registry publishing.
 
-- [Vix.cpp v2.5.5](./v2.5.5.md) — `vix run` registry dependency linking, installed module consistency, package export cleanup, and the first experimental `vix.app` workflow.
+- [Vix.cpp v2.7.2](./v2.7.2.md) — adds module-level registry dependencies, keeps dependency resolution in one root `vix.lock`, links packages to the modules that use them, and introduces timeout and output guards for C++ cells in Vix Note.
 
-- [Vix.cpp v2.5.3](./v2.5.3.md) — execution replay, runtime diagnostics, incremental build graph foundations, improved test/check output, and a dedicated dev session engine.
+- [Vix.cpp v2.7.1](./v2.7.1.md) — introduces Vix App Modules for structuring C++ applications and backends, with manifest-driven activation, generated route registration, module tests, architecture checks, and manifest-aware `vix dev` rebuilds.
 
-## Ecosystem releases
+- [Vix.cpp v2.7.0](./v2.7.0.md) — introduces Vix Note, Vix UI, and Vix Requests, together with specialized SDK profiles, CLI-first SDK installation, and the first desktop and mobile application shell workflows.
 
-- [Vix.cpp v2.4.0](./v2.4.0.md) — native static file serving, new standalone modules, umbrella headers, `vix::tests`, expanded environment handling, and real-world examples.
+## V2.6 releases
 
-- [Vix.cpp v2.3.1](./v2.3.1.md) — OpenSSL package resolution fixes for consumer projects, especially macOS and Homebrew environments.
+The v2.6 line develops the application workflow around `vix.app`, backend tooling, runtime reliability, diagnostics, tests, and release validation.
 
-- [Vix.cpp v2.3.0](./v2.3.0.md) — ultra-fast direct C++ execution, smart CMake fallback, script caching, database flags, and a cleaner run pipeline.
+- [Vix.cpp v2.6.3](./v2.6.3.md) — strengthens Core lifecycle and shutdown behavior, adds official benchmark baselines, improves `vix run` and `vix tests`, expands sanitizer coverage, and tightens CI and module validation.
 
-- [Vix.cpp v2.2.0](./v2.2.0.md) — manifest, resolver, lockfile architecture, semver dependency resolution, transitive packages, and interactive config generation.
+- [Vix.cpp v2.6.2](./v2.6.2.md) — improves dependency installation and updates, registry reliability, package listing commands, Windows SDK packaging, crypto helpers, and command diagnostics.
+
+- [Vix.cpp v2.6.1](./v2.6.1.md) — improves runtime and build diagnostics, test failure reporting, SDK release validation, and full-SDK consumer linking through `vix::vix`.
+
+- [Vix.cpp v2.6.0](./v2.6.0.md) — introduces the AI agent module, the official `vix.app` workflow, Vue integration, target-aware builds, async-powered `vix dev`, production backend tooling, and the game runtime foundation.
+
+## V2.5 releases
+
+The v2.5 line develops faster execution, generated projects, registry integration, build diagnostics, replay, and the early application manifest architecture.
+
+- [Vix.cpp v2.5.6](./v2.5.6.md) — fixes generated library workflows, improves header-only package guidance, strengthens Ninja target diagnostics, and simplifies CLI output.
+
+- [Vix.cpp v2.5.5](./v2.5.5.md) — improves registry dependency linking in `vix run`, installed module consistency, package exports, and the first experimental `vix.app` workflow.
+
+- [Vix.cpp v2.5.3](./v2.5.3.md) — introduces execution replay, runtime diagnostics, incremental build graph foundations, improved test and check output, and a dedicated development session engine.
+
+## Ecosystem and package architecture
+
+These releases establish the broader module, package, manifest, and direct-execution workflows used by later Vix versions.
+
+- [Vix.cpp v2.4.0](./v2.4.0.md) — adds native static file serving, standalone modules, umbrella headers, `vix::tests`, broader environment support, and real-world examples.
+
+- [Vix.cpp v2.3.1](./v2.3.1.md) — fixes OpenSSL package resolution for consumer projects, particularly on macOS and Homebrew-based environments.
+
+- [Vix.cpp v2.3.0](./v2.3.0.md) — adds fast direct C++ execution, intelligent CMake fallback, script caching, database flags, and a cleaner `vix run` pipeline.
+
+- [Vix.cpp v2.2.0](./v2.2.0.md) — introduces manifests, dependency resolution, root lockfiles, Semantic Versioning constraints, transitive packages, and interactive configuration generation.
 
 ## V2 stabilization releases
 
-- [Vix.cpp v2.1.19](./v2.1.19.md) — structured CMake diagnostics, dedicated build failure detectors, cleaner errors, reliable `--clean`, and publish edge-case fixes.
+The v2.1 series focuses on cross-platform SDK packaging, dependency exports, runtime output, CMake diagnostics, and release portability.
 
-- [Vix.cpp v2.1.18](./v2.1.18.md) — robust SQLite target compatibility across CMake versions and exported WebSocket dependency fixes.
+- [Vix.cpp v2.1.19](./v2.1.19.md) — adds structured CMake diagnostics, dedicated build failure detection, reliable clean builds, and fixes for package publication edge cases.
 
-- [Vix.cpp v2.1.17](./v2.1.17.md) — SQLite target resolution fixes for exported WebSocket packages and better `VixConfig.cmake` dependency handling.
+- [Vix.cpp v2.1.18](./v2.1.18.md) — improves SQLite target compatibility across CMake versions and fixes exported WebSocket dependencies.
 
-- [Vix.cpp v2.1.16](./v2.1.16.md) — Linux release portability, SDK runtime compatibility, header-only `fmt` and `spdlog`, and packaged artifact validation.
+- [Vix.cpp v2.1.17](./v2.1.17.md) — fixes SQLite target resolution for exported WebSocket packages and improves dependency handling in `VixConfig.cmake`.
 
-- [Vix.cpp v2.1.15](./v2.1.15.md) — SDK binary portability, relative RPATH handling, installer UX, and self-contained runtime behavior.
+- [Vix.cpp v2.1.16](./v2.1.16.md) — improves Linux release portability, SDK runtime compatibility, header-only `fmt` and `spdlog` integration, and packaged artifact validation.
 
-- [Vix.cpp v2.1.14](./v2.1.14.md) — cache module dependency cleanup, `vix::json` unification, and `VixTargets` export fixes.
+- [Vix.cpp v2.1.15](./v2.1.15.md) — improves SDK binary portability, relative runtime paths, installer behavior, and self-contained runtime execution.
 
-- [Vix.cpp v2.1.13](./v2.1.13.md) — export-safe `nlohmann_json` integration, cache module FetchContent fixes, and SDK packaging reliability.
+- [Vix.cpp v2.1.14](./v2.1.14.md) — cleans up cache module dependencies, unifies `vix::json`, and fixes exported `VixTargets`.
 
-- [Vix.cpp v2.1.12](./v2.1.12.md) — JSON and SQLite export safety, CMake package stabilization, and reusable SDK installability.
+- [Vix.cpp v2.1.13](./v2.1.13.md) — makes `nlohmann_json` integration export-safe and improves cache module dependency and SDK packaging behavior.
 
-- [Vix.cpp v2.1.11](./v2.1.11.md) — full SDK packaging for Linux, macOS, and Windows with `bin`, `include`, and `lib` layouts.
+- [Vix.cpp v2.1.12](./v2.1.12.md) — stabilizes JSON and SQLite exports, CMake package generation, and reusable SDK installation.
 
-- [Vix.cpp v2.1.10](./v2.1.10.md) — Windows dependency resolution, cross-platform build stability, and Boost dependency cleanup.
+- [Vix.cpp v2.1.11](./v2.1.11.md) — introduces full SDK packaging for Linux, macOS, and Windows with consistent `bin`, `include`, and `lib` layouts.
 
-- [Vix.cpp v2.1.9](./v2.1.9.md) — `fmt` migration completion, logging dependency propagation, and simplified CMake configuration.
+- [Vix.cpp v2.1.10](./v2.1.10.md) — improves Windows dependency resolution, cross-platform build reliability, and Boost dependency cleanup.
 
-- [Vix.cpp v2.1.8](./v2.1.8.md) — macOS `spdlog` compatibility fixes and logging portability improvements.
+- [Vix.cpp v2.1.9](./v2.1.9.md) — completes the `fmt` migration, fixes logging dependency propagation, and simplifies CMake configuration.
 
-- [Vix.cpp v2.1.7](./v2.1.7.md) — macOS build fixes and complete cross-platform dependency setup.
+- [Vix.cpp v2.1.8](./v2.1.8.md) — fixes macOS `spdlog` compatibility and improves logging portability.
 
-- [Vix.cpp v2.1.6](./v2.1.6.md) — Linux dependency restoration and aarch64 cross-compilation fixes.
+- [Vix.cpp v2.1.7](./v2.1.7.md) — fixes macOS builds and completes cross-platform dependency setup.
 
-- [Vix.cpp v2.1.5](./v2.1.5.md) — Linux aarch64 release pipeline fixes and cross-compilation dependency discovery.
+- [Vix.cpp v2.1.6](./v2.1.6.md) — restores Linux dependencies and fixes aarch64 cross-compilation behavior.
 
-- [Vix.cpp v2.1.4](./v2.1.4.md) — warning-free builds, safer runtime patterns, cleaner CMake configuration, and CLI cleanup.
+- [Vix.cpp v2.1.5](./v2.1.5.md) — fixes the Linux aarch64 release pipeline and cross-compilation dependency discovery.
 
-- [Vix.cpp v2.1.3](./v2.1.3.md) — clean runtime output, task execution, `vix fmt`, `vix info`, global updates, and REPL improvements.
+- [Vix.cpp v2.1.4](./v2.1.4.md) — removes build warnings, improves runtime safety, cleans up CMake configuration, and simplifies the CLI.
 
-- [Vix.cpp v2.1.2](./v2.1.2.md) — shell completion, paginated search, PTY runtime output, and improved command suggestions.
+- [Vix.cpp v2.1.3](./v2.1.3.md) — improves runtime output, task execution, `vix fmt`, `vix info`, global updates, and Vix Reply.
 
-- [Vix.cpp v2.1.1](./v2.1.1.md) — registry dependency resolution, generated CMake safety, and dependency loading order fixes.
+- [Vix.cpp v2.1.2](./v2.1.2.md) — adds shell completion, paginated package search, PTY runtime output, and improved command suggestions.
 
-- [Vix.cpp v2.1.0](./v2.1.0.md) — runtime performance, structured documentation, real-world examples, template improvements, and ecosystem maturity.
+- [Vix.cpp v2.1.1](./v2.1.1.md) — fixes registry dependency resolution, generated CMake safety, and package loading order.
+
+- [Vix.cpp v2.1.0](./v2.1.0.md) — improves runtime performance, documentation structure, project templates, examples, and ecosystem maturity.
 
 ## V2 foundation
 
-- [Vix.cpp v2.0.0](./v2.0.0.md) — the first official V2 release, replacing the Boost.Beast-based V1 runtime with a Boost-free native HTTP stack, async-first architecture, and cleaner module boundaries.
+- [Vix.cpp v2.0.0](./v2.0.0.md) — begins the V2 architecture by replacing the Boost.Beast-based V1 runtime with a Boost-free native HTTP stack, an async-first execution model, and clearer module boundaries.
