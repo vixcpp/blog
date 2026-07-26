@@ -14,7 +14,9 @@ Each page explains the purpose of the release, the technical changes it introduc
 
 ## V2.7 releases
 
-The v2.7 line expands Vix beyond the core build and runtime workflow. It introduces specialized SDK profiles, Vix Note, Vix UI, Vix Requests, application modules, Softadastra Cloud integration, composable SDK installations, improved package management, and the first package-based Note extension system.
+The v2.7 line expands Vix beyond the core build and runtime workflow. It introduces specialized SDK profiles, Vix Note, Vix UI, Vix Requests, application modules, Softadastra Cloud integration, composable SDK installations, improved package management, package and namespace migrations, and the first package-based Note extension system.
+
+- [Vix.cpp v2.7.8](./v2.7.8.md) — adds first-class package moves and namespace migrations across the Vix Registry and CLI, automatic registry pull request creation, dependency-only workspace packages, semantic version ordering, and broader compatibility with managed, system, local, and legacy Vix SDK installations.
 
 - [Vix.cpp v2.7.7](./v2.7.7.md) — introduces package-based extensions for Vix Note, extension discovery and management, registry-aware extension commands, a modernized Vix Reply editor, and more reliable global installation of CLI packages.
 
