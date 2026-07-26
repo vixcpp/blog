@@ -1489,3 +1489,8 @@ video {
     transition-duration: 0.01ms !important;
   }
 }
+@media (max-width: 520px) {
+  .vp-doc {
+    padding-top: 0px !important;
+  }
+}
