@@ -12,6 +12,14 @@ This changelog documents the evolution of Vix.cpp across its public releases.
 
 Each page explains the purpose of the release, the technical changes it introduced, the workflows affected, and the compatibility or validation work behind it. Releases are grouped by development period so related architectural changes remain easy to follow.
 
+## V2.8 releases
+
+The v2.8 line introduces `vix::realtime`, a transport-independent runtime for authoritative stateful applications. It adds rooms with serialized command execution, deterministic events, logical sessions, snapshots, event replay, reconnection, presence, persistence abstractions, and optional WebSocket and PostgreSQL integration.
+
+Versions v2.8.0, v2.8.1, and v2.8.2 were published while release, packaging, and distribution issues were still being resolved. They remain part of the project history for traceability, but they should not be used as stable releases. **Vix.cpp v2.8.3 is the first stable and supported release of the v2.8 line.**
+
+- [Vix.cpp v2.8.3](./v2.8.3.md) — introduces the stable v2.8 realtime runtime for authoritative stateful applications, with rooms, serialized commands, deterministic events, logical sessions, snapshots, replay, reconnection, presence, persistence stores, and optional WebSocket and PostgreSQL integration.
+
 ## V2.7 releases
 
 The v2.7 line expands Vix beyond the core build and runtime workflow. It introduces specialized SDK profiles, Vix Note, Vix UI, Vix Requests, application modules, Softadastra Cloud integration, composable SDK installations, improved package management, package and namespace migrations, and the first package-based Note extension system.
