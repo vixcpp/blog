@@ -14,11 +14,13 @@ Each page explains the purpose of the release, the technical changes it introduc
 
 ## V2.8 releases
 
-The v2.8 line introduces `vix::realtime`, a transport-independent runtime for authoritative stateful applications. It adds rooms with serialized command execution, deterministic events, logical sessions, snapshots, event replay, reconnection, presence, persistence abstractions, and optional WebSocket and PostgreSQL integration.
+The v2.8 line introduces `vix::realtime`, a transport-independent runtime for authoritative stateful applications, then improves the everyday C++ development loop with faster compilation and rebuilds, lighter public headers, dependency-aware caching, clearer diagnostics, and more consistent `build`, `run`, and `dev` behavior.
 
 Versions v2.8.0, v2.8.1, and v2.8.2 were published while release, packaging, and distribution issues were still being resolved. They remain part of the project history for traceability, but they should not be used as stable releases. **Vix.cpp v2.8.3 is the first stable and supported release of the v2.8 line.**
 
-- [Vix.cpp v2.8.3](./v2.8.3.md) — introduces the stable v2.8 realtime runtime for authoritative stateful applications, with rooms, serialized commands, deterministic events, logical sessions, snapshots, replay, reconnection, presence, persistence stores, and optional WebSocket and PostgreSQL integration.
+- [Vix.cpp v2.8.4](./v2.8.4.md) adds lighter public headers, faster compilation and rebuilds, dependency-aware caching, safer build parallelism, clearer diagnostics, improved cross-compilation controls, and more consistent behavior across `vix build`, `vix run`, and `vix dev`.
+
+- [Vix.cpp v2.8.3](./v2.8.3.md) introduces the stable v2.8 realtime runtime for authoritative stateful applications, with rooms, serialized commands, deterministic events, logical sessions, snapshots, replay, reconnection, presence, persistence stores, and optional WebSocket and PostgreSQL integration.
 
 ## V2.7 releases
 
