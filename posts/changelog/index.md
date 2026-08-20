@@ -14,9 +14,11 @@ Each page explains the purpose of the release, the technical changes it introduc
 
 ## V2.8 releases
 
-The v2.8 line introduces `vix::realtime`, a transport-independent runtime for authoritative stateful applications, then improves the everyday C++ development loop with faster compilation and rebuilds, lighter public headers, dependency-aware caching, clearer diagnostics, and more consistent `build`, `run`, and `dev` behavior.
+The v2.8 line introduces `vix::realtime`, a transport-independent runtime for authoritative stateful applications, then strengthens the everyday C++ development loop, modular application architecture, dependency management, and project mutation safety.
 
 Versions v2.8.0, v2.8.1, and v2.8.2 were published while release, packaging, and distribution issues were still being resolved. They remain part of the project history for traceability, but they should not be used as stable releases. **Vix.cpp v2.8.3 is the first stable and supported release of the v2.8 line.**
+
+- [Vix.cpp v2.8.5](./v2.8.5.md) stabilizes Vix Realtime and adds module-scoped Git dependencies, canonical module graph validation, dependency ownership and conflict detection, transactional project mutations, interrupted transaction recovery, and stricter Git installation contracts.
 
 - [Vix.cpp v2.8.4](./v2.8.4.md) adds lighter public headers, faster compilation and rebuilds, dependency-aware caching, safer build parallelism, clearer diagnostics, improved cross-compilation controls, and more consistent behavior across `vix build`, `vix run`, and `vix dev`.
 

@@ -1,12 +1,12 @@
 <script setup>
 const latestRelease = {
   eyebrow: "Latest release",
-  version: "Vix.cpp v2.8.4",
+  version: "Vix.cpp v2.8.5",
   date: "July 19, 2026",
   title: "Vix Note is now open to package-based extensions.",
   description:
     "The latest release adds installable Note extensions, custom cell types, external runtimes, extension management, a modernized Reply editor, and more reliable global CLI package installation.",
-  href: "/posts/changelog/v2.8.4",
+  href: "/posts/changelog/v2.8.5",
 };
 
 const readingPaths = [
@@ -72,7 +72,7 @@ const featuredArticles = [
 
 const signals = [
   {
-    value: "v2.8.3",
+    value: "v2.8.5",
     label: "Latest documented release",
   },
   {
